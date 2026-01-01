@@ -1,0 +1,94 @@
+@media screen and (min-width: 450px) and (max-width: 620px) {
+    .banner-inner .org{
+        font-size: 1.4em;
+    }
+    .banner{
+        height:10vh;
+        max-width: max-content;
+        min-width: 100%;
+    }
+    .banner-inner{
+        min-width: 90%;
+        max-width:max-content;
+    }
+    .banner-inner h1 .title-wrap {
+        width:32vw;
+        min-width: 32vw;
+    }
+    .banner-inner h1 .title-wrap .title-text{
+        font-size: 0.7em;
+    }
+    .card{
+        padding:8px;
+    }
+    .pill{
+        font-size:1.0em;
+    }
+}
+@media screen and (min-width: 300px) and (max-width: 450px) {
+    .banner-inner .org{
+        font-size: 1.1em;
+    }
+    .card{
+        padding:5px;
+    }
+    .pill{
+        font-size:0.7em;
+    }
+    .avatar{
+        height:64px;
+        border-radius: 100%;
+    }
+    .dataset-tri.left{
+        left:12px;
+        
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 12px solid #e6eef8;
+        margin: 0;
+    }
+    .dataset-tri.right{
+        right:12px;
+        
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 12px solid #e6eef8;
+        margin: 0;
+    }
+    .banner{
+        height:10vh;
+        max-width: max-content;
+        min-width: 100%;
+    }
+    .banner-inner{
+        min-width: 90%;
+        max-width:max-content;
+    }
+.controls .toggle-btn{
+    padding:2px 8px;
+}
+    .banner-inner h1 .title-wrap {
+        width:35vw;
+        min-width: 35vw;
+    }
+    .banner-inner h1 .title-wrap .title-text{
+        font-size: 0.7em;
+    }
+}
+@media screen and (min-width: 300px) and (max-width: 404px) {
+    .banner-inner h1 .title-wrap .title-text{
+        font-size: 0.55em;
+    }
+    .banner-inner h1 .title-wrap {
+        width:40vw;
+        min-width: 40vw;
+    }
+    .banner-inner .org{
+        font-size: 0.9em;
+    }
+    .controls .toggle-btn{
+    padding:2px 3px;
+    font-size: 0.7em;
+}
+
+}

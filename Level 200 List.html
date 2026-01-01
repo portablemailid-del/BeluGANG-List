@@ -14,7 +14,7 @@
         body{font-family:Inter,system-ui,Segoe UI,Arial;background:var(--bg);color:#e6eef8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0} 
         .container{width:100%;max-width:1100px;padding:0} 
   h1{font-size:1.6rem;margin:0 0 18px;color:#e6eef8}
-  .banner{position:fixed;top:0;left:0;width:100%;height:var(--banner-height);background:#111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
+  .banner{position:fixed;top:0;left:0;min-width:100%;max-width:max-content;height:var(--banner-height);background:#111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
   .banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
   /* level title: slightly smaller and lifted */
   .banner-inner h1{position:absolute;left:50%;transform:translate(-50%,-4px);font-size:1.2rem;white-space:nowrap;margin:0}
@@ -227,6 +227,7 @@
   /* focus outline for keyboard */
   .card:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:4px}
 </style>
+<link rel="stylesheet" href="css.css">
 </head>
 <body>
   <div class="banner">
@@ -614,14 +615,14 @@ styleTag.textContent = `
   overflow:hidden;
   transition: width 800ms cubic-bezier(.2,.8,.3,1);
 }
-#float-search:hover, #float-search:focus-within{ width:320px; }
+#float-search:hover, #float-search:focus-within{ width:80%; }
 #float-search input[type='search']{background:transparent;border:none;outline:none;color:#e6eef8;min-width:0;width:0;opacity:0;transition: width 320ms cubic-bezier(.2,.8,.3,1), opacity 220ms; font-weight:600}
 #float-search:hover input[type='search'], #float-search:focus-within input[type='search']{width:200px;opacity:1}
 #float-search button{padding:6px;border-radius:8px;min-width:36px}
 #floatSearchToggle{ background:#1b1b1b; color:#ffffff; border:1px solid rgba(0,0,0,0.42); box-shadow:0 6px 20px rgba(0,0,0,0.38); padding:6px 10px; border-radius:10px; }
 #floatSearchToggle svg{ display:block; color:inherit; transform:translateX(6px); transition:transform .14s ease; }
 #floatSearchToggle:hover{ filter:brightness(1.2); box-shadow:0 8px 28px rgba(0,0,0,0.44); transform:translateY(-1px); }
-@media (max-width:520px){ #float-search{ right:12px; top:100px; width:200px; } }
+@media (max-width:520px){ #float-search{ right:12px; top:100px; } }
 
 /* search highlight */
 .card.search-match{box-shadow:0 20px 50px rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.12);transform:translateY(-4px)}

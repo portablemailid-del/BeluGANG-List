@@ -1183,42 +1183,8 @@ function animateDatasetSwitch(newDs){
     setTimeout(checkScrollForBanner, 240);
   }catch(e){ console.warn('bottom banner init failed', e); }
 })();
-    
-/* Mobile double-tap toggle for card*/
-(function setupMobileDoubleTap(){
-  let lastTapTime = 0;
-  let lastCard = null;
-  const DOUBLE_TAP_DELAY = 350;
-
-  // Only activate on touch devices
-  if (!('ontouchstart' in window)) return;
-
-  document.addEventListener('click', function (e) {
-    const card = e.target.closest('.card');
-    if (!card) return;
-
-    const now = Date.now();
-
-    // Close
-    if (lastCard === card && (now - lastTapTime) < DOUBLE_TAP_DELAY) {
-      e.preventDefault();
-      card.classList.remove('show-desc');
-      lastCard = null;
-      lastTapTime = 0;
-      return;
-    }
-    // Open
-    lastTapTime = now;
-    lastCard = card;
-    // Delay
-    setTimeout(() => {
-      if (lastCard === card) {
-        card.classList.add('show-desc');
-      }
-    }, DOUBLE_TAP_DELAY);
-  }, true);
-})();
 </script>
 </body>
 </html>
+
 

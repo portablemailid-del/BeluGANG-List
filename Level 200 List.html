@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BeluGANG List</title>
+<style>
+:root{
+--bg:#202120; --card:#23272b; --muted:#aeb8c2; --accent:#7c3aed;
+--glass: rgba(255,255,255,0.04);
+--card-radius:12px;
+--banner-height:84px;
+}
+body{font-family:Inter,system-ui,Segoe UI,Arial;background:var(--bg);color:#e6eef8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0} 
+.container{width:100%;max-width:1100px;padding:0} 
+h1{font-size:1.6rem;margin:0 0 18px;color:#e6eef8}
+.banner{position:fixed;top:0;left:0;min-width:100%;max-width:max-content;height:var(--banner-height);background:#111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
+.banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* level title: slightly smaller and lifted */
+.banner-inner h1{position:absolute;left:50%;transform:translate(-50%,-4px);font-size:1.2rem;white-space:nowrap;margin:0}
+/* organization name: larger */
+.banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px}
+
+.controls select{
+-webkit-appearance:none;
+-moz-appearance:none;
+appearance:none;
+background: linear-gradient(180deg,#2c3136,#26292c);
+color:#e6eef8;
+border:1px solid rgba(255,255,255,0.08);
+padding:8px 40px 8px 12px;
+border-radius:10px;
+min-width:160px;
+font-weight:600;
+box-shadow:0 4px 14px rgba(0,0,0,0.45);
+background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke='%23e6eef8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><path d='M2 6l6 6 6-6'/></svg>");
+background-repeat:no-repeat;
+background-position:right 12px center;
+background-size:12px;
+transition:transform .12s ease, box-shadow .12s ease;
+cursor:pointer;
+}
+/* ensure options use dark background and light text when the dropdown opens */
+.controls select option{ background:#2c3136; color:#e6eef8 }
+/* Windows specific: hide native expand icon */
+.controls select::-ms-expand{ display:none }
+.controls select:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+.controls select:focus{outline:none;box-shadow:0 0 0 4px rgba(124,58,237,0.12)}
+/* dataset toggle tabs */
+.dataset-toggle{display:inline-flex;gap:8px;align-items:center;margin-right:10px}
+.dataset-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef8;padding:6px 10px;border-radius:8px;font-weight:600;cursor:pointer}
+.dataset-btn.active{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12)}
+.toggle-btn[disabled]{opacity:0.5;cursor:default}
+
+/* staff grouping */
+.group-section{margin-top:18px}
+.group-title{font-weight:800;font-size:1rem;color:#e6eef8;margin:6px 0 14px;text-align:center;position:relative;padding:6px 0}
+.group-title::before, .group-title::after{content:'';position:absolute;top:50%;height:1px;background:rgba(255,255,255,0.04);width:30%;transform:translateY(-50%)}
+.group-title::before{left:0}
+.group-title::after{right:0} 
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px;grid-auto-rows:1fr}
+.staff-grid .card{height:100%;box-sizing:border-box}
+.staff-grid .card{min-height:140px}
+/* role pill should appear under the ID, not centered inline; remove decorative lines */
+.card.staff-owner .stats, .card.staff-cm .stats, .card.staff-sr .stats, .card.staff-mod .stats{justify-content:flex-start}
+.card.staff-owner .stats::before,.card.staff-owner .stats::after,.card.staff-cm .stats::before,.card.staff-cm .stats::after,.card.staff-sr .stats::before,.card.staff-sr .stats::after,.card.staff-mod .stats::before,.card.staff-mod .stats::after{display:none}
+.meta{display:flex;flex-direction:column}
+.stats{margin-top:8px}
+/* centered card highlight: outline only (no permanent shadow); hover/focus still lifts like other cards */
+.staff-grid .card.centered-card{outline:1px solid rgba(255,255,255,0.03);box-shadow:none;margin-top:0;margin-bottom:0;transition:transform .22s, box-shadow .22s, width .22s}
+/* ensure centered cards animate width changes and still lift on hover */
+.staff-grid .card.centered-card:hover, .staff-grid .card.centered-card:focus-within{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+/* owner span keeps natural size (span 2 columns) */
+.staff-grid .card.owner-span{grid-column:span 2}
+@media (min-width:920px){
+/* at larger widths, enforce owner card min width equal to two columns so it looks long */
+.staff-grid .card.owner-span{min-width:calc(2 * 420px + 24px);}
+}
+/* role-specific plates */
+.card.staff-owner{padding:22px;border-radius:14px;background:linear-gradient(180deg,#111316,#15181b)}
+.card.staff-owner .avatar{width:88px;height:88px;font-size:22px;flex:0 0 88px}
+.card.staff-owner .pill{padding:8px 10px;font-size:0.92rem;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+
+.card.staff-cm{padding:18px;border-radius:13px}
+.card.staff-cm .avatar{width:72px;height:72px;font-size:20px;flex:0 0 72px}
+.card.staff-cm .pill{padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+
+.card.staff-sr{padding:16px;border-radius:12px}
+.card.staff-sr .avatar{width:64px;height:64px;font-size:18px;flex:0 0 64px}
+.card.staff-sr .pill{padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+
+.card.staff-mod .avatar{width:56px;height:56px;font-size:16px;flex:0 0 56px}
+.card.staff-mod .pill{padding:6px 10px;font-size:0.88rem;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+
+/* staff role badges (right) */
+.staff-badge{position:absolute;top:12px;right:12px;border-radius:999px;padding:6px 10px;font-weight:800;font-size:0.85rem}
+.role-owner{background:linear-gradient(180deg,#FFEB99,#FFD54F);color:#111827}
+.role-cm{background:linear-gradient(180deg,#D8B4FE,#B794F4);color:#111827}
+.role-sr{background:linear-gradient(180deg,#E1A17A,#D98845);color:#111827}
+.role-mod{background:linear-gradient(180deg,#ffffff,#e6e6e6);color:#111827}
+
+/* pill colors for staff roles (used under ID) */
+.pill.role-owner{background:linear-gradient(180deg,#ffffff,#e6e6e6);color:#111827}
+.pill.role-cm{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);color:#ffffff} 
+.pill.role-admin{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);color:#ffffff}
+.pill.role-sr{background:linear-gradient(180deg,#0f6b44,#0a4f34);color:#ffffff}
+.pill.role-mod{background:linear-gradient(180deg,#79c99a,#5fbf7f);color:#111827}
+
+/* title wrapper and dataset triangles (absolute so they don't shift) */
+.banner-inner h1 .title-wrap{position:absolute;left:50%;transform:translate(-50%,-4px);width:320px;display:block;min-width:240px}
+.banner-inner h1 .title-wrap .title-text{display:block;text-align:center;width:100%;font-weight:700}
+.dataset-tri{
+background:transparent;
+border:none;
+padding:0;
+width:0;
+height:0;
+display:inline-block;
+vertical-align:middle;
+transform-origin:center;
+transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .16s, border-color .16s;
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+-webkit-tap-highlight-color: transparent;
+}
+.dataset-tri.left{left:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-right:14px solid #e6eef8;margin:0}
+.dataset-tri.right{right:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:14px solid #e6eef8;margin:0}
+.dataset-tri.active.left{border-right-color:#ffffff}
+.dataset-tri.active.right{border-left-color:#ffffff}
+/* hover + focus styles: subtle by default (scale + gentle glow) */
+.dataset-tri:hover{opacity:0.95;transform:translateY(-50%) scale(1.06)}
+.dataset-tri:focus-visible{outline:none;box-shadow:0 0 0 6px rgba(255,255,255,0.06);border-color:#ffffff;transform:translateY(-50%) scale(1.12)}
+/* keep low-impact active state for click */
+.dataset-tri:active{transform:translateY(-50%) scale(1.06)}
+@media(max-width:520px){ .banner-inner h1 .title-wrap{width:220px} }
+
+/* board switch animations */
+#board{transition:opacity .36s ease, transform .36s cubic-bezier(.2,.8,.2,1)}
+#board.fade-out{opacity:0;transform:translateY(8px);pointer-events:none}
+#board.fade-in{opacity:1;transform:translateY(0)}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.container{width:100%;max-width:1100px;padding:0 16px;padding-bottom:48px;margin:calc(var(--banner-height) + 20px) auto 0}  
+.grid{display:grid;grid-template-columns:1fr;gap:22px}
+.card{
+background: rgba(35,39,43,0.96);
+border:1px solid rgba(255,255,255,0.04);
+padding:18px;border-radius:12px;position:relative;overflow:visible;
+transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, margin .18s ease, width .22s ease;
+display:flex;flex-direction:column;align-items:stretch;box-sizing:border-box;
+}
+.card::before{
+content:'';position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:12px 0 0 12px;background:transparent;transition:background-color .18s ease;
+}
+.card.rank-1::before{background:linear-gradient(180deg,#FFD700,#FFC107)}
+.card.rank-2::before{background:linear-gradient(180deg,#C0C0C0,#A8A8A8)}
+.card.rank-3::before{background:linear-gradient(180deg,#CD7F32,#B87333)}
+.card:focus-within, .card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+
+.card.show-desc{margin-bottom:12px}
+.card-header{display:flex;gap:14px;align-items:center}
+.avatar{
+width:64px;height:64px;border-radius:50%;flex:0 0 64px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);
+display:inline-grid;place-items:center;background:#ffffff;color:#111827;font-weight:700;font-size:18px;letter-spacing:0.6px
+}
+.meta{flex:1}
+.username{font-weight:700;font-size:1.05rem}
+.muted{color:var(--muted);font-size:0.9rem;margin-top:6px}
+.stats{display:flex;gap:10px;align-items:center;margin-top:12px}
+.pill{background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:999px;font-weight:700;font-size:1.12rem;color:var(--muted)} 
+.months{color:var(--muted);font-size:0.9rem}
+
+/* description inner animation */
+.desc{padding:0;max-height:0;overflow:hidden;border-radius:10px;background:transparent;border:1px solid transparent;color:#e6eef8;font-size:0.92rem;line-height:1.5;transition:max-height .32s ease;padding-top:0;padding-bottom:0}
+.desc-inner{opacity:0;transform:translateY(6px);transition:opacity .22s ease, transform .22s ease}
+.desc-inner.centered{ text-align:center }
+.card.show-desc .desc{background:#222323;border:1px solid rgba(255,255,255,0.04);padding:12px;margin-top:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);}
+.card.show-desc .desc-inner{opacity:1;transform:translateY(0)}
+
+/* reveal-on-scroll animation */
+.reveal{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* rank badge and gradient colors */
+.rank-badge{
+position:absolute;
+top:12px;
+right:12px;
+background:linear-gradient(180deg,#ffffff,#e6e6e6);
+color:#111827;
+padding:6px 10px;
+border-radius:999px;
+font-weight:700;
+font-size:.85rem;
+box-shadow:0 2px 8px rgba(0,0,0,0.18);
+border:1px solid rgba(0,0,0,0.06);
+min-width:44px;
+text-align:center;
+}
+.card.rank-1 .rank-badge{background:linear-gradient(180deg,#FFEB99,#FFD54F); color:#111827}
+.card.rank-2 .rank-badge{background:linear-gradient(180deg,#F0F0F0,#CFCFCF); color:#111827}
+.card.rank-3 .rank-badge{background:linear-gradient(180deg,#F3C08A,#E29A5A); color:#111827}
+
+/* clickable ID (copies to clipboard) */
+.id-link{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;padding:4px 8px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit}
+.id-link:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,0.35)}
+.id-link:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:2px}
+/* placeholder for missing/deleted IDs (non-interactive pill) */
+.id-missing{
+display:inline-block;
+padding:4px 10px;
+border-radius:6px;
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(255,255,255,0.02);
+color:#e6eef8;
+font-weight:700;
+font-size:0.92rem;
+line-height:1;
+vertical-align:middle;
+cursor:default;
+} 
+
+/* small screens */
+@media (max-width:520px){.grid{grid-template-columns:1fr}.avatar{width:52px;height:52px;font-size:16px}}
+/* focus outline for keyboard */
+.card:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:4px}
+</style>
+<link rel="stylesheet" href="css.css">
+</head>
+<body>
+<div class="banner">
+<div class="banner-inner">
+<div class="org">BeluGANG</div>
+<h1 id="bannerTitle"><div class="title-wrap"><button id="datasetTriLeft" class="dataset-tri left" aria-label="Previous list" aria-pressed="false"></button><span class="title-text">Level 200 List</span><button id="datasetTriRight" class="dataset-tri right" aria-label="Next list" aria-pressed="false"></button></div></h1>
+<div class="controls">
+<label for="sortMode" class="sr-only">Sort leaderboard</label>
+<button id="sortMode" class="toggle-btn" aria-label="Toggle sort" aria-pressed="false" data-mode="fastest">Fastest 200</button>
+</div> 
+</div>
+</div>
+<div id="float-search" role="search" aria-label="Floating search" title="Search names">
+<button id="floatSearchToggle" class="toggle-btn" aria-label="Open search" aria-expanded="false" title="Search">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="2" fill="none"></circle></svg>
+</button>
+<label for="searchBox" class="sr-only">Search name</label>
+<input id="searchBox" type="search" placeholder="Search name..." aria-label="Search names" />
+</div>
+<div class="container" aria-live="polite">
+<div id="board" class="grid" role="list"></div>
+</div> 
+
+<script>
+function discordDefaultAvatar(id) {
+if (!id || id === 'Deleted') return null;
+// only accept numeric Discord IDs to avoid throwing when a placeholder like '-' is used
+if(!/^[0-9]+$/.test(String(id))) return null;
+try{
+const i = Number((BigInt(id) >> 22n) % 6n);
+return `https://cdn.discordapp.com/embed/avatars/${i}.png`;
+}catch(e){ return null; }
+}
+
+// stable fallback avatar when ID is missing or non-numeric; hashes a seed (name or id) to one of the 6 Discord default avatars
+function getFallbackDiscordAvatar(seed){
+const s = String(seed || '').trim() || 'fallback';
+let n = 0;
+for(let i=0;i<s.length;i++) n = (n*31 + s.charCodeAt(i)) >>> 0;
+const idx = n % 6;
+return `https://cdn.discordapp.com/embed/avatars/${idx}.png`;
+}
+
+// show a small, persistent error overlay for runtime errors so we can see why rendering fails
+function showErrorOverlay(msg){
+try{
+let ov = document.getElementById('error-overlay');
+if(!ov){ ov = document.createElement('div'); ov.id = 'error-overlay'; document.body.appendChild(ov); }
+ov.textContent = '';
+const header = document.createElement('strong'); header.textContent = 'Runtime error'; ov.appendChild(header);
+const br = document.createElement('div'); br.style.marginTop = '6px'; br.style.whiteSpace = 'pre-wrap'; br.textContent = String(msg).slice(0,200); ov.appendChild(br);
+}catch(e){ console.warn('showErrorOverlay failed', e); }
+}
+
+window.addEventListener('error', (ev)=>{ console.error(ev); try{ showErrorOverlay(`${ev.message} — ${ev.filename}:${ev.lineno}`); }catch(e){} });
+window.addEventListener('unhandledrejection', (ev)=>{ console.error(ev); try{ showErrorOverlay(`Unhandled rejection: ${ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason)}`); }catch(e){} });
+
+// setup search control behaviour
+function setupSearch(){
+try{
+const sb = document.getElementById('searchBox');
+if(!sb) return; 
+let searchResults = [];
+let searchIndex = -1;
+function highlightSearch(q){
+document.querySelectorAll('.card.search-match').forEach(c=>c.classList.remove('search-match'));
+document.querySelectorAll('.card .username.search-hit').forEach(n=>n.classList.remove('search-hit'));
+searchResults = [];
+searchIndex = -1;
+const ql = q.trim().toLowerCase();
+if(!ql) return;
+Array.from(document.querySelectorAll('.card .username')).forEach(n => {
+if((n.textContent || '').trim().toLowerCase().includes(ql)){
+const card = n.closest('.card');
+card.classList.add('search-match');
+n.classList.add('search-hit');
+searchResults.push(card);
+}
+});
+if(searchResults.length){ searchIndex = 0; }
+}
+sb.addEventListener('input', (e)=>{ highlightSearch(e.target.value); });
+sb.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); if(searchResults.length){ searchIndex = (searchIndex + 1) % searchResults.length; searchResults[searchIndex].scrollIntoView({behavior:'smooth', block:'center'}); searchResults[searchIndex].focus(); } } });
+
+
+// floating search UX: clicking the magnifier focuses the input; focus/blur updates aria-expanded and supports keyboard Escape to close
+const floatWrap = document.getElementById('float-search');
+const floatToggle = document.getElementById('floatSearchToggle');
+if(floatToggle && sb){
+floatToggle.addEventListener('click', ()=>{ sb.focus(); });
+sb.addEventListener('focus', ()=>{ floatToggle.setAttribute('aria-expanded','true'); if(floatWrap) floatWrap.classList.add('open'); });
+sb.addEventListener('blur', ()=>{ floatToggle.setAttribute('aria-expanded','false'); if(floatWrap) floatWrap.classList.remove('open'); });
+sb.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ sb.value=''; highlightSearch(''); sb.blur(); } });
+}
+}catch(e){ console.warn('setupSearch failed', e); }
+}
+
+
+const discordIds = [
+'921333518406148146',
+'662237931846631454',
+'918862839316373554',
+'961824403413426246',
+'918864897633296405',
+'863423967883559012',
+'Deleted',
+'832173647577612298',
+'894871129108410389',
+'761273366602448946',
+'1042982216373903490',
+'544833848559665173',
+'913230713871040562',
+'981042270939779102',
+'841287142785417256',
+'1170790968941891596',
+'775371863106650112',
+'617215246766964765',
+'1059770507546861609',
+'1126210964061180038',
+'769982567469940777',
+'1034407138019258408',
+'577141429906833408',
+'1155133403780350032',
+'1079783186600579152',
+'1181564704909439067',
+'1238135785681850469',
+'1309845497980125185',
+'984783971676205106',
+'1072043150505410570',
+'1095261491617345586',
+'658059455790841868',
+'1168813994123993119',
+'1226544764128596020',
+'777265386239426570',
+'421170808891768832',
+'1242486029915521125'
+];
+
+/* Provided 34-person dataset */
+const people = [
+{date:'17/06/2022', position:'1st', discordId:'921333518406148146', name:'SRS', time:'05 / 28', img:'https://cdn.discordapp.com/avatars/921333518406148146/abb0a5f6862f8227edc816502e1b055e.webp?size=240'},
+{date:'11/08/2022', position:'2nd', discordId:'662237931846631454', name:'Sadie', time:'10 / 25', img:'https://cdn.discordapp.com/avatars/662237931846631454/b6ff5334c1460e3161c5c92cb99f76f8.webp?size=240'},
+{date:'29/09/2022', position:'3rd', discordId:'918862839316373554', name:'Java', time:'09 / 19', img:'https://cdn.discordapp.com/avatars/918862839316373554/838639dbcc57ae21f060d156240e58da.webp?size=240'},
+{date:'06/12/2022', position:'4th', discordId:'961824403413426246', name:'Safo', time:'07 / 28', img:'https://cdn.discordapp.com/avatars/961824403413426246/3cc24d7c3639b6673c5f5b4d769bfda1.webp?size=240'},
+{date:'01/02/2023', position:'5th', discordId:'918864897633296405', name:'Motorhead', time:'-- / --', img:'https://i.pravatar.cc/150?img=15'},
+{date:'06/06/2023', position:'6th', discordId:'863423967883559012', name:'Mika', time:'14 / 12', img:'https://i.pravatar.cc/150?img=16'},
+{date:'19/06/2023', position:'7th', discordId:'-', name:'Dark', time:'10 / 11', img:'https://i.pravatar.cc/150?img=17'},
+{date:'16/08/2023', position:'8th', discordId:'832173647577612298', name:'Callie', time:'11 / 14', img:'https://i.pravatar.cc/150?img=18'},
+{date:'04/10/2023', position:'9th', discordId:'894871129108410389', name:'Tormentor', time:'23 / 28', img:'https://i.pravatar.cc/150?img=19'},
+{date:'29/10/2023', position:'10th', discordId:'761273366602448946', name:'Oblivio', time:'24 / 00', img:'https://i.pravatar.cc/150?img=20'},
+{date:'26/01/2024', position:'11th', discordId:'1042982216373903490', name:'Abdullah', time:'10 / 04', img:'https://i.pravatar.cc/150?img=21'},
+{date:'28/02/2024', position:'12th', discordId:'544833848559665173', name:'Agent', time:'28 / 27', img:'https://i.pravatar.cc/150?img=22'},
+{date:'15/03/2024', position:'13th', discordId:'913230713871040562', name:'Sidney', time:'20 / 06', img:'https://i.pravatar.cc/150?img=23'},
+{date:'20/04/2024', position:'14th', discordId:'981042270939779102', name:'Jhebert', time:'22 / 19', img:'https://i.pravatar.cc/150?img=24'},
+{date:'23/05/2024', position:'15th', discordId:'841287142785417256', name:'Leo', time:'31 / 17', img:'https://i.pravatar.cc/150?img=25'},
+{date:'26/05/2024', position:'16th', discordId:'1170790968941891596', name:'SH', time:'25 / 09', img:'https://i.pinimg.com/736x/8e/8a/a5/8e8aa50b60fbf72650f47226ab43dae7.jpg'},
+{date:'03/06/2024', position:'17th', discordId:'775371863106650112', name:'TT', time:'24 / 29', img:'https://i.pravatar.cc/150?img=27'},
+{date:'29/06/2024', position:'18th', discordId:'617215246766964765', name:'Awakes', time:'36 / 04', img:'https://i.pravatar.cc/150?img=28'},
+{date:'25/07/2024', position:'19th', discordId:'1059770507546861609', name:'Jod', time:'14 / 25', img:'https://i.pravatar.cc/150?img=29'},
+{date:'11/11/2024', position:'20th', discordId:'1126210964061180038', name:'Nameless', time:'14 / 24', img:'https://i.pravatar.cc/150?img=30'},
+{date:'29/11/2024', position:'21st', discordId:'769982567469940777', name:'Suga', time:'16 / 13', img:'https://i.pravatar.cc/150?img=31'},
+{date:'29/11/2024', position:'22nd', discordId:'1034407138019258408', name:'Sonic', time:'35 / 10', img:'https://i.pravatar.cc/150?img=32'},
+{date:'30/12/2024', position:'23rd', discordId:'577141429906833408', name:'Eric', time:'39 / 20', img:'https://i.pravatar.cc/150?img=33'},
+{date:'09/02/2025', position:'24th', discordId:'1155133403780350032', name:'Rei', time:'10 / 02', img:'https://i.pravatar.cc/150?img=34'},
+{date:'12/03/2025', position:'25th', discordId:'1079783186600579152', name:'Catto', time:'24 / 13', img:'https://i.pravatar.cc/150?img=35'},
+{date:'10/04/2025', position:'26th', discordId:'1181564704909439067', name:'HD', time:'39 / 11', img:'https://i.pravatar.cc/150?img=36'},
+{date:'28/04/2025', position:'27th', discordId:'1238135785681850469', name:'Begu', time:'10 / 21', img:'https://i.pravatar.cc/150?img=37'},
+{date:'21/05/2025', position:'28th', discordId:'-', name:'Certi', time:'-- / --', img:'https://i.pravatar.cc/150?img=38'},
+{date:'09/06/2025', position:'29th', discordId:'984783971676205106', name:'Chaos', time:'35 / 28', img:'https://i.pravatar.cc/150?img=39'},
+{date:'16/06/2025', position:'30th', discordId:'1072043150505410570', name:'Dawa', time:'28 / 10', img:'https://i.pravatar.cc/150?img=40'},
+{date:'04/07/2025', position:'31st', discordId:'1095261491617345586', name:'Bebo', time:'22 / 27', img:'https://i.pravatar.cc/150?img=41'},
+{date:'08/08/2025', position:'32nd', discordId:'658059455790841868', name:'Cold', time:'35 / 22', img:'https://i.pravatar.cc/150?img=42'},
+{date:'20/11/2025', position:'33rd', discordId:'1168813994123993119', name:'Rosie', time:'24 / 20', img:'https://i.pravatar.cc/150?img=43'},
+{date:'30/12/2025', position:'34th', discordId:'1226544764128596020', name:'Hamza', time:'10 / 28', img:'https://i.pravatar.cc/150?img=44'},
+{date:'13/01/2026', position:'35th', discordId:'1242486029915521125', name:'Chespin', time:'54 / 07', img:'https://i.pravatar.cc/150?img=45'},
+{date:'07/04/2026', position:'36th', discordId:'777265386239426570', name:'Wintails', time:'42 / 29', img:'https://i.pravatar.cc/150?img=45'}
+];
+
+// helper: parse time string "MM / DD"; treat '-- / --' as very slow and compute total days
+function parseTime(t){
+if(!t || t.includes('--')) return {monthsNum: 1e6, daysNum: 1e6, totalDays: 1e9};
+const bits = t.split('/').map(s=>s.trim());
+const m = parseInt(bits[0],10);
+const d = parseInt(bits[1],10);
+const monthsNum = isNaN(m)?1e6:m;
+const daysNum = isNaN(d)?0:d;
+const totalDays = monthsNum * 30 + daysNum; // approximate months as 30 days
+return {monthsNum, daysNum, totalDays};
+}
+
+people.forEach((p, i)=>{
+const parsed = parseTime(p.time);
+p.monthsNum = parsed.monthsNum;
+p.daysNum = parsed.daysNum;
+p.totalDays = parsed.totalDays;
+p.totalDaysLabel = (p.totalDays >= 1e9) ? '--' : `${p.totalDays} days`;
+p.id = i+1; // local id
+// default description (will be shown in expandable area)
+p.description = `Date: ${formatDateDisplay(p.date)} \nID: ${p.discordId} \nTime: ${formatTime(p)}`;
+});
+
+// expanded staff dataset with roles and hierarchy
+const staff = [
+{name:'Beluga', role:'Owner', discordId:'846497753009356800'},
+// Community Managers
+{name:'rand', role:'Community Manager', discordId:'1181564704909439067'},
+{name:'TT', role:'Community Manager', discordId:'775371863106650112'},
+// Admins (display under Admin but colored like Community Manager)
+{name:'Chaos', role:'Admin', discordId:'984783971676205106'},
+{name:'Oblivio', role:'Admin', discordId:'761273366602448946'},
+{name:'Nameless', role:'Admin', discordId:'1126210964061180038'},
+{name:'TheDiamondRoblox', role:'Admin', discordId:'526996077770047498'},
+// Senior Moderators
+{name:'Sadie', role:'Sr Moderator', discordId:'662237931846631454'},
+{name:'Adnan', role:'Sr Moderator', discordId:'1064683563280236544'},
+{name:'Muncher', role:'Sr Moderator', discordId:'858666204406874152'},
+{name:'Sidney', role:'Sr Moderator', discordId:'913230713871040562'},
+{name:'Quokka', role:'Sr Moderator', discordId:'1179528757724336352'},
+{name:'Daisy', role:'Sr Moderator', discordId:'674988575762415638'},
+{name:'Cherry', role:'Sr Moderator', discordId:'949769046704914452'},
+// Moderators
+{name:'Dom', role:'Moderator', discordId:'852940911826436147'},
+{name:'MSWB', role:'Moderator', discordId:'858815743013421066'},
+{name:'Whirlpool', role:'Moderator', discordId:'462502268374220801'},
+{name:'Sana', role:'Moderator', discordId:'1087304647687032904'},
+{name:'Alpha', role:'Moderator', discordId:'607968506558021642'},
+{name:'Scythe', role:'Moderator', discordId:'1342125575955021864'},
+{name:'Gabriel', role:'Moderator', discordId:'1085984192644530257'},
+{name:'TheOnlyGoob', role:'Moderator', discordId:'1361786331365113942'},
+{name:'Tech', role:'Moderator', discordId:'963411818087317515'},
+{name:'Central Keen', role:'Moderator', discordId:'779395854574420009'},
+{name:'Achii', role:'Moderator', discordId:'738296855254794302'},
+{name:'Kaitak', role:'Moderator', discordId:'1155097526282760273'},
+{name:'Zain', role:'Moderator', discordId:'902814972671852574'},
+{name:'Xmo', role:'Moderator', discordId:'416798214415450112'},
+{name:'Reiku', role:'Moderator', discordId:'887920090815815691'},
+{name:'Ben_Games', role:'Moderator', discordId:'895326036433182770'},
+{name:'Nate', role:'Moderator', discordId:'834411211315347537'},
+{name:'Ghostly', role:'Moderator', discordId:'554814577389469696'},
+{name:'ExpoThree', role:'Moderator', discordId:'710178061777240125'},
+{name:'Samboe', role:'Moderator', discordId:'1089679102795059261'},
+{name:'Diamond', role:'Moderator', discordId:'704771469225361435'},
+{name:'Adam', role:'Moderator', discordId:'832643218860146689'},
+{name:'Furqan', role:'Moderator', discordId:'981928341491843142'}
+];
+
+// normalize staff entries (id and description)
+staff.forEach((s,i)=>{
+s.id = 's' + (i+1); // prefix to avoid collision with people ids
+// staff entries don't carry a date; default description is the role
+if(!s.description) s.description = `${s.role}`;
+});
+
+// helper to convert DD/MM/YYYY to a comparable number (YYYYMMDD)
+function parseDateToNumber(dateStr){
+if(!dateStr) return 99999999;
+const parts = dateStr.split('/').map(s=>s.trim());
+if(parts.length !== 3) return 99999999;
+const d = parseInt(parts[0],10);
+const m = parseInt(parts[1],10);
+const y = parseInt(parts[2],10);
+if(isNaN(d) || isNaN(m) || isNaN(y)) return 99999999;
+return (y*10000) + (m*100) + d;
+}
+
+let board = document.getElementById('board');
+const sortBtn = document.getElementById('sortMode');
+
+// toggle button helpers for sort mode
+function getModeLabel(mode){ return mode === 'first' ? 'First Level 200' : 'Fastest 200'; }
+function setSortMode(mode){
+if(!sortBtn) return;
+sortBtn.dataset.mode = mode;
+// center the text and remove the triangle marker
+sortBtn.textContent = getModeLabel(mode);
+sortBtn.setAttribute('aria-pressed', mode === 'first');
+}
+function toggleSortMode(){
+const newMode = (sortBtn.dataset.mode === 'first') ? 'fastest' : 'first';
+setSortMode(newMode);
+sortPeople(newMode);
+reorderBoardWithAnimation();
+}
+if(sortBtn){
+// match visual style of the old select
+sortBtn.addEventListener('click', toggleSortMode);
+sortBtn.addEventListener('keydown', (e)=>{ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); toggleSortMode(); } });
+}
+
+// dataset toggle handling
+let currentDataset = 'people';
+function setDataset(ds){
+// ensure we have a valid `board` reference (re-query if needed)
+if(!board) board = document.getElementById('board');
+if(!board){ console.warn('Board element not found; aborting setDataset'); return; }
+
+currentDataset = ds;
+// update any dataset tab buttons if present (legacy support)
+if(typeof datasetBtns !== 'undefined' && Array.isArray(datasetBtns)) datasetBtns.forEach(b => { const act = b.dataset.ds === ds; b.classList.toggle('active', act); b.setAttribute('aria-pressed', act); });
+if(sortBtn){
+if(ds === 'staff'){
+sortBtn.disabled = true; 
+sortBtn.setAttribute('aria-disabled','true');
+sortBtn.style.display = 'none';
+sortBtn.setAttribute('aria-hidden','true');
+} else {
+sortBtn.disabled = false; 
+sortBtn.removeAttribute('aria-disabled');
+sortBtn.style.display = '';
+sortBtn.removeAttribute('aria-hidden');
+}
+}
+
+// render the chosen dataset — for people: apply sort then render; for staff: just render
+if(ds === 'people'){
+sortPeople(sortBtn && sortBtn.dataset ? sortBtn.dataset.mode || 'fastest' : 'fastest');
+// render fresh people DOM and sync ranks
+try{ renderBoard(); updateRanks(); }catch(err){ console.error('renderBoard failed', err); }
+} else {
+// staff view: render grouped staff and DO NOT apply numeric ranks
+try{ renderBoard(); }catch(err){ console.error('renderStaff render failed', err); }
+}
+
+// set up reveal observers after rendering so cards animate when they enter view
+try{ if(typeof setupRevealObserver === 'function') setupRevealObserver(); }catch(e){ /* noop */ }
+
+
+
+// update triangle visual and banner title
+const left = document.getElementById('datasetTriLeft');
+const right = document.getElementById('datasetTriRight');
+const titleText = document.querySelector('.title-text');
+const isStaff = ds === 'staff';
+if(left){ left.setAttribute('aria-pressed', isStaff); left.classList.toggle('active', isStaff); }
+if(right){ right.setAttribute('aria-pressed', isStaff); right.classList.toggle('active', isStaff); }
+if(titleText) titleText.textContent = (ds === 'staff') ? 'Staff List' : 'Level 200 List';
+}
+const triLeft = document.getElementById('datasetTriLeft');
+const triRight = document.getElementById('datasetTriRight');
+function animateDatasetCycle(dir){
+const datasets = ['people','staff'];
+const idx = datasets.indexOf(currentDataset);
+const n = datasets.length;
+const newIdx = dir === 'next' ? (idx + 1) % n : (idx - 1 + n) % n;
+animateDatasetSwitch(datasets[newIdx]);
+}
+if(triLeft){ triLeft.addEventListener('click', ()=> animateDatasetCycle('prev')); triLeft.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); animateDatasetCycle('prev'); } }); }
+if(triRight){ triRight.addEventListener('click', ()=> animateDatasetCycle('next')); triRight.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); animateDatasetCycle('next'); } }); }
+
+// small toggle button styling
+const styleTag = document.createElement('style');
+styleTag.textContent = `
+.controls .toggle-btn{
+ background:linear-gradient(180deg,#15171a,#1f2023);
+ color:#e6eef8;
+ border:2px solid rgba(255,255,255,0.9);
+ padding:8px 18px;
+ border-radius:12px;
+ font-weight:700;
+ cursor:pointer;
+ text-align:center;
+ display:inline-block;
+}
+.controls .toggle-btn:focus{outline:3px solid rgba(255,255,255,0.12);box-shadow:none}
+
+/* search box styling (banner & floating) */
+.controls .search-wrap{display:inline-flex;gap:8px;align-items:center;margin-left:12px}
+.controls .search-wrap input[type='search']{background:linear-gradient(180deg,#222428,#1f2124);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;min-width:200px;font-weight:600}
+.controls .search-wrap input[type='search']::placeholder{color:rgba(230,238,248,0.46)}
+.controls .search-wrap button{padding:6px 10px;border-radius:8px}
+
+/* floating search (top-right, collapsed by default, expands on hover/focus) */
+#float-search{
+ position:fixed;
+ right:18px;
+ top:88px;
+ z-index:200002;
+ display:flex;
+ align-items:center;
+ gap:8px;
+ background:linear-gradient(180deg,#15171a,#1f2023);
+ padding:8px;
+ border-radius:12px;
+ border:1px solid rgba(255,255,255,0.06);
+ width:44px;
+ box-shadow:0 8px 30px rgba(0,0,0,0.45);
+ overflow:hidden;
+ transition: width 800ms cubic-bezier(.2,.8,.3,1);
+}
+#float-search:hover, #float-search:focus-within{ width:80%; }
+#float-search input[type='search']{background:transparent;border:none;outline:none;color:#e6eef8;min-width:0;width:0;opacity:0;transition: width 320ms cubic-bezier(.2,.8,.3,1), opacity 220ms; font-weight:600}
+#float-search:hover input[type='search'], #float-search:focus-within input[type='search']{width:100%;opacity:1}
+#float-search button{padding:6px;border-radius:8px;min-width:36px}
+#floatSearchToggle{ background:#1b1b1b; color:#ffffff; border:1px solid rgba(0,0,0,0.42); box-shadow:0 6px 20px rgba(0,0,0,0.38); padding:6px 10px; border-radius:10px; }
+#floatSearchToggle svg{ display:block; color:inherit; transform:translateX(6px); transition:transform .14s ease; }
+#floatSearchToggle:hover{ filter:brightness(1.2); box-shadow:0 8px 28px rgba(0,0,0,0.44); transform:translateY(-1px); }
+@media (max-width:520px){ #float-search{ right:12px; top:100px; } }
+
+/* search highlight */
+.card.search-match{box-shadow:0 20px 50px rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.12);transform:translateY(-4px)}
+.card .username.search-hit{background:linear-gradient(90deg,rgba(124,58,237,0.06),rgba(124,58,237,0.02));padding:2px 6px;border-radius:6px}
+
+/* error overlay */
+#error-overlay{position:fixed;left:18px;top:88px;z-index:200000;background:linear-gradient(180deg,#2b0f12,#1a0b0d);color:#fff;padding:12px 14px;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.04);max-width:420px;white-space:normal;font-size:13px}
+`;
+document.head.appendChild(styleTag);
+
+function getInitials(name){
+if(!name) return '';
+const parts = name.split(/\s+/).filter(Boolean);
+if(parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+function formatTime(p){
+// show as "X months Y days" using parsed months and days
+if(!p || p.totalDays >= 1e9) return '--';
+const m = Number(p.monthsNum);
+const d = Number(p.daysNum);
+if(isNaN(m) || isNaN(d)) return '--';
+const parts = [];
+if(m > 0 && m < 1e6) parts.push(`${m} month${m === 1 ? '' : 's'}`);
+if(d > 0) parts.push(`${d} day${d === 1 ? '' : 's'}`);
+if(parts.length === 0) return '0 days';
+return parts.join(' ');
+} 
+
+// format a date string in dd/mm/yyyy into a human readable form like "1 February 2023"
+function formatDateDisplay(dateStr){
+if(!dateStr) return '--';
+const parts = dateStr.split('/').map(s=>s.trim());
+if(parts.length !== 3) return dateStr;
+const d = parseInt(parts[0],10);
+const m = parseInt(parts[1],10);
+const y = parseInt(parts[2],10);
+if(isNaN(d) || isNaN(m) || isNaN(y)) return dateStr;
+const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const month = monthNames[m - 1] || '';
+return `${d} ${month} ${y}`;
+}
+
+function sortPeople(mode){
+if(mode === 'fastest'){
+people.sort((a,b)=> (a.monthsNum - b.monthsNum) || (a.daysNum - b.daysNum) || (parseDateToNumber(a.date) - parseDateToNumber(b.date)));
+} else if(mode === 'first'){
+people.sort((a,b)=> (parseDateToNumber(a.date) - parseDateToNumber(b.date)) || (parseInt(a.position,10) - parseInt(b.position,10)) || (a.id - b.id));
+}
+}
+
+function renderBoard(){
+board.innerHTML = '';
+if(currentDataset === 'staff'){
+renderStaff();
+return;
+}
+const data = (currentDataset === 'staff') ? staff : people;
+// debug: log dataset and names to detect missing rows like Certi
+try{ console.log('renderBoard: start', { dataset: currentDataset, total: data.length, sample: data.slice(0,8).map((p,i)=>`${i+1}:${p.name}(${p.discordId})`) }); }catch(e){}
+// render each person defensively to avoid a single bad row killing the entire render loop
+data.forEach((p, index)=>{
+try{
+const card = document.createElement('article');
+card.className = 'card';
+// enable reveal-on-scroll animation
+card.classList.add('reveal');
+card.setAttribute('role','listitem');
+card.setAttribute('tabindex','0');
+// identify card for FLIP animations
+card.dataset.id = p.id;
+
+// rank class for accent
+if(index===0) card.classList.add('rank-1');
+else if(index===1) card.classList.add('rank-2');
+else if(index===2) card.classList.add('rank-3');
+
+// badge (gradient background based on rank)
+const rankBadge = document.createElement('div');
+rankBadge.className = 'rank-badge';
+rankBadge.textContent = `#${index+1}`;
+card.appendChild(rankBadge);
+
+const initials = getInitials(p.name);
+const formatted = (currentDataset === 'staff') ? (p.role || '') : formatTime(p);
+
+// only render a clickable button when a valid ID exists
+const rawId = (p.discordId || '').toString().trim();
+const idLower = rawId.toLowerCase();
+const missingSentinels = ['--','-','deleted','removed','n/a','null',''];
+const isMissing = missingSentinels.includes(idLower);
+const hasId = rawId && !isMissing;
+let idHtml;
+if(hasId){
+idHtml = `<button class="id-link" aria-label="Copy ID ${rawId}">${rawId}</button>`;
+} else {
+// show the original text for deleted accounts (e.g., "Deleted") or an em dash
+const display = (rawId && rawId !== '--') ? rawId : '—';
+const aria = (rawId && rawId !== '--') ? `aria-label="ID ${rawId}"` : `aria-label="ID missing"`;
+idHtml = `<span class="id-missing" ${aria}>${display}</span>`;
+}
+
+card.innerHTML += `
+       <div class="card-header">
+         <div class="avatar" aria-hidden="true" aria-label="${p.name}"></div>
+         <div class="meta">
+           <div class="username">${p.name}</div>
+           <div class="stats"><div class="pill">${formatted}</div></div>
+         </div>
+       </div>
+       <div id="desc-${p.id}" class="desc" role="region" aria-hidden="true">
+         <div class="desc-inner ${currentDataset === 'staff' ? '' : 'centered'}">
+           <strong>Date:</strong> ${formatDateDisplay(p.date)}<br>
+           ${currentDataset === 'staff' ? `<strong>Role:</strong> ${p.role}<br>` : ``}
+           <strong>ID:</strong> ${idHtml}<br>
+           ${currentDataset === 'staff' ? `<strong>Note:</strong> ${p.description}` : `<strong>Time:</strong> ${formatTime(p)}`}
+         </div>
+       </div>
+     `; 
+
+const avatar = card.querySelector('.avatar');
+
+// avatar selection priority:
+// 1) discord default avatar (when a valid numeric ID exists)
+// 2) manual image if provided (but ignore pravatar placeholders)
+// 3) deterministic discord embed avatar fallback (based on name or id)
+// 4) initials
+let avatarUrl = null;
+
+if (p.discordId && p.discordId !== 'Deleted') {
+avatarUrl = discordDefaultAvatar(p.discordId) || getFallbackDiscordAvatar(p.name || p.discordId);
+} else if (p.img && !/pravatar\.cc/.test(p.img)) {
+avatarUrl = p.img.replace('.webp', '.png');
+} else {
+// deterministic fallback so Deleted/'-' entries get a Discord-looking avatar
+avatarUrl = getFallbackDiscordAvatar(p.name || p.discordId);
+}
+
+if (avatarUrl) {
+avatar.style.backgroundImage = `url("${avatarUrl}")`;
+avatar.style.backgroundSize = 'cover';
+avatar.style.backgroundPosition = 'center';
+avatar.textContent = '';
+} else {
+avatar.style.backgroundImage = '';
+avatar.textContent = initials;
+}
+
+
+
+// attach copy handlers to ID buttons (header & desc)
+const idButtons = card.querySelectorAll('.id-link');
+idButtons.forEach(btn=>{
+btn.addEventListener('click', async (e)=>{
+try{
+await navigator.clipboard.writeText(p.discordId);
+const orig = btn.textContent;
+btn.textContent = 'Copied';
+setTimeout(()=> btn.textContent = orig, 1200);
+}catch(err){
+console.error('copy failed', err);
+}
+});
+});
+
+const desc = card.querySelector('.desc');
+const descInner = desc.querySelector('.desc-inner');
+
+function closeOthers(){
+document.querySelectorAll('.card.show-desc').forEach(c=>{ if(c !== card) { c.classList.remove('show-desc'); const d = c.querySelector('.desc'); if(d) d.style.maxHeight = '0px'; } });
+}
+function showDesc(){
+closeOthers();
+card.classList.add('show-desc');
+card.setAttribute('aria-expanded','true');
+desc.setAttribute('aria-hidden','false');
+// animate max-height to content height
+desc.style.maxHeight = descInner.scrollHeight + 24 + 'px';
+// ensure visible
+setTimeout(()=>{ descInner.style.opacity = 1; descInner.style.transform = 'translateY(0)'; card.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 40);
+}
+function hideDesc(){
+card.classList.remove('show-desc');
+card.setAttribute('aria-expanded','false');
+desc.setAttribute('aria-hidden','true');
+descInner.style.opacity = 0; descInner.style.transform = 'translateY(6px)';
+desc.style.maxHeight = '0px';
+}
+
+card.addEventListener('mouseenter', showDesc);
+card.addEventListener('mouseleave', hideDesc);
+card.addEventListener('focusin', showDesc);
+card.addEventListener('focusout', hideDesc);
+card.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); const isOpen = card.classList.contains('show-desc'); if(isOpen) hideDesc(); else showDesc(); } });
+
+board.appendChild(card);
+}
+catch(err){
+console.error('renderBoard: failed to render person', p && p.name, p, err);
+}
+});
+
+// after rendering, update status and log summary for debugging
+try{
+const renderedNames = Array.from(board.querySelectorAll('.username')).map(n=>n.textContent && n.textContent.trim()).filter(Boolean);
+const count = renderedNames.length;
+console.log('renderBoard: rendered names count', count);
+const missing = (people || []).map(p=>p.name && p.name.trim()).filter(Boolean).filter(n => !renderedNames.includes(n));
+if(missing.length) console.warn('renderBoard: missing after render ->', missing);
+}catch(e){ /* noop */ }
+}
+
+// render staff with grouping and role-specific plates
+function renderStaff(){
+board.innerHTML = '';
+const groupsOrder = ['Owner','Community Manager','Admin','Sr Moderator','Moderator'];
+const groups = {};
+staff.forEach(s => {
+const role = s.role || 'Moderator';
+const key = role.trim();
+if(!groups[key]) groups[key] = [];
+groups[key].push(s);
+});
+
+groupsOrder.forEach(groupName => {
+const members = groups[groupName];
+if(!members || members.length === 0) return;
+
+// sort alphabetically by name for easier lookup (case-insensitive)
+members.sort((a,b)=> a.name.localeCompare(b.name, undefined, {sensitivity:'base'}));
+
+// if odd number of members, move the last (lowest alphabetical) into the center for balance
+if(members.length % 2 === 1 && members.length > 1){
+const last = members.pop();
+const midIndex = Math.floor(members.length / 2);
+members.splice(midIndex, 0, last);
+}
+
+const sec = document.createElement('section');
+sec.className = 'group-section';
+const title = document.createElement('div');
+title.className = 'group-title';
+title.textContent = groupName;
+sec.appendChild(title);
+
+const grid = document.createElement('div');
+grid.className = 'staff-grid';
+
+members.forEach((p)=>{
+const card = document.createElement('article');
+card.className = 'card';
+// enable reveal-on-scroll animation
+card.classList.add('reveal');
+// role-specific modifier
+const roleKey = groupName.toLowerCase().startsWith('owner') ? 'staff-owner' : ( (groupName.toLowerCase().includes('community') || groupName.toLowerCase().includes('admin')) ? 'staff-cm' : (groupName.toLowerCase().includes('sr') ? 'staff-sr' : 'staff-mod'));
+card.classList.add(roleKey);
+card.setAttribute('role','listitem');
+card.dataset.id = p.id;
+// make the Owner card span two columns so it takes the full width
+if(groupName === 'Owner'){
+// span exactly 2 columns (keeps a long card similar to the Level 200 list)
+card.style.gridColumn = 'span 2';
+card.classList.add('owner-span');
+}
+
+// id rendering (staff: only show ID; no date)
+const rawId = (p.discordId || '').toString().trim();
+const idLower = rawId.toLowerCase();
+const missingSentinels = ['--','-','deleted','removed','n/a','null',''];
+const isMissing = missingSentinels.includes(idLower);
+const hasId = rawId && !isMissing;
+let idHtml;
+if(hasId){ idHtml = `<button class="id-link" aria-label="Copy ID ${rawId}">${rawId}</button>` } else { const display = (rawId && rawId !== '--') ? rawId : '—'; idHtml = `<span class="id-missing">${display}</span>`; }
+
+// pill role class mapping for colors
+const pillRoleClass = (roleKey === 'staff-owner') ? 'role-owner' : (roleKey === 'staff-cm' ? 'role-cm' : (roleKey === 'staff-sr' ? 'role-sr' : 'role-mod'));
+const roleLabel = p.role;
+
+card.innerHTML += `
+       <div class="card-header">
+         <div class="avatar" aria-hidden="true" aria-label="${p.name}"></div>
+         <div class="meta">
+           <div class="username">${p.name}</div>
+           <div class="muted">ID: ${idHtml}</div>
+           <div class="stats"><div class="pill ${pillRoleClass}">${roleLabel}</div></div>
+         </div>
+       </div>
+     `;
+
+const avatar = card.querySelector('.avatar');
+
+// avatar selection for staff cards: prefer discord avatar when available; otherwise avoid pravatar placeholders and use deterministic discord fallback
+let avatarUrl = null;
+if (p.discordId && p.discordId !== 'Deleted') {
+avatarUrl = discordDefaultAvatar(p.discordId) || getFallbackDiscordAvatar(p.name || p.discordId);
+} else if (p.img && !/pravatar\.cc/.test(p.img)) {
+avatarUrl = p.img.replace('.webp', '.png');
+} else {
+avatarUrl = getFallbackDiscordAvatar(p.name || p.discordId);
+}
+
+if (avatarUrl) {
+avatar.style.backgroundImage = `url("${avatarUrl}")`;
+avatar.style.backgroundSize = 'cover';
+avatar.style.backgroundPosition = 'center';
+avatar.textContent = '';
+} else {
+avatar.textContent = initials;
+}
+
+// style the role pill according to role (Owner, Community Manager/Admin, Sr, Mod)
+const pillEl = card.querySelector('.pill');
+if(pillEl){
+if(groupName === 'Owner' || roleKey === 'staff-owner') pillEl.classList.add('role-owner');
+else if(groupName === 'Community Manager' || roleKey === 'staff-cm') pillEl.classList.add('role-cm');
+else if(groupName === 'Admin') pillEl.classList.add('role-admin');
+else if(roleKey === 'staff-sr') pillEl.classList.add('role-sr');
+else pillEl.classList.add('role-mod');
+}
+
+
+// attach copy handlers to ID buttons (header & desc) if any
+const idButtons = card.querySelectorAll('.id-link');
+idButtons.forEach(btn=>{
+btn.addEventListener('click', async (e)=>{
+try{ await navigator.clipboard.writeText(p.discordId); const orig = btn.textContent; btn.textContent = 'Copied'; setTimeout(()=> btn.textContent = orig, 1200); }catch(err){ console.error('copy failed', err); }
+});
+});
+
+
+
+grid.appendChild(card);
+});
+
+
+
+sec.appendChild(grid);
+board.appendChild(sec);
+
+// center any lone final card AFTER it has been inserted into the DOM
+requestAnimationFrame(()=>{
+try{
+const colStyle = window.getComputedStyle(grid).gridTemplateColumns || '';
+const cols = colStyle ? colStyle.trim().split(/\s+/).length : 1;
+if(cols > 1 && (grid.children.length % cols) === 1){
+const lastCard = grid.children[grid.children.length - 1];
+if(lastCard){
+// make it span the full row so we can center it, then constrain to exactly one column's width
+lastCard.style.gridColumn = '1 / -1';
+lastCard.style.justifySelf = 'center';
+
+if(!lastCard.classList.contains('staff-owner')){
+// compute single column width and set that width so the lone card matches cards above
+const gridRect = grid.getBoundingClientRect();
+const gap = parseFloat(window.getComputedStyle(grid).gap) || 0;
+const colWidth = Math.max(0, Math.floor((gridRect.width - (cols - 1) * gap) / cols));
+lastCard.style.width = colWidth + 'px';
+lastCard.style.maxWidth = colWidth + 'px';
+lastCard.style.margin = '0 auto';
+lastCard.style.alignSelf = 'stretch';
+lastCard.style.boxSizing = 'border-box';
+} else {
+lastCard.style.width = '';
+lastCard.style.maxWidth = '';
+lastCard.style.margin = '';
+lastCard.style.alignSelf = '';
+}
+
+lastCard.classList.add('centered-card');
+}
+} else {
+Array.from(grid.children).forEach(c => { c.classList.remove('centered-card'); c.style.gridColumn = ''; c.style.justifySelf = ''; c.style.maxWidth = ''; c.style.width = ''; c.style.margin = ''; c.style.alignSelf = ''; });
+}
+}catch(e){ /* noop */ }
+});
+});
+}
+
+// keep badges & left accents in sync with current DOM order
+function updateRanks(){
+Array.from(board.children).forEach((c, i)=>{
+c.classList.remove('rank-1','rank-2','rank-3');
+if(i===0) c.classList.add('rank-1');
+else if(i===1) c.classList.add('rank-2');
+else if(i===2) c.classList.add('rank-3');
+const badge = c.querySelector('.rank-badge');
+if(badge) badge.textContent = `#${i+1}`;
+});
+}
+
+// Reorder with FLIP animation when sort mode changes
+function reorderBoardWithAnimation(){
+// capture first positions
+const cards = Array.from(board.children);
+const firstRects = new Map();
+cards.forEach(c => { firstRects.set(c.dataset.id, c.getBoundingClientRect()); });
+
+// append in new order
+const data = (currentDataset === 'staff') ? staff : people;
+data.forEach(p => {
+const c = board.querySelector(`[data-id="${p.id}"]`);
+if(c) board.appendChild(c);
+});
+
+// update badges and left-accent classes to reflect new order (only for people list)
+if(currentDataset !== 'staff') updateRanks();
+
+// animate from old position to new
+const lastRects = new Map();
+const moved = [];
+Array.from(board.children).forEach(c => {
+const id = c.dataset.id;
+const first = firstRects.get(id);
+const last = c.getBoundingClientRect();
+lastRects.set(id, last);
+const deltaY = first ? first.top - last.top : 0;
+if(deltaY){
+moved.push({c, deltaY});
+}
+});
+
+moved.forEach(({c, deltaY}) => {
+c.style.transition = 'none';
+c.style.transform = `translateY(${deltaY}px)`;
+requestAnimationFrame(()=>{
+c.style.transition = 'transform .48s cubic-bezier(.2,.8,.2,1)';
+c.style.transform = '';
+});
+const cleanup = ()=>{ c.style.transition = ''; c.style.transform = ''; c.removeEventListener('transitionend', cleanup); };
+c.addEventListener('transitionend', cleanup);
+});
+}
+
+// reveal observer for scroll animations
+let revealObserver = null;
+function setupRevealObserver(){
+try{
+if(revealObserver) revealObserver.disconnect();
+revealObserver = new IntersectionObserver((entries, obs)=>{
+entries.forEach(entry => {
+if(entry.isIntersecting){
+// add a tiny delay and clear inline transition to ensure the CSS transition runs
+setTimeout(()=>{ try{ entry.target.style.transition = ''; entry.target.classList.add('visible'); }catch(e){} }, 25);
+obs.unobserve(entry.target);
+}
+});
+},{threshold:0.12});
+// ensure reveal elements already in the viewport show immediately; otherwise observe them
+document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+try{
+const r = el.getBoundingClientRect();
+const vh = window.innerHeight || document.documentElement.clientHeight;
+if(r.top < vh && r.bottom > 0){
+// small delay to ensure initial styles are applied; clear any inline transition and then add visible
+setTimeout(()=>{ try{ el.style.transition = ''; el.classList.add('visible'); }catch(e){} }, 25);
+} else {
+revealObserver.observe(el);
+}
+}catch(e){ revealObserver.observe(el); }
+});
+}catch(err){ /* noop */ }
+}
+
+// helper: locate a card by display name, scroll to it and apply a temporary highlight
+
+
+// initial setup: ensure button is initialized and use its mode for sorting
+setSortMode((sortBtn && sortBtn.dataset.mode) ? sortBtn.dataset.mode : 'fastest');
+// initialize state with safety and set up search control
+try{ setDataset('people'); }catch(err){ console.error('init render failed', err); showErrorOverlay('Init render failed: ' + (err && err.message ? err.message : String(err))); }
+try{ setupSearch(); }catch(e){}
+
+
+// animate switching datasets with a smooth fade/slide
+function animateDatasetSwitch(newDs){
+if(!board) { setDataset(newDs); return; }
+// prevent double toggles
+if(board.classList.contains('fade-out')) return;
+board.classList.add('fade-out');
+const onFade = (e)=>{
+if(e.propertyName !== 'opacity') return;
+board.removeEventListener('transitionend', onFade);
+setDataset(newDs);
+requestAnimationFrame(()=>{
+board.classList.remove('fade-out');
+board.classList.add('fade-in');
+const onIn = (ev)=>{ if(ev.propertyName !== 'opacity') return; board.removeEventListener('transitionend', onIn); board.classList.remove('fade-in'); };
+board.addEventListener('transitionend', onIn);
+});
+};
+board.addEventListener('transitionend', onFade);
+}
+
+// Bottom banner: full-width footer that appears when the user reaches the bottom; instant, extra slim, text lifted
+;(function(){
+const css = `
+ /* footer banner styles (visible and more prominent) */
+ .bottom-banner{
+   position:fixed;
+   left:0;
+   right:0;
+   bottom:0;
+   display:none; /* hidden by default, shown instantly */
+   z-index:200001;
+   background:linear-gradient(180deg,#111216,#15171a);
+   color:var(--muted);
+   padding:0; /* compact */
+   height:48px; /* more visible */
+   border-top-left-radius:6px;
+   border-top-right-radius:6px;
+   border-top:1px solid rgba(255,255,255,0.04);
+   box-shadow:0 -8px 20px rgba(0,0,0,0.28);
+   display:flex;justify-content:center;align-items:center;font-weight:800;pointer-events:none;
+ }
+ .bottom-banner.show{ display:flex; }
+ .bottom-banner .banner-inner{ width:100%; max-width:1100px; padding:0 16px; display:flex; align-items:center; justify-content:center; gap:12px; position:relative; height:52px; }
+ .bottom-banner .text{ font-size:1.08rem; color:#e6eef8; font-weight:800; text-align:center; line-height:52px; transform:none; white-space:nowrap; overflow:visible; text-overflow:ellipsis; text-shadow:0 1px 0 rgba(0,0,0,0.35); }
+ `;
+
+try{
+const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+const banner = document.createElement('div');
+banner.className = 'bottom-banner';
+banner.setAttribute('role','status');
+banner.setAttribute('aria-hidden','true');
+banner.innerHTML = `<div class="banner-inner container"><div class="text">Not an official list</div></div>`;
+document.body.appendChild(banner);
+
+// ensure the banner does not permanently hide important content by adding body padding equal to its height when visible
+function applyBodyPadding(){
+try{
+// add a small extra gap to ensure the last card never touches the banner (4px)
+const h = Math.round(banner.getBoundingClientRect().height) + 4;
+if(h && document.body.style.paddingBottom !== h + 'px') document.body.style.paddingBottom = h + 'px';
+}catch(e){}
+}
+
+function clearBodyPadding(){
+try{ if(document.body.style.paddingBottom){ document.body.style.paddingBottom = ''; } }catch(e){}
+}
+
+function throttle(fn, wait){ let last = 0, t = null; return function(...args){ const now = Date.now(); if(now - last >= wait){ last = now; fn.apply(this,args); } else { clearTimeout(t); t = setTimeout(()=>{ last = Date.now(); fn.apply(this,args); }, wait - (now - last)); } } }
+
+let visible = false;
+function checkScrollForBanner(){ const nearBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 24); if(nearBottom){ if(!visible){ banner.classList.add('show'); banner.setAttribute('aria-hidden','false'); visible = true; // allow the transition to apply before measuring
+setTimeout(applyBodyPadding, 50);
+} else { // ensure padding remains correct
+applyBodyPadding();
+}
+} else {
+if(visible){ banner.classList.remove('show'); banner.setAttribute('aria-hidden','true'); visible = false; clearBodyPadding(); }
+} }
+
+window.addEventListener('scroll', throttle(checkScrollForBanner, 150), {passive:true});
+window.addEventListener('resize', throttle(()=>{ checkScrollForBanner(); if(visible) applyBodyPadding(); }, 250));
+// initial check after layout
+setTimeout(checkScrollForBanner, 240);
+}catch(e){ console.warn('bottom banner init failed', e); }
+})();
+</script>
+</body>
+</html>

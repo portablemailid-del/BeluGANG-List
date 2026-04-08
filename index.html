@@ -1,131 +1,205 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BeluGANG List</title>
-<style>
-.card-banner{
-  position:absolute;
-  inset:0;
-  border-radius:12px;
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  opacity:0.18;
-  transition:opacity .22s ease;
-  pointer-events:none;
-  z-index:0;
-}
-.card:hover .card-banner, .card:focus-within .card-banner{
-  opacity:0.32;
-}
-/* ensure card content sits above the banner */
-.card-header, .desc, .rank-badge{
-  position:relative;
-  z-index:1;
-}
-:root{
---bg:#202120; --card:#23272b; --muted:#aeb8c2; --accent:#7c3aed;
---glass: rgba(255,255,255,0.04);
---card-radius:12px;
---banner-height:84px;
-}
-html{background:linear-gradient(rgba(32,33,32,0.8), rgba(32,33,32,0.8)), url('https://cdn.discordapp.com/splashes/846496831533088768/1b728ecdbe543ff9e183605686639dce.jpg?size=4096') no-repeat center center / cover fixed;background-color:#202120;overscroll-behavior:none;min-height:100%;}
-body{font-family:Inter,system-ui,Segoe UI,Arial;background:transparent;color:#e6eef8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;overscroll-behavior:none;overflow-x:hidden;}
-.container{width:100%;max-width:1100px;padding:0} 
-h1{font-size:1.6rem;margin:0 0 18px;color:#e6eef8}
-.banner{position:fixed;top:0;left:0;width:100%;height:var(--banner-height);background:#111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
-.banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
-/* level title: slightly smaller and lifted */
-.banner-inner h1{position:absolute;left:50%;transform:translate(-50%,-4px);font-size:1.2rem;white-space:nowrap;margin:0}
-/* organization name: larger */
-.banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BeluGANG List</title>
+  <style>
+  .card-banner {
+    position:absolute;
+    inset:0;
+    border-radius:12px;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    opacity:0.18;
+    transition:opacity .22s ease;
+    pointer-events:none;
+    z-index:0;
+  }
+  .card:hover.card-banner, .card:focus-within.card-banner {
+    opacity:0.32;
+  }
+  .card-header, .desc, .rank-badge {
+    position:relative;
+    z-index:1;
+  }:root {
+    --bg: #202120; --card:#23272b;
+    --muted: #aeb8c2;
+    --accent:
+      #7c3aed;
+      --card-radius:12px;
+      --banner-height:84px;
+    }
+    html{background:linear-gradient(rgba(32,33,32,0.8), rgba(32,33,32,0.8)), url('https://cdn.discordapp.com/splashes/846496831533088768/1b728ecdbe543ff9e183605686639dce.jpg?size= 4096 ') no-repeat center center / cover fixed;background-color:#202120;overscroll-behavior:none;min-height:100%;}
+    body {
+      font-family:Inter, system-ui, Segoe UI, Arial;
+      background:transparent;
+      color: #e6eef8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      margin:0;
+      overscroll-behavior:none;
+      overflow-x:hidden;
+    }
+    .container {
+      width:100% ;max-width:1100px;padding:0
+    }
+    .banner {
+      position:fixed;top:0;left:0;width:100% ;height:var(--banner-height);background: #111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
+      .banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+      .banner-inner h1{position:absolute;left:50%;transform:translate(-50%,-4px);font-size:1.2rem;white-space:nowrap;margin:0}
+      .banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px
+    }
+    .dataset-btn {
+        background:transparent;border:1px solid rgba(255, 255, 255, 0.06);color: #e6eef8;padding:6px 10px;border-radius:8px;font-weight:600;cursor:pointer
+      }
+      .dataset-btn.active {
+        background:rgba(255, 255, 255, 0.06);border-color:rgba(255, 255, 255, 0.12)
+      }
+      .toggle-btn[disabled] {
+        opacity:0.5;cursor:default
+      }
 
-.controls select{
--webkit-appearance:none;
--moz-appearance:none;
-appearance:none;
-background: linear-gradient(180deg,#2c3136,#26292c);
-color:#e6eef8;
-border:1px solid rgba(255,255,255,0.08);
-padding:8px 40px 8px 12px;
-border-radius:10px;
-min-width:160px;
-font-weight:600;
-box-shadow:0 4px 14px rgba(0,0,0,0.45);
-background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke='%23e6eef8' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><path d='M2 6l6 6 6-6'/></svg>");
-background-repeat:no-repeat;
-background-position:right 12px center;
-background-size:12px;
-transition:transform .12s ease, box-shadow .12s ease;
-cursor:pointer;
-}
-/* ensure options use dark background and light text when the dropdown opens */
-.controls select option{ background:#2c3136; color:#e6eef8 }
-/* Windows specific: hide native expand icon */
-.controls select::-ms-expand{ display:none }
-.controls select:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,0.5)}
-.controls select:focus{outline:none;box-shadow:0 0 0 4px rgba(124,58,237,0.12)}
-/* dataset toggle tabs */
-.dataset-toggle{display:inline-flex;gap:8px;align-items:center;margin-right:10px}
-.dataset-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef8;padding:6px 10px;border-radius:8px;font-weight:600;cursor:pointer}
-.dataset-btn.active{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12)}
-.toggle-btn[disabled]{opacity:0.5;cursor:default}
+      /* staff grouping */
+      .group-section {
+        margin-top:18px
+      }
+      .group-title {
+        font-weight:800;
+        font-size:1rem;
+        color: #e6eef8;
+        margin:6px 0 14px;
+        text-align:center;
+        position:relative;
+        padding:6px 0
+      }
+      .group-title::before, .group-title::after {
+        content: '';position:absolute;top: 50%;height:1 px;background:rgba(255, 255, 255, 0.04);width:30%
+        ;transform:translateY(-50% )
+      }
+      .group-title::before {
+        left:0
+      }
+      .group-title::after {
+        right:0
+      }
+      .staff-grid {
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(420px, 1fr));
+        gap:24px;
+        grid-auto-rows:1fr;
+      }
+      .staff-grid.card {
+        height:100% ;box-sizing:border-box
+      }
+      .staff-grid.card {
+        min-height:140px
+      }
+      /* role pill should appear under the ID, not centered inline; remove decorative lines */
+      .card.staff-owner.stats, .card.staff-cm.stats, .card.staff-sr.stats, .card.staff-mod.stats {
+        justify-content:flex-start
+      }
+      .card.staff-owner.stats::before, .card.staff-owner.stats::after, .card.staff-cm.stats::before, .card.staff-cm.stats::after, .card.staff-sr.stats::before, .card.staff-sr.stats::after, .card.staff-mod.stats::before,
+      .card.staff-mod.stats::after {
+        display:none
+      }
+      .meta {
+        display:flex;flex-direction:column
+      }
+      .stats {
+        margin-top:8px
+      }
+      /* centered card highlight:outline only (no permanent shadow); hover/focus still lifts like other cards */
+      .staff-grid.card.centered-card {
+        outline:1px solid rgba(255, 255, 255, 0.03);box-shadow:none;margin-top:0;margin-bottom:0;transition:transform .22s,
+        box-shadow .22s,
+        width .22s
+      }
+      /* ensure centered cards animate width changes and still lift on hover */
+      .staff-grid.card.centered-card:hover, .staff-grid.card.centered-card:focus-within {
+        transform:translateY(-6px);box-shadow:0 12px 30px rgba(0, 0, 0, 0.6)
+      }
+      /* owner span keeps natural size (span 2 columns) */
+      .staff-grid.card.owner-span {
+        grid-column:span 2
+      }
+    @media(min-width:920px) {
+        /* at larger widths, enforce owner card min width equal to two columns so it looks long */
+        .staff-grid.card.owner-span {
+          min-width:calc(2 * 420px + 24px);
+        }
+      }
+      /* role-specific plates */
+      .card.staff-owner {
+        padding:22px;border-radius:14px;background:linear-gradient(180deg, #111316,#15181b)
+      }
+      .card.staff-owner.avatar {
+        width:88px;height:88px;font-size:22px;flex:0 0 88px
+      }
+      .card.staff-owner.pill {
+        padding:8px 10px;font-size:0.92rem;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
+      }
 
-/* staff grouping */
-.group-section{margin-top:18px}
-.group-title{font-weight:800;font-size:1rem;color:#e6eef8;margin:6px 0 14px;text-align:center;position:relative;padding:6px 0}
-.group-title::before, .group-title::after{content:'';position:absolute;top:50%;height:1px;background:rgba(255,255,255,0.04);width:30%;transform:translateY(-50%)}
-.group-title::before{left:0}
-.group-title::after{right:0} 
-.staff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px;grid-auto-rows:1fr}
-.staff-grid .card{height:100%;box-sizing:border-box}
-.staff-grid .card{min-height:140px}
-/* role pill should appear under the ID, not centered inline; remove decorative lines */
-.card.staff-owner .stats, .card.staff-cm .stats, .card.staff-sr .stats, .card.staff-mod .stats{justify-content:flex-start}
-.card.staff-owner .stats::before,.card.staff-owner .stats::after,.card.staff-cm .stats::before,.card.staff-cm .stats::after,.card.staff-sr .stats::before,.card.staff-sr .stats::after,.card.staff-mod .stats::before,.card.staff-mod .stats::after{display:none}
-.meta{display:flex;flex-direction:column}
-.stats{margin-top:8px}
-/* centered card highlight: outline only (no permanent shadow); hover/focus still lifts like other cards */
-.staff-grid .card.centered-card{outline:1px solid rgba(255,255,255,0.03);box-shadow:none;margin-top:0;margin-bottom:0;transition:transform .22s, box-shadow .22s, width .22s}
-/* ensure centered cards animate width changes and still lift on hover */
-.staff-grid .card.centered-card:hover, .staff-grid .card.centered-card:focus-within{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
-/* owner span keeps natural size (span 2 columns) */
-.staff-grid .card.owner-span{grid-column:span 2}
-@media (min-width:920px){
-/* at larger widths, enforce owner card min width equal to two columns so it looks long */
-.staff-grid .card.owner-span{min-width:calc(2 * 420px + 24px);}
-}
-/* role-specific plates */
-.card.staff-owner{padding:22px;border-radius:14px;background:linear-gradient(180deg,#111316,#15181b)}
-.card.staff-owner .avatar{width:88px;height:88px;font-size:22px;flex:0 0 88px}
-.card.staff-owner .pill{padding:8px 10px;font-size:0.92rem;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+      .card.staff-cm {
+        padding:18px;border-radius:13px
+      }
+      .card.staff-cm.avatar {
+        width:72px;height:72px;font-size:20px;flex:0 0 72px
+      }
+      .card.staff-cm.pill {
+        padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
+      }
 
-.card.staff-cm{padding:18px;border-radius:13px}
-.card.staff-cm .avatar{width:72px;height:72px;font-size:20px;flex:0 0 72px}
-.card.staff-cm .pill{padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+      .card.staff-sr {
+        padding:16px;border-radius:12px
+      }
+      .card.staff-sr.avatar {
+        width:64px;height:64px;font-size:18px;flex:0 0 64px
+      }
+      .card.staff-sr.pill {
+        padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
+      }
 
-.card.staff-sr{padding:16px;border-radius:12px}
-.card.staff-sr .avatar{width:64px;height:64px;font-size:18px;flex:0 0 64px}
-.card.staff-sr .pill{padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
+      .card.staff-mod.avatar {
+        width:56px;height:56px;font-size:16px;flex:0 0 56px
+      }
+      .card.staff-mod.pill {
+        padding:6px 10px;font-size:0.88rem;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
+      }
 
-.card.staff-mod .avatar{width:56px;height:56px;font-size:16px;flex:0 0 56px}
-.card.staff-mod .pill{padding:6px 10px;font-size:0.88rem;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
-
-/* staff role badges (right) */
-.staff-badge{position:absolute;top:12px;right:12px;border-radius:999px;padding:6px 10px;font-weight:800;font-size:0.85rem}
-.role-owner{background:linear-gradient(180deg,#FFEB99,#FFD54F);color:#111827}
-.role-cm{background:linear-gradient(180deg,#D8B4FE,#B794F4);color:#111827}
-.role-sr{background:linear-gradient(180deg,#E1A17A,#D98845);color:#111827}
-.role-mod{background:linear-gradient(180deg,#ffffff,#e6e6e6);color:#111827}
+      /* staff role badges (right) */
+      .staff-badge {
+        position:absolute;top:12px;right:12px;border-radius:999px;padding:6px 10px;font-weight:800;font-size:0.85rem
+      }
+      .role-owner {
+        background:linear-gradient(180deg, #FFEB99, #FFD54F);color: #111827}
+        .role-cm{background:linear-gradient(180deg,#D8B4FE,
+        #B794F4);
+        color: #111827
+      }
+.role-sr{background:linear-gradient(180deg,#E1A17A, #D98845);
+color: #111827}
+.role-mod{background:linear-gradient(180deg,#ffffff, #e6e6e6);
+color: #111827}
 
 /* pill colors for staff roles (used under ID) */
-.pill.role-owner{background:linear-gradient(180deg,#ffffff,#e6e6e6);color:#111827}
-.pill.role-cm{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);color:#ffffff} 
-.pill.role-admin{background:linear-gradient(180deg,#ff6b6b,#ff3b3b);color:#ffffff}
-.pill.role-sr{background:linear-gradient(180deg,#0f6b44,#0a4f34);color:#ffffff}
-.pill.role-mod{background:linear-gradient(180deg,#79c99a,#5fbf7f);color:#111827}
+.pill.role-owner{background:linear-gradient(180deg,#ffffff, #e6e6e6);
+color: #111827}
+.pill.role-cm{background:linear-gradient(180deg,#ff6b6b, #ff3b3b);
+color: #ffffff
+}
+.pill.role-admin {
+    background:linear-gradient(180deg, #ff6b6b, #ff3b3b);color: #ffffff
+  }
+  .pill.role-sr {
+    background:linear-gradient(180deg, #0f6b44,#0a4f34);color: #ffffff
+  }
+  .pill.role-mod {
+    background:linear-gradient(180deg,
+    #79c99a,#5fbf7f);color: #111827}
 
 /* title wrapper and dataset triangles (absolute so they don't shift) */
 .banner-inner h1 .title-wrap{position:absolute;left:50%;transform:translate(-50%,-4px);width:320px;display:block;min-width:240px}
@@ -144,82 +218,270 @@ position:absolute;
 top:50%;
 transform:translateY(-50%);
 cursor:pointer;
--webkit-tap-highlight-color: transparent;
+-webkit-tap-highlight-color:transparent;
 }
-.dataset-tri.left{left:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-right:14px solid #e6eef8;margin:0}
-.dataset-tri.right{right:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:14px solid #e6eef8;margin:0}
-.dataset-tri.active.left{border-right-color:#ffffff}
-.dataset-tri.active.right{border-left-color:#ffffff}
-/* hover + focus styles: subtle by default (scale + gentle glow) */
-.dataset-tri:hover{opacity:0.95;transform:translateY(-50%) scale(1.06)}
-.dataset-tri:focus-visible{outline:none;box-shadow:0 0 0 6px rgba(255,255,255,0.06);border-color:#ffffff;transform:translateY(-50%) scale(1.12)}
-/* keep low-impact active state for click */
-.dataset-tri:active{transform:translateY(-50%) scale(1.06)}
-@media(max-width:520px){ .banner-inner h1 .title-wrap{width:220px} }
+.dataset-tri.left{left:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-right:14px solid #e6eef8;margin:0
+  }
+  .dataset-tri.right {
+    right:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:14px solid #e6eef8;margin:0
+  }
+  .dataset-tri.active.left {
+    border-right-color: #ffffff
+  }
+  .dataset-tri.active.right {
+    border-left-color: #ffffff
+  }
+  /* hover + focus styles:subtle by default (scale + gentle glow) */
+  .dataset-tri:hover {
+    opacity:0.95;transform:translateY(-50%) scale(1.06)
+  }
+  .dataset-tri:focus-visible {
+    outline:none;box-shadow:0 0 0 6px rgba(255, 255, 255, 0.06);border-color: #ffffff;transform:translateY(-50%      ) scale(1.12)
+  }
+  /* keep low-impact active state for click */
+  .dataset-tri:active {
+    transform:translateY(-50%) scale(1.06)
+  }
+@media(max-width:520px) {
+  .banner-inner h1.title-wrap {
+    width:220px
+  }
+}
 
 /* board switch animations */
-#board{transition:opacity .36s ease, transform .36s cubic-bezier(.2,.8,.2,1)}
-#board.fade-out{opacity:0;transform:translateY(8px);pointer-events:none}
-#board.fade-in{opacity:1;transform:translateY(0)}
+#board {
+  transition:opacity .36s ease,
+  transform .36s cubic-bezier(.2, .8, .2, 1)
+}
+#board.fade-out {
+  opacity:0;transform:translateY(8px);pointer-events:none
+}
+#board.fade-in {
+    opacity:1;transform:translateY(0)
+  }
+  
+  /* timeline view styles */
+  #timeline {
+    transition:opacity .36s ease, transform .36s cubic-bezier(.2, .8, .2, 1)
+  }
+  #timeline.fade-out {
+    opacity:0;transform:translateY(8px);pointer-events:none
+  }
+  #timeline.fade-in {
+    opacity:1;transform:translateY(0)
+  }
+  .timeline-section {
+    margin-bottom:42px
+  }
+  .timeline-year {
+    font-size:1.5rem;
+    font-weight:900;
+    color:#e6eef8;
+    margin-bottom:20px;
+    padding-bottom:12px;
+    border-bottom:2px solid rgba(255, 255, 255, 0.05);
+    text-align:center
+  }
+  .timeline-list {
+    display:flex;
+    flex-direction:column;
+    gap:14px
+  }
+  .timeline-entry {
+    background:rgba(35, 39, 43, 0.5);
+    border:1px solid rgba(255, 255, 255, 0.04);
+    border-radius:8px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition:background .18s ease, transform .18s ease, opacity .3s ease;
+    opacity:0;
+    transform:translateY(12px);
+    animation:timelineEntryFadeIn .4s ease forwards;
+  }
+  .timeline-entry:nth-child(1) { animation-delay: 0.1s; }
+  .timeline-entry:nth-child(2) { animation-delay: 0.15s; }
+  .timeline-entry:nth-child(3) { animation-delay: 0.2s; }
+  .timeline-entry:nth-child(4) { animation-delay: 0.25s; }
+  .timeline-entry:nth-child(5) { animation-delay: 0.3s; }
+  .timeline-entry:nth-child(6) { animation-delay: 0.35s; }
+  .timeline-entry:nth-child(7) { animation-delay: 0.4s; }
+  .timeline-entry:nth-child(8) { animation-delay: 0.45s; }
+  .timeline-entry:nth-child(9) { animation-delay: 0.5s; }
+  .timeline-entry:nth-child(10) { animation-delay: 0.55s; }
 
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.container{width:100%;max-width:1100px;padding:0 16px;padding-bottom:48px;margin:calc(var(--banner-height) + 20px) auto 0}
-.grid{display:grid;grid-template-columns:1fr;gap:22px}
-.card{
-background: rgba(35,39,43,0.96);
-border:1px solid rgba(255,255,255,0.04);
-padding:18px;border-radius:12px;position:relative;overflow:visible;
-transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, margin .18s ease, width .22s ease;
-display:flex;flex-direction:column;align-items:stretch;box-sizing:border-box;
+@keyframes timelineEntryFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.card::before{
-content:'';position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:12px 0 0 12px;background:transparent;transition:background-color .18s ease;
-}
-.card.rank-1::before{background:linear-gradient(180deg,#FFD700,#FFC107)}
-.card.rank-2::before{background:linear-gradient(180deg,#C0C0C0,#A8A8A8)}
-.card.rank-3::before{background:linear-gradient(180deg,#CD7F32,#B87333)}
-.card:focus-within, .card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+  .timeline-entry:hover {
+    background:rgba(35, 39, 43, 0.8);
+    transform:translateX(4px)
+  }
+  .timeline-rank {
+    font-weight:800;
+    min-width:32px;
+    color:var(--muted);
+  }
+  .timeline-name {
+    flex:1;
+    font-weight:700;
+  }
+  .timeline-date {
+    font-size:0.9rem;
+    color:var(--muted);
+  }
 
-.card.show-desc{margin-bottom:12px}
-.card-header{display:flex;gap:14px;align-items:center}
-.avatar{
-width:64px;height:64px;border-radius:50%;flex:0 0 64px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);
-display:inline-grid;place-items:center;background:#ffffff;color:#111827;font-weight:700;font-size:18px;letter-spacing:0.6px
-}
-.meta{flex:1}
-.username{font-weight:700;font-size:1.05rem}
-.muted{color:var(--muted);font-size:0.9rem;margin-top:6px}
+  .sr-only {
+    position:absolute;width:1px;height:1px;padding:0;margin: -1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0
+  }
+  .container {
+    width:100%;
+    max-width:1100px;
+    padding:0 16px;
+    padding-bottom:48px;
+    margin:calc(var(--banner-height) + 20px) auto 0;
+  }
+  .grid {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:22px;
+  }
+  .card {
+    background:rgba(35, 39, 43, 0.96);
+    border:1px solid rgba(255, 255, 255, 0.04);
+    padding:18px;
+    border-radius:12px;
+    position:relative;
+    overflow:visible;
+    transition:transform .22s cubic-bezier(.2, .8, .2, 1),
+      box-shadow .22s ease,
+      margin .18s ease,
+      width .22s ease;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    box-sizing:border-box;
+  }
+  .card::before {
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:6px;
+    border-radius:12px 0 0 12px;
+    background:transparent;
+    transition:background-color .18s ease;
+  }
+  .card.rank-1::before {
+    background:linear-gradient(180deg, #FFD700, #FFC107);
+  }
+  .card.rank-2::before {
+    background:linear-gradient(180deg, #C0C0C0, #A8A8A8);
+  }
+  .card.rank-3::before {
+    background:linear-gradient(180deg, #CD7F32, #B87333);
+  }
+  .card:focus-within, .card:hover {
+    transform:translateY(-6px);
+    box-shadow:0 12px 40px rgba(2, 6, 23, 0.6);
+  }
+
+  .card.show-desc {
+    margin-bottom:12px
+  }
+  .card-header {
+    display:flex;gap:14px;align-items:center
+  }
+  .avatar {
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    flex:0 0 64px;
+    overflow:hidden;
+    border:1px solid rgba(0, 0, 0, 0.06);
+    display:inline-grid;
+    place-items:center;
+    background:#ffffff;
+    color:#111827;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:0.6px;
+    transition:transform .2s ease, box-shadow .2s ease;
+    cursor:pointer
+  }
+  .avatar:hover {
+    transform:scale(1.12);
+  }
+  .card.rank-1 .avatar:hover {
+    box-shadow:0 0 24px rgba(255, 235, 153, 0.6), 0 0 12px rgba(255, 235, 153, 0.4);
+  }
+  .card.rank-2 .avatar:hover {
+    box-shadow:0 0 24px rgba(240, 240, 240, 0.6), 0 0 12px rgba(240, 240, 240, 0.4);
+  }
+  .card.rank-3 .avatar:hover {
+    box-shadow:0 0 24px rgba(243, 192, 138, 0.6), 0 0 12px rgba(243, 192, 138, 0.4);
+  }
+  .meta {
+    flex:1
+  }
+  .username {
+    font-weight:700;
+    font-size:1.05rem
+  }
+  .muted {
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-top:6px
+  }
 .stats{display:flex;gap:10px;align-items:center;margin-top:12px}
 .pill{background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:999px;font-weight:700;font-size:1.12rem;color:var(--muted)} 
 .months{color:var(--muted);font-size:0.9rem}
 
 /* description inner animation */
-.desc{padding:0;max-height:0;overflow:hidden;border-radius:10px;background:transparent;border:1px solid transparent;color:#e6eef8;font-size:0.92rem;line-height:1.5;transition:max-height .32s ease;padding-top:0;padding-bottom:0}
-.desc-inner{opacity:0;transform:translateY(6px);transition:opacity .22s ease, transform .22s ease}
-.desc-inner.centered{ text-align:center }
-.card.show-desc .desc{
-  background: rgba(10, 10, 10, 0.35); /* dark tint */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.desc{padding:0;max-height:0;overflow:hidden;border-radius:10px;background:transparent;border:1px solid transparent;color:#e6eef8;font-size:0.92rem;line-height:1.5;transition:max-height .32s ease;padding-top:0;padding-bottom:0
+  }
+  .desc-inner {
+    opacity:0;transform:translateY(6px);transition:opacity .22s ease,
+    transform .22s ease
+  }
+  .desc-inner.centered {
+    text-align:center
+  }
+  .card.show-desc.desc {
+    background:rgba(10, 10, 10, 0.35);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255, 255, 255, 0.08);
+    padding:12px;
+    margin-top:12px;
+    box-shadow:0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .card.show-desc.desc-inner {
+    opacity:1;
+    transform:translateY(0)
+  }
 
-  border:1px solid rgba(255,255,255,0.08);
-  padding:12px;
-  margin-top:12px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.4);
-}
-w-desc .desc-inner{opacity:1;transform:translateY(0)}
+  /* reveal-on-scroll animation */
+  .reveal {
+    opacity:0;transform:translateY(12px);transition:opacity .45s ease,
+    transform .45s cubic-bezier(.2, .8, .2, 1)
+  }
+  .reveal.visible {
+    opacity:1;transform:translateY(0)
+  }
 
-/* reveal-on-scroll animation */
-.reveal{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* rank badge and gradient colors */
-.rank-badge{
-position:absolute;
-top:12px;
-right:12px;
-background:linear-gradient(180deg,#ffffff,#e6e6e6);
-color:#111827;
+  /* rank badge and gradient colors */
+  .rank-badge {
+    position:absolute;
+    top:12px;
+    right:12px;
+    background:linear-gradient(180deg, #ffffff, #e6e6e6);
+    color: #111827;
 padding:6px 10px;
 border-radius:999px;
 font-weight:700;
@@ -229,299 +491,584 @@ border:1px solid rgba(0,0,0,0.06);
 min-width:44px;
 text-align:center;
 }
-.card.rank-1 .rank-badge{background:linear-gradient(180deg,#FFEB99,#FFD54F); color:#111827}
-.card.rank-2 .rank-badge{background:linear-gradient(180deg,#F0F0F0,#CFCFCF); color:#111827}
-.card.rank-3 .rank-badge{background:linear-gradient(180deg,#F3C08A,#E29A5A); color:#111827}
+.card.rank-1 .rank-badge{background:linear-gradient(180deg,#FFEB99,
+    #FFD54F);
+color: #111827}
+.card.rank-2 .rank-badge{background:linear-gradient(180deg,#F0F0F0, #CFCFCF);
+color: #111827}
+.card.rank-3 .rank-badge{background:linear-gradient(180deg,#F3C08A, #E29A5A);
+color: #111827}
 
 /* clickable ID (copies to clipboard) */
-.id-link{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;padding:4px 8px;border-radius:6px;font-weight:700;cursor:pointer;font-family:inherit}
-.id-link:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,0.35)}
-.id-link:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:2px}
-/* placeholder for missing/deleted IDs (non-interactive pill) */
-.id-missing{
-display:inline-block;
-padding:4px 10px;
+.id-link{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;
+padding:4px 8px;
 border-radius:6px;
-background:rgba(255,255,255,0.03);
-border:1px solid rgba(255,255,255,0.02);
-color:#e6eef8;
 font-weight:700;
-font-size:0.92rem;
-line-height:1;
-vertical-align:middle;
-cursor:default;
-} 
+cursor:pointer;
+font-family:inherit
+}
+.id-link:hover {
+    transform:translateY(-2px);box-shadow:0 6px 14px rgba(0, 0, 0, 0.35)
+  }
+  .id-link:focus {
+    outline:3px solid rgba(124, 58, 237, 0.12);outline-offset:2px
+  }
+  /* placeholder for missing/deleted IDs (non-interactive pill) */
+  .id-missing {
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:6px;
+    background:rgba(255, 255, 255, 0.03);
+    border:1px solid rgba(255, 255, 255, 0.02);
+    color: #e6eef8;
+    font-weight:700;
+    font-size:0.92rem;
+    line-height:1;
+    vertical-align:middle;
+    cursor:default;
+  }
 
 /* small screens */
-@media (max-width:520px){.grid{grid-template-columns:1fr}.avatar{width:52px;height:52px;font-size:16px}}
-/* focus outline for keyboard */
-.card:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:4px}
-</style>
-<link rel="stylesheet" href="css.css">
+@media(max-width:520px) {
+    .grid {
+      grid-template-columns:1fr
+    }
+    .avatar {
+      width:52px;
+      height:52px;
+      font-size:16px
+    }
+  }
+  /* focus outline for keyboard */
+  .card:focus {
+    outline:3px solid rgba(124, 58, 237, 0.12);
+    outline-offset:4px
+  }
+  </style>
 </head>
 <body>
-<div class="banner">
-<div class="banner-inner">
-<div class="org">BeluGANG</div>
-<h1 id="bannerTitle"><div class="title-wrap"><span class="title-text">Level 200 List</span></div></h1>
-<div class="controls">
-<label for="sortMode" class="sr-only">Sort leaderboard</label>
-<button id="sortMode" class="toggle-btn" aria-label="Toggle sort" aria-pressed="false" data-mode="fastest">Fastest 200</button>
-</div> 
-</div>
-</div>
-<div class="container" aria-live="polite">
-<div id="board" class="grid" role="list"></div>
-</div> 
+  <div class = "banner">
+    <div class = "banner-inner">
+      <div class = "org" > 
+        BeluGANG 
+      </div> 
+    <h1 id = "bannerTitle"> 
+    <div class = "title-wrap"> 
+      <span class = "title-text"> 
+        Level 200 List 
+      </span></div></h1> 
+        <div class = "controls">
+          <label for = "sortMode" class = "sr-only"> Sort leaderboard </label>
+            <button id = "sortMode" class = "toggle-btn" aria-label = "Toggle sort" aria-pressed = "false" data-mode = "fastest"> 
+              Fastest 200 
+            </button>
+            <button id = "viewToggle" class = "toggle-btn" aria-label = "Toggle view" title = "Switch between Leaderboard and Timeline views" style = "margin-left:8px">
+              Timeline
+            </button>
+        </div>
+    </div>
+  </div> 
+  <div class = "container" aria-live = "polite">
+    <div id = "board" class = "grid" role = "list">
+    </div>
+    <div id = "timeline" style = "display:none">
+    </div>
+  </div> 
 
-<script>
-function discordDefaultAvatar(id) {
-if (!id || id === 'Deleted') return null;
-// only accept numeric Discord IDs to avoid throwing when a placeholder like '-' is used
-if(!/^[0-9]+$/.test(String(id))) return null;
-try{
-const i = Number((BigInt(id) >> 22n) % 6n);
-return `https://cdn.discordapp.com/embed/avatars/${i}.png`;
-}catch(e){ return null; }
+  <script >
+  function discordDefaultAvatar(id) {
+     if (!id || id === 'Deleted') return null;
+     if (!/^[0-9]+$/.test(String(id))) return null;
+      try {
+        const i = Number((BigInt(id) >> 22n)%6n);
+        return `https://cdn.discordapp.com/embed/avatars/${i}.png`;
+     } catch (e) {
+        return null;
+     }
+   }
+
+    function getFallbackDiscordAvatar(seed) {
+      const s = String(seed || '').trim() || 'fallback';
+      let n = 0;
+      for (let i = 0; i <s.length; i++) n = (n * 31 + s.charCodeAt(i)) >>> 0;
+      const idx = n%6;
+      return `https://cdn.discordapp.com/embed/avatars/${idx}.png`;
+    }
+
+    async function getDiscordAvatar(id, name, img) {
+      if (!id || !/^[0-9]+$/.test(id)) {
+      return getFallbackDiscordAvatar(name);
+    }
+  
+    try {
+      const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+      const json = await res.json();
+      const avatarHash = json?.data?.discord_user?.avatar;
+      if (avatarHash) {
+      return `https://cdn.discordapp.com/avatars/${id}/${avatarHash}.png?size=512`;
+      }
+    }  catch (err) {
+      console.warn('Lanyard failed:', id);
+    }
+
+    if (img) return img;
+    return getFallbackDiscordAvatar(name);
+    }
+
+    function showErrorOverlay(msg) {
+      try {
+      let ov = document.getElementById('error-overlay');
+      if (!ov) {
+      ov = document.createElement('div');
+      ov.id = 'error-overlay';
+      document.body.appendChild(ov);
+    }
+      ov.textContent = '';
+      const header = document.createElement('strong');
+      header.textContent = 'Runtime error';
+      ov.appendChild(header);
+      const br = document.createElement('div');
+      br.style.marginTop = '6px';
+      br.style.whiteSpace = 'pre-wrap';
+      br.textContent = String(msg).slice(0, 200);
+      ov.appendChild(br);
+    } catch (e) {
+      console.warn('showErrorOverlay failed', e);
+    }
+  }
+
+    window.addEventListener('error', (ev) => {
+    console.error(ev);
+    try {
+      showErrorOverlay(`${ev.message} — ${ev.filename}:${ev.lineno}`);
+    } catch (e) {}
+  });
+    window.addEventListener('unhandledrejection', (ev) => {
+      console.error(ev);
+      try {
+        showErrorOverlay(
+          `Unhandled rejection: ${ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason)}`);
+        } catch (e) {}
+      });
+      const people = [{
+        date: '17/06/2022',
+        position: '1st',
+        discordId: '921333518406148146',
+        name: 'SRS',
+        time: '05 / 28',
+      }, {
+        date: '11/08/2022',
+        position: '2nd',
+        discordId: '662237931846631454',
+        name: 'Sadie',
+        time: '10 / 25',
+      }, { 
+        date: '29/09/2022',
+        position: '3rd',
+        discordId: '918862839316373554',
+        name: 'Java',
+        time: '09 / 19',
+}, {
+  date: '06/12/2022',
+  position: '4th',
+  discordId: '961824403413426246',
+  name: 'Safo',
+  time: '07 / 28',
+}, {
+  date: '01/02/2023',
+  position: '5th',
+  discordId: '918864897633296405',
+  name: 'Motorhead',
+  time: '-- / --',
+}, {
+  date: '06/06/2023',
+  position: '6th',
+  discordId: '863423967883559012',
+  name: 'Mika',
+  time: '14 / 12',
+}, {
+  date: '19/06/2023',
+  position: '7th',
+  discordId: '-',
+  name: 'Dark',
+  time: '10 / 11',
+}, {
+  date: '16/08/2023',
+  position: '8th',
+  discordId: '832173647577612298',
+  name: 'Callie',
+  time: '11 / 14',
+}, {
+  date: '04/10/2023',
+  position: '9th',
+  discordId: '894871129108410389',
+  name: 'Tormentor',
+  time: '23 / 28',
+}, {
+  date: '29/10/2023',
+  position: '10th',
+  discordId: '761273366602448946',
+  name: 'Oblivio',
+  time: '24 / 00',
+}, {
+  date: '26/01/2024',
+  position: '11th',
+  discordId: '1042982216373903490',
+  name: 'Abdullah',
+  time: '10 / 04',
+}, {
+  date: '28/02/2024',
+  position: '12th',
+  discordId: '544833848559665173',
+  name: 'Agent',
+  time: '28 / 27',
+}, {
+  date: '15/03/2024',
+  position: '13th',
+  discordId: '913230713871040562',
+  name: 'Sidney',
+  time: '20 / 06',
+}, {
+  date: '20/04/2024',
+  position: '14th',
+  discordId: '981042270939779102',
+  name: 'Jhebert',
+  time: '22 / 19',
+}, {
+  date: '23/05/2024',
+  position: '15th',
+  discordId: '841287142785417256',
+  name: 'Leo',
+  time: '31 / 17',
+}, {
+  date: '26/05/2024',
+  position: '16th',
+  discordId: '1170790968941891596',
+  name: 'SH',
+  time: '25 / 09',
+}, {
+  date: '03/06/2024',
+  position: '17th',
+  discordId: '775371863106650112',
+  name: 'TT',
+  time: '24 / 29',
+}, {
+  date: '29/06/2024',
+  position: '18th',
+  discordId: '617215246766964765',
+  name: 'Awakes',
+  time: '36 / 04',
+}, {
+  date: '25/07/2024',
+  position: '19th',
+  discordId: '1059770507546861609',
+  name: 'Jod',
+  time: '14 / 25',
+}, {
+  date: '11/11/2024',
+  position: '20th',
+  discordId: '1126210964061180038',
+  name: 'Nameless',
+  time: '14 / 24',
+}, {
+  date: '29/11/2024',
+  position: '21st',
+  discordId: '769982567469940777',
+  name: 'Suga',
+  time: '16 / 13',
+}, {
+  date: '29/11/2024',
+  position: '22nd',
+  discordId: '1034407138019258408',
+  name: 'Sonic',
+  time: '35 / 10',
+}, {
+  date: '30/12/2024',
+  position: '23rd',
+  discordId: '577141429906833408',
+  name: 'Eric',
+  time: '39 / 20',
+}, {
+  date: '09/02/2025',
+  position: '24th',
+  discordId: '1155133403780350032',
+  name: 'Rei',
+  time: '10 / 02',
+}, {
+  date: '12/03/2025',
+  position: '25th',
+  discordId: '1079783186600579152',
+  name: 'Catto',
+  time: '24 / 13',
+}, {
+  date: '10/04/2025',
+  position: '26th',
+  discordId: '1181564704909439067',
+  name: 'HD',
+  time: '39 / 11',
+}, {
+  date: '28/04/2025',
+  position: '27th',
+  discordId: '1238135785681850469',
+  name: 'Begu',
+  time: '10 / 21',
+}, {
+  date: '21/05/2025',
+  position: '28th',
+  discordId: '-',
+  name: 'Certi',
+  time: '-- / --',
+}, {
+  date: '09/06/2025',
+  position: '29th',
+  discordId: '984783971676205106',
+  name: 'Chaos',
+  time: '35 / 28',
+}, {
+  date: '16/06/2025',
+  position: '30th',
+  discordId: '1072043150505410570',
+  name: 'Dawa',
+  time: '28 / 10',
+}, {
+  date: '04/07/2025',
+  position: '31st',
+  discordId: '1095261491617345586',
+  name: 'Bebo',
+  time: '22 / 27',
+}, {
+  date: '08/08/2025',
+  position: '32nd',
+  discordId: '658059455790841868',
+  name: 'Cold',
+  time: '35 / 22',
+}, {
+  date: '20/11/2025',
+  position: '33rd',
+  discordId: '1168813994123993119',
+  name: 'Rosie',
+  time: '24 / 20',
+}, {
+  date: '30/12/2025',
+  position: '34th',
+  discordId: '1226544764128596020',
+  name: 'Hamza',
+  time: '10 / 28',
+}, {
+  date: '13/01/2026',
+  position: '35th',
+  discordId: '1242486029915521125',
+  name: 'Chespin',
+  time: '54 / 07',
+}, {
+  date: '07/04/2026',
+  position: '36th',
+  discordId: '777265386239426570',
+  name: 'Wintails',
+  time: '42 / 29',
+}];
+
+const board = document.getElementById('board');
+
+function parseTime(t) {
+  if (!t || t.includes('--')) return {
+    monthsNum:1e6,
+    daysNum:1e6,
+    totalDays:1e9
+  };
+  const bits = t.split('/').map(s => s.trim());
+  const m = parseInt(bits[0], 10);
+  const d = parseInt(bits[1], 10);
+  const monthsNum = isNaN(m) ? 1e6 : m;
+  const daysNum = isNaN(d) ? 0 : d;
+  const totalDays = monthsNum * 30 + daysNum; // approximate months as 30 days
+  return {
+    monthsNum,
+    daysNum,
+    totalDays
+  };
 }
 
-// stable fallback avatar when ID is missing or non-numeric; hashes a seed (name or id) to one of the 6 Discord default avatars
-function getFallbackDiscordAvatar(seed){
-const s = String(seed || '').trim() || 'fallback';
-let n = 0;
-for(let i=0;i<s.length;i++) n = (n*31 + s.charCodeAt(i)) >>> 0;
-const idx = n % 6;
-return `https://cdn.discordapp.com/embed/avatars/${idx}.png`;
-}
-
-// show a small, persistent error overlay for runtime errors so we can see why rendering fails
-function showErrorOverlay(msg){
-try{
-let ov = document.getElementById('error-overlay');
-if(!ov){ ov = document.createElement('div'); ov.id = 'error-overlay'; document.body.appendChild(ov); }
-ov.textContent = '';
-const header = document.createElement('strong'); header.textContent = 'Runtime error'; ov.appendChild(header);
-const br = document.createElement('div'); br.style.marginTop = '6px'; br.style.whiteSpace = 'pre-wrap'; br.textContent = String(msg).slice(0,200); ov.appendChild(br);
-}catch(e){ console.warn('showErrorOverlay failed', e); }
-}
-
-window.addEventListener('error', (ev)=>{ console.error(ev); try{ showErrorOverlay(`${ev.message} — ${ev.filename}:${ev.lineno}`); }catch(e){} });
-window.addEventListener('unhandledrejection', (ev)=>{ console.error(ev); try{ showErrorOverlay(`Unhandled rejection: ${ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason)}`); }catch(e){} });
-
-// setup search control behaviour
-
-
-
-const discordIds = [
-  '921333518406148146',
-'662237931846631454',
-'918862839316373554',
-'961824403413426246',
-'918864897633296405',
-'863423967883559012',
-'Deleted',
-'832173647577612298',
-'894871129108410389',
-'761273366602448946',
-'1042982216373903490',
-'544833848559665173',
-'913230713871040562',
-'981042270939779102',
-'841287142785417256',
-'1170790968941891596',
-'775371863106650112',
-'617215246766964765',
-'1059770507546861609',
-'1126210964061180038',
-'769982567469940777',
-'1034407138019258408',
-'577141429906833408',
-'1155133403780350032',
-'1079783186600579152',
-'1181564704909439067',
-'1238135785681850469',
-'1309845497980125185',
-'984783971676205106',
-'1072043150505410570',
-'1095261491617345586',
-'658059455790841868',
-'1168813994123993119',
-'1226544764128596020',
-'777265386239426570',
-'421170808891768832',
-'1242486029915521125'
-];
-
-/* Provided 34-person dataset */
-const people = [
-{date:'17/06/2022', position:'1st', discordId:'921333518406148146', name:'SRS', time:'05 / 28', img:'https://cdn.discordapp.com/avatars/921333518406148146/4ff81b7048c7d59b5aaad5f675cc61bc.png?size=512'},
-{date:'11/08/2022', position:'2nd', discordId:'662237931846631454', name:'Sadie', time:'10 / 25', img:'https://cdn.discordapp.com/avatars/662237931846631454/ec54552af664db02c42831ba6b80c28c.png?size=512', banner:"https://cdn.discordapp.com/banners/662237931846631454/a96317a9a3fcb41379ad0d42ac362e2f.png?size=4096"},
-{date:'29/09/2022', position:'3rd', discordId:'918862839316373554', name:'Java', time:'09 / 19', img:'https://cdn.discordapp.com/avatars/918862839316373554/e8a1d8098bb842f3e927f4878e435a90.png?size=512'},
-{date:'06/12/2022', position:'4th', discordId:'961824403413426246', name:'Safo', time:'07 / 28', img:'https://cdn.discordapp.com/avatars/961824403413426246/2217f0912c653d249885a15c7ce12b05.png?size=512'},
-{date:'01/02/2023', position:'5th', discordId:'918864897633296405', name:'Motorhead', time:'-- / --', img:'https://cdn.discordapp.com/avatars/918864897633296405/99ff1dccde2f2c9b972b712c7acc991f.png?size=512'},
-{date:'06/06/2023', position:'6th', discordId:'863423967883559012', name:'Mika', time:'14 / 12', img:'https://cdn.discordapp.com/avatars/863423967883559012/3a76bf7085d66ccfb7486ee4abb164a4.png?size=512', banner:"https://cdn.discordapp.com/banners/863423967883559012/a_386b207e5aeadb70bafaaabeeaca611d.gif?size=4096"},
-{date:'19/06/2023', position:'7th', discordId:'-', name:'Dark', time:'10 / 11', img:'https://i.pravatar.cc/150?img=17'},
-{date:'16/08/2023', position:'8th', discordId:'832173647577612298', name:'Callie', time:'11 / 14', img:'https://cdn.discordapp.com/avatars/832173647577612298/9d6adf4de17c3e1ca4db62c68b252ada.png?size=512'},
-{date:'04/10/2023', position:'9th', discordId:'894871129108410389', name:'Tormentor', time:'23 / 28', img:'https://cdn.discordapp.com/avatars/894871129108410389/14cc5d8e0ba140b64d005efb2efccd8f.png?size=512'},
-{date:'29/10/2023', position:'10th', discordId:'761273366602448946', name:'Oblivio', time:'24 / 00', img:'https://cdn.discordapp.com/avatars/761273366602448946/986d9951ad016f9368889dd70119adb7.png?size=512', banner:"https://cdn.discordapp.com/banners/761273366602448946/a_e83860c3291837263d9b71a83d576030.gif?size=4096"},
-{date:'26/01/2024', position:'11th', discordId:'1042982216373903490', name:'Abdullah', time:'10 / 04', img:'https://cdn.discordapp.com/avatars/1042982216373903490/267c50a8e9c2eda4a21cda7f287a41e7.png?size=512'},
-{date:'28/02/2024', position:'12th', discordId:'544833848559665173', name:'Agent', time:'28 / 27', img:'https://cdn.discordapp.com/avatars/544833848559665173/4db523b13ca03094fff59f6e57cebeed.png?size=512'},
-{date:'15/03/2024', position:'13th', discordId:'913230713871040562', name:'Sidney', time:'20 / 06', img:'https://cdn.discordapp.com/avatars/913230713871040562/2d9a6322e72ea8a5a115ecf3d224b35e.png?size=512'},
-{date:'20/04/2024', position:'14th', discordId:'981042270939779102', name:'Jhebert', time:'22 / 19', img:'https://cdn.discordapp.com/avatars/981042270939779102/65539d3eb748369164267456ccbef44a.png?size=512'},
-{date:'23/05/2024', position:'15th', discordId:'841287142785417256', name:'Leo', time:'31 / 17', img:'https://cdn.discordapp.com/avatars/841287142785417256/50ee99a6bc347a17cd7776984973cbde.png?size=512'},
-{date:'26/05/2024', position:'16th', discordId:'1170790968941891596', name:'SH', time:'25 / 09', img:'https://cdn.discordapp.com/avatars/1170790968941891596/0e7cbe0167a1bff9b7c7ab4f7a697501.png?size=512'},
-{date:'03/06/2024', position:'17th', discordId:'775371863106650112', name:'TT', time:'24 / 29', img:'https://cdn.discordapp.com/avatars/775371863106650112/94c20caf23b1e527d04b391d7c3d465c.png?size=512', banner:"https://cdn.discordapp.com/banners/775371863106650112/738867273683afd7a5a40e801cdc87ed.png?size=4096"},
-{date:'29/06/2024', position:'18th', discordId:'617215246766964765', name:'Awakes', time:'36 / 04', img:'https://cdn.discordapp.com/avatars/617215246766964765/5d0e1125d4092c83f4647873e4992287.png?size=512'},
-{date:'25/07/2024', position:'19th', discordId:'1059770507546861609', name:'Jod', time:'14 / 25', img:'https://cdn.discordapp.com/avatars/1059770507546861609/f61a54271eb3915693646ca947591f2a.png?size=512'},
-{date:'11/11/2024', position:'20th', discordId:'1126210964061180038', name:'Nameless', time:'14 / 24', img:'https://cdn.discordapp.com/avatars/1126210964061180038/c6d82c2d4833270fe42574b6ba6dfe75.png?size=512'},
-{date:'29/11/2024', position:'21st', discordId:'769982567469940777', name:'Suga', time:'16 / 13', img:'https://cdn.discordapp.com/avatars/769982567469940777/b0963dd46674ceac3ff94ca3158e0f50.png?size=512'},
-{date:'29/11/2024', position:'22nd', discordId:'1034407138019258408', name:'Sonic', time:'35 / 10', img:'https://cdn.discordapp.com/avatars/1034407138019258408/3326ad72939873f40892ea2a513f317e.png?size=512'},
-{date:'30/12/2024', position:'23rd', discordId:'577141429906833408', name:'Eric', time:'39 / 20', img:'https://cdn.discordapp.com/avatars/577141429906833408/a_826d5300c536de37f24cf6a576b39646.gif?size=512', banner:"https://cdn.discordapp.com/banners/577141429906833408/a_a8990159871ebc6b51c1bf147c5e4b46.gif?size=4096"},
-{date:'09/02/2025', position:'24th', discordId:'1155133403780350032', name:'Rei', time:'10 / 02', img:'https://cdn.discordapp.com/avatars/1155133403780350032/514feccbfed9c08e0e7f622e7ffb7a01.png?size=512'},
-{date:'12/03/2025', position:'25th', discordId:'1079783186600579152', name:'Catto', time:'24 / 13', img:'https://cdn.discordapp.com/avatars/1079783186600579152/f2cb75489c334564b9ec835b74301468.png?size=512'},
-{date:'10/04/2025', position:'26th', discordId:'1181564704909439067', name:'HD', time:'39 / 11', img:'https://cdn.discordapp.com/avatars/1181564704909439067/e9893a21c3a16d7fa8f6a8210691a1c3.png?size=512'},
-{date:'28/04/2025', position:'27th', discordId:'1238135785681850469', name:'Begu', time:'10 / 21', img:'https://cdn.discordapp.com/avatars/1238135785681850469/3bd5411c22c31a07572dc39ad823df93.png?size=512', banner:"https://cdn.discordapp.com/banners/1238135785681850469/df430375f0ef07a000a04fb6e9c2961c.png?size=4096"},
-{date:'21/05/2025', position:'28th', discordId:'-', name:'Certi', time:'-- / --', img:'https://i.pravatar.cc/150?img=38'},
-{date:'09/06/2025', position:'29th', discordId:'984783971676205106', name:'Chaos', time:'35 / 28', img:'https://cdn.discordapp.com/avatars/984783971676205106/5357ac5fe04399ac54487ebd644adbc3.png?size=512'},
-{date:'16/06/2025', position:'30th', discordId:'1072043150505410570', name:'Dawa', time:'28 / 10', img:'https://cdn.discordapp.com/avatars/1072043150505410570/416c5b9b8610123088404f07d4a94fde.png?size=512'},
-{date:'04/07/2025', position:'31st', discordId:'1095261491617345586', name:'Bebo', time:'22 / 27', img:'https://cdn.discordapp.com/avatars/1095261491617345586/9e6b76e089a2f6452c54967455d8df3f.png?size=512'},
-{date:'08/08/2025', position:'32nd', discordId:'658059455790841868', name:'Cold', time:'35 / 22', img:'https://cdn.discordapp.com/avatars/658059455790841868/4a4c6403f18cddbb1abecf1562311ddb.png?size=512', banner:"https://cdn.discordapp.com/banners/658059455790841868/f20219ed2ae072c5a0e075cea06190d2.png?size=4096"},
-{date:'20/11/2025', position:'33rd', discordId:'1168813994123993119', name:'Rosie', time:'24 / 20', img:'https://cdn.discordapp.com/avatars/1168813994123993119/b3e988254ac0ead11cd9b9f65ae4bd6e.png?size=512'},
-{date:'30/12/2025', position:'34th', discordId:'1226544764128596020', name:'Hamza', time:'10 / 28', img:'https://cdn.discordapp.com/avatars/1226544764128596020/c228fcd8ad84df4b0090d2f979361ba0.png?size=512'},
-{date:'13/01/2026', position:'35th', discordId:'1242486029915521125', name:'Chespin', time:'54 / 07', img:'https://cdn.discordapp.com/avatars/1242486029915521125/a_453c8a53d766eb238ddcfd7f34c17daa.gif?size=512', banner:"https://cdn.discordapp.com/banners/1242486029915521125/a_edece3bbc38a6800d960523ec93ac2b3.gif?size=4096"},
-{date:'07/04/2026', position:'36th', discordId:'777265386239426570', name:'Wintails', time:'42 / 29', img:'https://cdn.discordapp.com/avatars/777265386239426570/9bc5c7882d1515ddfbf4d2992f9bd43a.png?size=512', banner:"https://cdn.discordapp.com/banners/777265386239426570/a_93c1fcf03f77da2d915d32c679ba0cd8.gif?size=4096"}
-];
-
-// helper: parse time string "MM / DD"; treat '-- / --' as very slow and compute total days
-function parseTime(t){
-if(!t || t.includes('--')) return {monthsNum: 1e6, daysNum: 1e6, totalDays: 1e9};
-const bits = t.split('/').map(s=>s.trim());
-const m = parseInt(bits[0],10);
-const d = parseInt(bits[1],10);
-const monthsNum = isNaN(m)?1e6:m;
-const daysNum = isNaN(d)?0:d;
-const totalDays = monthsNum * 30 + daysNum; // approximate months as 30 days
-return {monthsNum, daysNum, totalDays};
-}
-
-people.forEach((p, i)=>{
-const parsed = parseTime(p.time);
-p.monthsNum = parsed.monthsNum;
-p.daysNum = parsed.daysNum;
-p.totalDays = parsed.totalDays;
-p.totalDaysLabel = (p.totalDays >= 1e9) ? '--' : `${p.totalDays} days`;
-p.id = i+1; // local id
-// default description (will be shown in expandable area)
-p.description = `Date: ${formatDateDisplay(p.date)} \nID: ${p.discordId} \nTime: ${formatTime(p)}`;
+people.forEach((p, i) => {
+  const parsed = parseTime(p.time);
+  p.monthsNum = parsed.monthsNum;
+  p.daysNum = parsed.daysNum;
+  p.totalDays = parsed.totalDays;
+  p.totalDaysLabel = (p.totalDays >= 1e9) ? '--' : `${p.totalDays} days`;
+  p.id = i + 1; // local id
+  p.description = `Date: ${formatDateDisplay(p.date)} \nID: ${p.discordId} \nTime: ${formatTime(p)}`;
 });
 
-// expanded staff dataset with roles and hierarchy
-const staff = [
-{name:'Beluga', role:'Owner', discordId:'846497753009356800'},
-// Community Managers
-{name:'rand', role:'Community Manager', discordId:'1181564704909439067'},
-{name:'TT', role:'Community Manager', discordId:'775371863106650112'},
-// Admins (display under Admin but colored like Community Manager)
-{name:'Chaos', role:'Admin', discordId:'984783971676205106'},
-{name:'Oblivio', role:'Admin', discordId:'761273366602448946'},
-{name:'Nameless', role:'Admin', discordId:'1126210964061180038'},
-{name:'TheDiamondRoblox', role:'Admin', discordId:'526996077770047498'},
-// Senior Moderators
-{name:'Sadie', role:'Sr Moderator', discordId:'662237931846631454'},
-{name:'Adnan', role:'Sr Moderator', discordId:'1064683563280236544'},
-{name:'Muncher', role:'Sr Moderator', discordId:'858666204406874152'},
-{name:'Sidney', role:'Sr Moderator', discordId:'913230713871040562'},
-{name:'Quokka', role:'Sr Moderator', discordId:'1179528757724336352'},
-{name:'Daisy', role:'Sr Moderator', discordId:'674988575762415638'},
-{name:'Cherry', role:'Sr Moderator', discordId:'949769046704914452'},
-// Moderators
-{name:'Dom', role:'Moderator', discordId:'852940911826436147'},
-{name:'MSWB', role:'Moderator', discordId:'858815743013421066'},
-{name:'Whirlpool', role:'Moderator', discordId:'462502268374220801'},
-{name:'Sana', role:'Moderator', discordId:'1087304647687032904'},
-{name:'Alpha', role:'Moderator', discordId:'607968506558021642'},
-{name:'Scythe', role:'Moderator', discordId:'1342125575955021864'},
-{name:'Gabriel', role:'Moderator', discordId:'1085984192644530257'},
-{name:'TheOnlyGoob', role:'Moderator', discordId:'1361786331365113942'},
-{name:'Tech', role:'Moderator', discordId:'963411818087317515'},
-{name:'Central Keen', role:'Moderator', discordId:'779395854574420009'},
-{name:'Achii', role:'Moderator', discordId:'738296855254794302'},
-{name:'Kaitak', role:'Moderator', discordId:'1155097526282760273'},
-{name:'Zain', role:'Moderator', discordId:'902814972671852574'},
-{name:'Xmo', role:'Moderator', discordId:'416798214415450112'},
-{name:'Reiku', role:'Moderator', discordId:'887920090815815691'},
-{name:'Ben_Games', role:'Moderator', discordId:'895326036433182770'},
-{name:'Nate', role:'Moderator', discordId:'834411211315347537'},
-{name:'Ghostly', role:'Moderator', discordId:'554814577389469696'},
-{name:'ExpoThree', role:'Moderator', discordId:'710178061777240125'},
-{name:'Samboe', role:'Moderator', discordId:'1089679102795059261'},
-{name:'Diamond', role:'Moderator', discordId:'704771469225361435'},
-{name:'Adam', role:'Moderator', discordId:'832643218860146689'},
-{name:'Furqan', role:'Moderator', discordId:'981928341491843142'}
-];
-
-// normalize staff entries (id and description)
-staff.forEach((s,i)=>{
-s.id = 's' + (i+1); // prefix to avoid collision with people ids
-// staff entries don't carry a date; default description is the role
-if(!s.description) s.description = `${s.role}`;
-});
-
-// helper to convert DD/MM/YYYY to a comparable number (YYYYMMDD)
-function parseDateToNumber(dateStr){
-if(!dateStr) return 99999999;
-const parts = dateStr.split('/').map(s=>s.trim());
-if(parts.length !== 3) return 99999999;
-const d = parseInt(parts[0],10);
-const m = parseInt(parts[1],10);
-const y = parseInt(parts[2],10);
-if(isNaN(d) || isNaN(m) || isNaN(y)) return 99999999;
-return (y*10000) + (m*100) + d;
+function parseDateToNumber(dateStr) {
+  if (!dateStr) return 99999999;
+  const parts = dateStr.split('/').map(s => s.trim());
+  if (parts.length !== 3) return 99999999;
+  const d = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const y = parseInt(parts[2], 10);
+  if (isNaN(d) || isNaN(m) || isNaN(y)) return 99999999;
+  return (y * 10000) + (m * 100) + d;
 }
 
-let board = document.getElementById('board');
 const sortBtn = document.getElementById('sortMode');
 
-// toggle button helpers for sort mode
-function getModeLabel(mode){ return mode === 'first' ? 'First Level 200' : 'Fastest 200'; }
-function setSortMode(mode){
-if(!sortBtn) return;
-sortBtn.dataset.mode = mode;
-// center the text and remove the triangle marker
-sortBtn.textContent = getModeLabel(mode);
-sortBtn.setAttribute('aria-pressed', mode === 'first');
-}
-function toggleSortMode(){
-const newMode = (sortBtn.dataset.mode === 'first') ? 'fastest' : 'first';
-setSortMode(newMode);
-sortPeople(newMode);
-reorderBoardWithAnimation();
-}
-if(sortBtn){
-// match visual style of the old select
-sortBtn.addEventListener('click', toggleSortMode);
-sortBtn.addEventListener('keydown', (e)=>{ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); toggleSortMode(); } });
+function getModeLabel(mode) {
+  return mode === 'first' ? 'First Level 200' : 'Fastest 200';
 }
 
-// dataset toggle handling
+function setSortMode(mode) {
+  if (!sortBtn) return;
+  sortBtn.dataset.mode = mode;
+  sortBtn.textContent = getModeLabel(mode);
+  sortBtn.setAttribute('aria-pressed', mode === 'first');
+}
+
+function toggleSortMode() {
+  const newMode = (sortBtn.dataset.mode === 'first') ? 'fastest' : 'first';
+  setSortMode(newMode);
+  sortPeople(newMode);
+  reorderBoardWithAnimation();
+}
+if (sortBtn) {
+  sortBtn.addEventListener('click', toggleSortMode);
+  sortBtn.addEventListener('keydown', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      toggleSortMode();
+    }
+  });
+}
+
+let currentView = 'leaderboard';
+const viewToggle = document.getElementById('viewToggle');
+const timeline = document.getElementById('timeline');
+
+function renderTimeline() {
+  if (!timeline) return;
+  timeline.innerHTML = '';
+  
+  const grouped = {};
+  people.forEach(p => {
+    const year = p.date.split('/')[2];
+    if (!grouped[year]) grouped[year] = [];
+    grouped[year].push(p);
+  });
+  
+  const years = Object.keys(grouped).sort((a, b) => b - a);
+  
+  years.forEach(year => {
+    const section = document.createElement('div');
+    section.className = 'timeline-section';
+    
+    const yearTitle = document.createElement('div');
+    yearTitle.className = 'timeline-year';
+    yearTitle.textContent = year;
+    section.appendChild(yearTitle);
+    
+    const list = document.createElement('div');
+    list.className = 'timeline-list';
+    
+    grouped[year].forEach((p, idx) => {
+      const entry = document.createElement('div');
+      entry.className = 'timeline-entry';
+      
+      const rank = document.createElement('div');
+      rank.className = 'timeline-rank';
+      rank.textContent = `#${people.indexOf(p) + 1}`;
+      entry.appendChild(rank);
+      
+      const name = document.createElement('div');
+      name.className = 'timeline-name';
+      name.textContent = p.name;
+      entry.appendChild(name);
+      
+      const date = document.createElement('div');
+      date.className = 'timeline-date';
+      date.textContent = formatDateDisplay(p.date);
+      entry.appendChild(date);
+      
+      list.appendChild(entry);
+    });
+    
+    section.appendChild(list);
+    timeline.appendChild(section);
+  });
+}
+
+function toggleView() {
+  if (currentView === 'leaderboard') {
+    currentView = 'timeline';
+    board.classList.add('fade-out');
+    // hide sort button with animation
+    sortBtn.classList.add('hidden');
+    // reset card visibility for when we return
+    document.querySelectorAll('.card.visible').forEach(card => {
+      card.classList.remove('visible');
+    });
+    setTimeout(() => {
+      board.style.display = 'none';
+      renderTimeline();
+      timeline.style.display = 'block';
+      timeline.classList.remove('fade-out');
+      timeline.classList.add('fade-in');
+    }, 180);
+    viewToggle.textContent = 'Leaderboard';
+  } else {
+    currentView = 'leaderboard';
+    timeline.classList.add('fade-out');
+    setTimeout(() => {
+      timeline.style.display = 'none';
+      board.style.display = '';
+      board.classList.remove('fade-out');
+      board.classList.add('fade-in');
+      // show sort button with animation
+      sortBtn.classList.remove('hidden');
+      // re-setup reveal observer for leaderboard cards
+      if (typeof setupRevealObserver === 'function') setupRevealObserver();
+    }, 180);
+    viewToggle.textContent = 'Timeline';
+  }
+}
+
+if (viewToggle) {
+  viewToggle.addEventListener('click', toggleView);
+  viewToggle.addEventListener('keydown', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      toggleView();
+    }
+  });
+}
+
+if (sortBtn) {
+  sortBtn.classList.remove('hidden');
+}
+
 let currentDataset = 'people';
-function setDataset(ds){
-// ensure we have a valid `board` reference (re-query if needed)
-if(!board) board = document.getElementById('board');
-if(!board){ console.warn('Board element not found; aborting setDataset'); return; }
 
-currentDataset = ds;
+function setDataset(ds) {
+  if (!board) board = document.getElementById('board');
+  if (!board) {
+    console.warn('Board element not found; aborting setDataset');
+    return;
+  }
 
-// render the people dataset
-sortPeople(sortBtn && sortBtn.dataset ? sortBtn.dataset.mode || 'fastest' : 'fastest');
-// render fresh people DOM and sync ranks
-try{ renderBoard(); updateRanks(); }catch(err){ console.error('renderBoard failed', err); }
+  currentDataset = ds;
 
-// set up reveal observers after rendering so cards animate when they enter view
-try{ if(typeof setupRevealObserver === 'function') setupRevealObserver(); }catch(e){ /* noop */ }
+  sortPeople(sortBtn && sortBtn.dataset ? sortBtn.dataset.mode || 'fastest' : 'fastest');
+  try {
+    renderBoard();
+    updateRanks();
+  } catch (err) {
+    console.error('renderBoard failed', err);
+  }
+
+  try {
+    if (typeof setupRevealObserver === 'function') setupRevealObserver();
+  } catch (e) {
+    /* noop */ }
 }
 
-// helper: locate a card by display name, scroll to it and apply a temporary highlight
 const styleTag = document.createElement('style');
 styleTag.textContent = `
 .controls .toggle-btn{
@@ -534,10 +1081,17 @@ styleTag.textContent = `
  cursor:pointer;
  text-align:center;
  display:inline-block;
+ min-width:120px;
+ transition:opacity .3s ease, transform .3s ease, visibility .3s ease;
+}
+.controls .toggle-btn.hidden{
+ opacity:0;
+ transform:translateY(-4px);
+ visibility:hidden;
+ pointer-events:none;
 }
 .controls .toggle-btn:focus{outline:3px solid rgba(255,255,255,0.12);box-shadow:none}
 
-/* search box styling (banner & floating) */
 .controls .search-wrap{display:inline-flex;gap:8px;align-items:center;margin-left:12px}
 .controls .search-wrap input[type='search']{background:linear-gradient(180deg,#222428,#1f2124);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:10px;min-width:200px;font-weight:600}
 .controls .search-wrap input[type='search']::placeholder{color:rgba(230,238,248,0.46)}
@@ -548,107 +1102,109 @@ styleTag.textContent = `
 `;
 document.head.appendChild(styleTag);
 
-function getInitials(name){
-if(!name) return '';
-const parts = name.split(/\s+/).filter(Boolean);
-if(parts.length === 1) return parts[0].slice(0,2).toUpperCase();
-return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+function getInitials(name) {
+  if (!name) return '';
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
 }
-function formatTime(p){
-// show as "X months Y days" using parsed months and days
-if(!p || p.totalDays >= 1e9) return '--';
-const m = Number(p.monthsNum);
-const d = Number(p.daysNum);
-if(isNaN(m) || isNaN(d)) return '--';
-const parts = [];
-if(m > 0 && m < 1e6) parts.push(`${m} month${m === 1 ? '' : 's'}`);
-if(d > 0) parts.push(`${d} day${d === 1 ? '' : 's'}`);
-if(parts.length === 0) return '0 days';
-return parts.join(' ');
-} 
+
+function formatTime(p) {
+  if (!p || p.totalDays >= 1e9) return '--';
+  const m = Number(p.monthsNum);
+  const d = Number(p.daysNum);
+  if (isNaN(m) || isNaN(d)) return '--';
+  const parts = [];
+  if (m > 0 && m < 1e6) parts.push(`${m} month${m === 1 ? '' : 's'}`);
+  if (d > 0) parts.push(`${d} day${d === 1 ? '' : 's'}`);
+  if (parts.length === 0) return '0 days';
+  return parts.join(' ');
+}
 
 // format a date string in dd/mm/yyyy into a human readable form like "1 February 2023"
-function formatDateDisplay(dateStr){
-if(!dateStr) return '--';
-const parts = dateStr.split('/').map(s=>s.trim());
-if(parts.length !== 3) return dateStr;
-const d = parseInt(parts[0],10);
-const m = parseInt(parts[1],10);
-const y = parseInt(parts[2],10);
-if(isNaN(d) || isNaN(m) || isNaN(y)) return dateStr;
-const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const month = monthNames[m - 1] || '';
-return `${d} ${month} ${y}`;
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return '--';
+  const parts = dateStr.split('/').map(s => s.trim());
+  if (parts.length !== 3) return dateStr;
+  const d = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const y = parseInt(parts[2], 10);
+  if (isNaN(d) || isNaN(m) || isNaN(y)) return dateStr;
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+    'November', 'December'
+  ];
+  const month = monthNames[m-1] || '';
+  return `${d} ${month} ${y}`;
 }
 
-function sortPeople(mode){
-if(mode === 'fastest'){
-people.sort((a,b)=> (a.monthsNum - b.monthsNum) || (a.daysNum - b.daysNum) || (parseDateToNumber(a.date) - parseDateToNumber(b.date)));
-} else if(mode === 'first'){
-people.sort((a,b)=> (parseDateToNumber(a.date) - parseDateToNumber(b.date)) || (parseInt(a.position,10) - parseInt(b.position,10)) || (a.id - b.id));
-}
-}
-
-function renderBoard(){
-board.innerHTML = '';
-const data = people;
-try{ console.log('renderBoard: start', { dataset: currentDataset, total: data.length, sample: data.slice(0,8).map((p,i)=>`${i+1}:${p.name}(${p.discordId})`) }); }catch(e){}
-data.forEach((p, index)=>{
-try{
-const card = document.createElement('article');
-card.className = 'card';
-card.classList.add('reveal');
-card.setAttribute('role','listitem');
-card.setAttribute('tabindex','0');
-card.dataset.id = p.id;
-
-if(index===0) card.classList.add('rank-1');
-else if(index===1) card.classList.add('rank-2');
-else if(index===2) card.classList.add('rank-3');
-
-const rankBadge = document.createElement('div');
-rankBadge.className = 'rank-badge';
-rankBadge.textContent = `#${index+1}`;
-card.appendChild(rankBadge);
-
-if (p.banner) {
-  const bannerEl = document.createElement('div');
-  bannerEl.className = 'card-banner';
-
-  if (typeof p.banner === 'string') {
-    // treat as image URL
-    bannerEl.style.backgroundImage = `url("${p.banner.trim()}")`;
-  } else if (typeof p.banner === 'object') {
-    // support color
-    if (p.banner.backgroundColor) {
-      bannerEl.style.backgroundColor = p.banner.backgroundColor;
-    }
-    if (p.banner.image) {
-      bannerEl.style.backgroundImage = `url("${p.banner.image}")`;
-    }
+function sortPeople(mode) {
+  if (mode === 'fastest') {
+    people.sort((a, b) => (a.monthsNum-b.monthsNum) || (a.daysNum-b.daysNum) || (parseDateToNumber(a.date) -
+      parseDateToNumber(b.date)));
+  } else if (mode === 'first') {
+    people.sort((a, b) => (parseDateToNumber(a.date) - parseDateToNumber(b.date)) || (parseInt(a.position, 10) -
+      parseInt(b.position, 10)) || (a.id-b.id));
   }
-
-  card.appendChild(bannerEl);
 }
 
-const initials = getInitials(p.name);
-const formatted = formatTime(p);
+function renderBoard() {
+  board.innerHTML = '';
+  people.forEach((p, index) => {
+    try {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.classList.add('reveal');
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('tabindex', '0');
+      card.dataset.id = p.discordId || 'unknown';
 
-const rawId = (p.discordId || '').toString().trim();
-const idLower = rawId.toLowerCase();
-const missingSentinels = ['--','-','deleted','removed','n/a','null',''];
-const isMissing = missingSentinels.includes(idLower);
-const hasId = rawId && !isMissing;
-let idHtml;
-if(hasId){
-idHtml = `<button class="id-link" aria-label="Copy ID ${rawId}">${rawId}</button>`;
-} else {
-const display = (rawId && rawId !== '--') ? rawId : '—';
-const aria = (rawId && rawId !== '--') ? `aria-label="ID ${rawId}"` : `aria-label="ID missing"`;
-idHtml = `<span class="id-missing" ${aria}>${display}</span>`;
-}
+      if (index === 0) card.classList.add('rank-1');
+      else if (index === 1) card.classList.add('rank-2');
+      else if (index === 2) card.classList.add('rank-3');
 
-card.innerHTML += `
+      const rankBadge = document.createElement('div');
+      rankBadge.className = 'rank-badge';
+      rankBadge.textContent = `#${index+1}`;
+      card.appendChild(rankBadge);
+
+      if (p.banner) {
+        const bannerEl = document.createElement('div');
+        bannerEl.className = 'card-banner';
+
+        if (typeof p.banner === 'string') {
+          // treat as image URL
+          bannerEl.style.backgroundImage = `url("${p.banner.trim()}")`;
+        } else if (typeof p.banner === 'object') {
+          // support color
+          if (p.banner.backgroundColor) {
+            bannerEl.style.backgroundColor = p.banner.backgroundColor;
+          }
+          if (p.banner.image) {
+            bannerEl.style.backgroundImage = `url("${p.banner.image}")`;
+          }
+        }
+
+        card.appendChild(bannerEl);
+      }
+
+      const initials = getInitials(p.name);
+      const formatted = formatTime(p);
+
+      const rawId = (p.discordId || '').toString().trim();
+      const idLower = rawId.toLowerCase();
+      const missingSentinels = ['--', '-', 'deleted', 'removed', 'n/a', 'null', ''];
+      const isMissing = missingSentinels.includes(idLower);
+      const hasId = rawId && !isMissing;
+      let idHtml;
+      if (hasId) {
+        idHtml = `<button class="id-link" aria-label="Copy ID ${rawId}">${rawId}</button>`;
+      } else {
+        const display = (rawId && rawId !== '--') ? rawId : '—';
+        const aria = (rawId && rawId !== '--') ? `aria-label="ID ${rawId}"` : `aria-label="ID missing"`;
+        idHtml = `<span class="id-missing" ${aria}>${display}</span>`;
+      }
+
+      card.innerHTML += `
        <div class="card-header">
          <div class="avatar" aria-hidden="true" aria-label="${p.name}"></div>
          <div class="meta">
@@ -665,241 +1221,283 @@ card.innerHTML += `
        </div>
      `;
 
-const avatar = card.querySelector('.avatar');
+      const avatar = card.querySelector('.avatar');
 
-let avatarUrl = null;
-if (p.img && !/pravatar\.cc/.test(p.img)) {
-avatarUrl = p.img.replace('.webp', '.png');
-} else if (p.discordId && p.discordId !== 'Deleted') {
-avatarUrl = discordDefaultAvatar(p.discordId) || getFallbackDiscordAvatar(p.name || p.discordId);
-} else {
-avatarUrl = getFallbackDiscordAvatar(p.name || p.discordId);
-}
+      // optional:show fallback immediately (so no empty flash)
+      avatar.style.backgroundImage = `url("${getFallbackDiscordAvatar(p.name)}")`;
+      avatar.style.backgroundSize = 'cover';
+      avatar.style.backgroundPosition = 'center';
+      avatar.textContent = '';
 
-if (avatarUrl) {
-avatar.style.backgroundImage = `url("${avatarUrl}")`;
-avatar.style.backgroundSize = 'cover';
-avatar.style.backgroundPosition = 'center';
-avatar.textContent = '';
-} else {
-avatar.style.backgroundImage = '';
-avatar.textContent = initials;
-}
+      getDiscordAvatar(p.discordId, p.name, p.img).then(url => {
+        avatar.style.backgroundImage = `url("${url}")`;
+      });
 
-const idButtons = card.querySelectorAll('.id-link');
-idButtons.forEach(btn=>{
-btn.addEventListener('click', async (e)=>{
-try{
-await navigator.clipboard.writeText(p.discordId);
-const orig = btn.textContent;
-btn.textContent = 'Copied';
-setTimeout(()=> btn.textContent = orig, 1200);
-}catch(err){
-console.error('copy failed', err);
-}
-});
-});
+      const idButtons = card.querySelectorAll('.id-link');
+      idButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          try {
+            await navigator.clipboard.writeText(p.discordId);
+            const orig = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => btn.textContent = orig, 1200);
+          } catch (err) {
+            console.error('copy failed', err);
+          }
+        });
+      });
 
-const desc = card.querySelector('.desc');
-const descInner = desc.querySelector('.desc-inner');
+      const desc = card.querySelector('.desc');
+      const descInner = desc.querySelector('.desc-inner');
 
-function closeOthers(){
-document.querySelectorAll('.card.show-desc').forEach(c=>{ if(c !== card) { c.classList.remove('show-desc'); const d = c.querySelector('.desc'); if(d) d.style.maxHeight = '0px'; } });
-}
+      function closeOthers() {
+        document.querySelectorAll('.card.show-desc').forEach(c => {
+          if (c !== card) {
+            c.classList.remove('show-desc');
+            const d = c.querySelector('.desc');
+            if (d) d.style.maxHeight = '0px';
+          }
+        });
+      }
 
-let autoScrollActive = false;
-let savedScrollY = null;
-let scrollAnimFrame = null;
+      let autoScrollActive = false;
+      let savedScrollY = null;
+      let scrollAnimFrame = null;
 
-function smoothScrollBy(amount, duration){
-  const start = window.scrollY;
-  const target = start + amount;
-  const startTime = performance.now();
+      function smoothScrollBy(amount, duration) {
+        const start = window.scrollY;
+        const target = start + amount;
+        const startTime = performance.now();
 
-  function step(now){
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    // ease in-out curve for natural feel
-    const ease = progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-    window.scrollTo(0, start + (target - start) * ease);
-    if(progress < 1) scrollAnimFrame = requestAnimationFrame(step);
-  }
-  if(scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
-  scrollAnimFrame = requestAnimationFrame(step);
-}
+        function step(now) {
+          const elapsed = now-startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // ease in-out curve for natural feel
+          const ease = progress < 0.5 ?
+            2 * progress * progress :
+            1-Math.pow(-2 * progress + 2, 2) / 2;
+          window.scrollTo(0, start + (target-start) * ease);
+          if (progress < 1) scrollAnimFrame = requestAnimationFrame(step);
+        }
+        if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
+        scrollAnimFrame = requestAnimationFrame(step);
+      }
 
-function smoothScrollTo(target, duration){
-  const start = window.scrollY;
-  const startTime = performance.now();
+      function smoothScrollTo(target, duration) {
+        const start = window.scrollY;
+        const startTime = performance.now();
 
-  function step(now){
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const ease = progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-    window.scrollTo(0, start + (target - start) * ease);
-    if(progress < 1) scrollAnimFrame = requestAnimationFrame(step);
-  }
-  if(scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
-  scrollAnimFrame = requestAnimationFrame(step);
-}
+        function step(now) {
+          const elapsed = now-startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = progress < 0.5 ?
+            2 * progress * progress :
+            1-Math.pow(-2 * progress + 2, 2) / 2;
+          window.scrollTo(0, start + (target-start) * ease);
+          if (progress < 1) scrollAnimFrame = requestAnimationFrame(step);
+        }
+        if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
+        scrollAnimFrame = requestAnimationFrame(step);
+      }
 
-function showDesc(){
-  closeOthers();
-  card.classList.add('show-desc');
-  card.setAttribute('aria-expanded','true');
-  desc.setAttribute('aria-hidden','false');
-  desc.style.maxHeight = descInner.scrollHeight + 24 + 'px';
+      function showDesc() {
+        closeOthers();
+        card.classList.add('show-desc');
+        card.setAttribute('aria-expanded', 'true');
+        desc.setAttribute('aria-hidden', 'false');
+        desc.style.maxHeight = descInner.scrollHeight + 24 + 'px';
 
-  setTimeout(()=>{
-    descInner.style.opacity = 1;
-    descInner.style.transform = 'translateY(0)';
-  }, 40);
+        setTimeout(() => {
+          descInner.style.opacity = 1;
+          descInner.style.transform = 'translateY(0)';
+        }, 40);
 
-  setTimeout(()=>{
-    const cardRect = card.getBoundingClientRect();
-    const expandedBottom = cardRect.bottom + descInner.scrollHeight + 24;
-    const viewportHeight = window.innerHeight;
+        setTimeout(() => {
+          const cardRect = card.getBoundingClientRect();
+          const expandedBottom = cardRect.bottom + descInner.scrollHeight + 24;
+          const viewportHeight = window.innerHeight;
 
-    if(expandedBottom > viewportHeight){
-      savedScrollY = window.scrollY;
-      autoScrollActive = true;
-      const scrollNeeded = expandedBottom - viewportHeight + 16;
-      smoothScrollBy(scrollNeeded, 600); // 600ms slow smooth scroll
+          if (expandedBottom > viewportHeight) {
+            savedScrollY = window.scrollY;
+            autoScrollActive = true;
+            const scrollNeeded = expandedBottom-viewportHeight + 16;
+            smoothScrollBy(scrollNeeded, 600); // 600ms slow smooth scroll
+          }
+        }, 360);
+      }
+
+      function hideDesc() {
+        card.classList.remove('show-desc');
+        card.setAttribute('aria-expanded', 'false');
+        desc.setAttribute('aria-hidden', 'true');
+        descInner.style.opacity = 0;
+        descInner.style.transform = 'translateY(6px)';
+        desc.style.maxHeight = '0px';
+
+        if (autoScrollActive && savedScrollY !== null) {
+          if (scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
+          smoothScrollTo(savedScrollY, 600); // 600ms slow smooth scroll back
+          autoScrollActive = false;
+          savedScrollY = null;
+        }
+      }
+
+      card.addEventListener('mouseenter', showDesc);
+      card.addEventListener('mouseleave', hideDesc);
+      card.addEventListener('focusin', showDesc);
+      card.addEventListener('focusout', hideDesc);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const isOpen = card.classList.contains('show-desc');
+          if (isOpen) hideDesc();
+          else showDesc();
+        }
+      });
+
+      board.appendChild(card);
+    } catch (err) {
+      console.error('renderBoard:failed to render person', p && p.name, p, err);
     }
-  }, 360);
-}
+  });
 
-function hideDesc(){
-  card.classList.remove('show-desc');
-  card.setAttribute('aria-expanded','false');
-  desc.setAttribute('aria-hidden','true');
-  descInner.style.opacity = 0;
-  descInner.style.transform = 'translateY(6px)';
-  desc.style.maxHeight = '0px';
-
-  if(autoScrollActive && savedScrollY !== null){
-    if(scrollAnimFrame) cancelAnimationFrame(scrollAnimFrame);
-    smoothScrollTo(savedScrollY, 600); // 600ms slow smooth scroll back
-    autoScrollActive = false;
-    savedScrollY = null;
-  }
-}
-
-card.addEventListener('mouseenter', showDesc);
-card.addEventListener('mouseleave', hideDesc);
-card.addEventListener('focusin', showDesc);
-card.addEventListener('focusout', hideDesc);
-card.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); const isOpen = card.classList.contains('show-desc'); if(isOpen) hideDesc(); else showDesc(); } });
-
-board.appendChild(card);
-}
-catch(err){
-console.error('renderBoard: failed to render person', p && p.name, p, err);
-}
-});
-
-// after rendering, update status and log summary for debugging
-try{
-const renderedNames = Array.from(board.querySelectorAll('.username')).map(n=>n.textContent && n.textContent.trim()).filter(Boolean);
-const count = renderedNames.length;
-console.log('renderBoard: rendered names count', count);
-const missing = (people || []).map(p=>p.name && p.name.trim()).filter(Boolean).filter(n => !renderedNames.includes(n));
-if(missing.length) console.warn('renderBoard: missing after render ->', missing);
-}catch(e){ /* noop */ }
 }
 
 // keep badges & left accents in sync with current DOM order
-function updateRanks(){
-Array.from(board.children).forEach((c, i)=>{
-c.classList.remove('rank-1','rank-2','rank-3');
-if(i===0) c.classList.add('rank-1');
-else if(i===1) c.classList.add('rank-2');
-else if(i===2) c.classList.add('rank-3');
-const badge = c.querySelector('.rank-badge');
-if(badge) badge.textContent = `#${i+1}`;
-});
+function updateRanks() {
+  Array.from(board.children).forEach((c, i) => {
+    c.classList.remove('rank-1', 'rank-2', 'rank-3');
+    if (i === 0) c.classList.add('rank-1');
+    else if (i === 1) c.classList.add('rank-2');
+    else if (i === 2) c.classList.add('rank-3');
+    const badge = c.querySelector('.rank-badge');
+    if (badge) badge.textContent = `#${i+1}`;
+  });
 }
 
 // Reorder with FLIP animation when sort mode changes
-function reorderBoardWithAnimation(){
-// capture first positions
-const cards = Array.from(board.children);
-const firstRects = new Map();
-cards.forEach(c => { firstRects.set(c.dataset.id, c.getBoundingClientRect()); });
+function reorderBoardWithAnimation() {
+  // capture first positions
+  const cards = Array.from(board.children);
+  const firstRects = new Map();
+  cards.forEach(c => {
+    firstRects.set(c.dataset.id, c.getBoundingClientRect());
+  });
 
-// append in new order
-const data = people;
-data.forEach(p => {
-const c = board.querySelector(`[data-id="${p.id}"]`);
-if(c) board.appendChild(c);
-});
+  // append in new order
+  const data = people;
+  people.forEach(p => {
+    const c = board.querySelector(`[data-id="${p.discordId || 'unknown'}"]`);
+    if (c) board.appendChild(c);
+  });
 
-// update badges and left-accent classes to reflect new order
-updateRanks();
+  // update badges and left-accent classes to reflect new order
+  updateRanks();
 
-// animate from old position to new
-const lastRects = new Map();
-const moved = [];
-Array.from(board.children).forEach(c => {
-const id = c.dataset.id;
-const first = firstRects.get(id);
-const last = c.getBoundingClientRect();
-lastRects.set(id, last);
-const deltaY = first ? first.top - last.top : 0;
-if(deltaY){
-moved.push({c, deltaY});
-}
-});
+  // animate from old position to new
+  const lastRects = new Map();
+  const moved = [];
+  Array.from(board.children).forEach(c => {
+    const id = c.dataset.id;
+    const first = firstRects.get(id);
+    const last = c.getBoundingClientRect();
+    lastRects.set(id, last);
+    const deltaY = first ? first.top-last.top : 0;
+    if (deltaY) {
+      moved.push({
+        c,
+        deltaY
+      });
+    }
+  });
 
-moved.forEach(({c, deltaY}) => {
-c.style.transition = 'none';
-c.style.transform = `translateY(${deltaY}px)`;
-requestAnimationFrame(()=>{
-c.style.transition = 'transform .48s cubic-bezier(.2,.8,.2,1)';
-c.style.transform = '';
-});
-const cleanup = ()=>{ c.style.transition = ''; c.style.transform = ''; c.removeEventListener('transitionend', cleanup); };
-c.addEventListener('transitionend', cleanup);
-});
+  moved.forEach(({
+    c,
+    deltaY
+  }) => {
+    c.style.transition = 'none';
+    c.style.transform = `translateY(${deltaY}px)`;
+    requestAnimationFrame(() => {
+      c.style.transition = 'transform .48s cubic-bezier(.2,.8,.2,1)';
+      c.style.transform = '';
+    });
+    const cleanup = () => {
+      c.style.transition = '';
+      c.style.transform = '';
+      c.removeEventListener('transitionend', cleanup);
+    };
+    c.addEventListener('transitionend', cleanup);
+  });
 }
 
 // reveal observer for scroll animations
 let revealObserver = null;
-function setupRevealObserver(){
-try{
-if(revealObserver) revealObserver.disconnect();
-revealObserver = new IntersectionObserver((entries, obs)=>{
-entries.forEach(entry => {
-if(entry.isIntersecting){
-// add a tiny delay and clear inline transition to ensure the CSS transition runs
-setTimeout(()=>{ try{ entry.target.style.transition = ''; entry.target.classList.add('visible'); }catch(e){} }, 25);
-obs.unobserve(entry.target);
-}
-});
-},{threshold:0.12});
-// ensure reveal elements already in the viewport show immediately; otherwise observe them
-document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
-try{
-const r = el.getBoundingClientRect();
-const vh = window.innerHeight || document.documentElement.clientHeight;
-if(r.top < vh && r.bottom > 0){
-// small delay to ensure initial styles are applied; clear any inline transition and then add visible
-setTimeout(()=>{ try{ el.style.transition = ''; el.classList.add('visible'); }catch(e){} }, 25);
-} else {
-revealObserver.observe(el);
-}
-}catch(e){ revealObserver.observe(el); }
-});
-}catch(err){ /* noop */ }
+
+function setupRevealObserver() {
+  try {
+    if (revealObserver) revealObserver.disconnect();
+    revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // add a tiny delay and clear inline transition to ensure the CSS transition runs
+          setTimeout(() => {
+            try {
+              entry.target.style.transition = '';
+              entry.target.classList.add('visible');
+            } catch (e) {}
+          }, 25);
+        } else {
+          // remove visible class when scrolling out of view so animation replays when scrolling back
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold:0.12
+    });
+    // ensure reveal elements already in the viewport show immediately; otherwise observe them
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      try {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        if (r.top < vh && r.bottom > 0) {
+          // small delay to ensure initial styles are applied; clear any inline transition and then add visible
+          setTimeout(() => {
+            try {
+              el.style.transition = '';
+              el.classList.add('visible');
+            } catch (e) {}
+          }, 25);
+        } else {
+          revealObserver.observe(el);
+        }
+      } catch (e) {
+        revealObserver.observe(el);
+      }
+    });
+  } catch (err) {
+    /* noop */ }
 }
 
 setSortMode('first');
-try{ setDataset('people'); }catch(err){ console.error('init render failed', err); showErrorOverlay('Init render failed: ' + (err && err.message ? err.message : String(err))); }
-try{ setupSearch(); }catch(e){}
+try {
+  setDataset('people');
+} catch (err) {
+  console.error('init render failed', err);
+  showErrorOverlay('Init render failed: ' + (err && err.message ? err.message : String(err)));
+}
+
+
+setInterval(() => {
+  document.querySelectorAll('.card').forEach(async (card) => {
+    const id = card.dataset.id;
+    const avatar = card.querySelector('.avatar');
+
+    if (!id || id === 'unknown') return;
+
+    const url = await getDiscordAvatar(id);
+    avatar.style.backgroundImage = `url("${url}")`;
+  });
+}, 60000); // every 60 seconds
 
 </script>
 </body>

@@ -10,7 +10,6 @@
 }
 html {
   scroll-behavior: smooth;
-  
 }
 
 @media (max-width: 768px) {
@@ -20,27 +19,11 @@ html {
   -webkit-backdrop-filter: blur(10px);
 }
 
-.avatar {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  aspect-ratio: 1 / 1;
-}
-}
-  
-.header {
-  padding: 16px 20px;
-}
-  
 .rank-badge {
   top: 10px;
   right: 10px;
   font-size: 0.8rem;
   padding: 5px 8px;
-}
-
-.container {
-  padding: 0 14px;
 }
 
 .avatar {
@@ -134,10 +117,6 @@ html {
     padding: 6px 10px;
   }
 
-  .banner-inner .org {
-  padding-left: 16px;
-}
-
   .muted {
     font-size: 0.8rem;
   }
@@ -190,10 +169,6 @@ html {
   body {
     overflow-x: hidden;
   }
-}
-
-.banner-inner h1 .title-wrap {
-  width: 180px;
 }
 
 .grid {
@@ -297,8 +272,7 @@ html {
   }:root {
     --bg: #202120; --card:#23272b;
     --muted: #aeb8c2;
-    --accent:
-      #7c3aed;
+    --accent: #7c3aed;
       --card-radius:12px;
       --banner-height:84px;
     }
@@ -375,162 +349,10 @@ html {
       .group-title::after {
         right:0
       }
-.staff-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-      .staff-grid.card {
-        height:100% ;box-sizing:border-box
-      }
-      .staff-grid.card {
-        min-height:140px
-      }
-      /* role pill should appear under the ID, not centered inline; remove decorative lines */
-      .card.staff-owner.stats, .card.staff-cm.stats, .card.staff-sr.stats, .card.staff-mod.stats {
-        justify-content:flex-start
-      }
-      .card.staff-owner.stats::before, .card.staff-owner.stats::after, .card.staff-cm.stats::before, .card.staff-cm.stats::after, .card.staff-sr.stats::before, .card.staff-sr.stats::after, .card.staff-mod.stats::before,
-      .card.staff-mod.stats::after {
-        display:none
-      }
-      .meta {
-        display:flex;flex-direction:column
-      }
-      .stats {
-        margin-top:8px
-      }
-      /* centered card highlight:outline only (no permanent shadow); hover/focus still lifts like other cards */
-      .staff-grid.card.centered-card {
-        outline:1px solid rgba(255, 255, 255, 0.03);box-shadow:none;margin-top:0;margin-bottom:0;transition:transform .22s,
-        box-shadow .22s,
-        width .22s
-      }
-      /* ensure centered cards animate width changes and still lift on hover */
-      .staff-grid.card.centered-card:hover, .staff-grid.card.centered-card:focus-within {
-        transform:translateY(-6px);box-shadow:0 12px 30px rgba(0, 0, 0, 0.6)
-      }
-      /* owner span keeps natural size (span 2 columns) */
-      .staff-grid.card.owner-span {
-        grid-column:span 2
-      }
-    @media(min-width:920px) {
-        /* at larger widths, enforce owner card min width equal to two columns so it looks long */
-        .staff-grid.card.owner-span {
-          min-width:calc(2 * 420px + 24px);
-        }
-      }
       /* role-specific plates */
-      .card.staff-owner {
-        padding:22px;border-radius:14px;background:linear-gradient(180deg, #111316,#15181b)
-      }
-      .card.staff-owner.avatar {
-        width:88px;height:88px;font-size:22px;flex:0 0 88px
-      }
-      .card.staff-owner.pill {
-        padding:8px 10px;font-size:0.92rem;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
-      }
-
-      .card.staff-cm {
-        padding:18px;border-radius:13px
-      }
-      .card.staff-cm.avatar {
-        width:72px;height:72px;font-size:20px;flex:0 0 72px
-      }
-      .card.staff-cm.pill {
-        padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
-      }
-
-      .card.staff-sr {
-        padding:16px;border-radius:12px
-      }
-      .card.staff-sr.avatar {
-        width:64px;height:64px;font-size:18px;flex:0 0 64px
-      }
-      .card.staff-sr.pill {
-        padding:7px 10px;font-size:0.9rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
-      }
-
-      .card.staff-mod.avatar {
-        width:56px;height:56px;font-size:16px;flex:0 0 56px
-      }
-      .card.staff-mod.pill {
-        padding:6px 10px;font-size:0.88rem;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block
-      }
-
-      /* staff role badges (right) */
-      .staff-badge {
-        position:absolute;top:12px;right:12px;border-radius:999px;padding:6px 10px;font-weight:800;font-size:0.85rem
-      }
-      .role-owner {
-        background:linear-gradient(180deg, #FFEB99, #FFD54F);color: #111827}
-        .role-cm{background:linear-gradient(180deg,#D8B4FE,
-        #B794F4);
-        color: #111827
-      }
-.role-sr{background:linear-gradient(180deg,#E1A17A, #D98845);
-color: #111827}
-.role-mod{background:linear-gradient(180deg,#ffffff, #e6e6e6);
-color: #111827}
-
-.pill.role-owner{background:linear-gradient(180deg,#ffffff, #e6e6e6);
-color: #111827}
-.pill.role-cm{background:linear-gradient(180deg,#ff6b6b, #ff3b3b);
-color: #ffffff
-}
-.pill.role-admin {
-    background:linear-gradient(180deg, #ff6b6b, #ff3b3b);color: #ffffff
-  }
-  .pill.role-sr {
-    background:linear-gradient(180deg, #0f6b44,#0a4f34);color: #ffffff
-  }
-  .pill.role-mod {
-    background:linear-gradient(180deg,
-    #79c99a,#5fbf7f);color: #111827}
-
-    .banner-inner h1 .title-wrap{position:absolute;left:50%;transform:translate(-50%,-4px);width:320px;display:block;min-width:240px}
-    .banner-inner h1 .title-wrap .title-text{display:block;text-align:center;width:100%;font-weight:700}
-    .dataset-tri{
-    background:transparent;
-    border:none;
-    padding:0;
-    width:0;
-    height:0;
-    display:inline-block;
-    vertical-align:middle;
-    transform-origin:center;
-    transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .16s, border-color .16s;
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-}
-.dataset-tri.left{left:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-right:14px solid #e6eef8;margin:0
-  }
-  .dataset-tri.right {
-    right:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:14px solid #e6eef8;margin:0
-  }
-  .dataset-tri.active.left {
-    border-right-color: #ffffff
-  }
-  .dataset-tri.active.right {
-    border-left-color: #ffffff
-  }
-  /* hover + focus styles:subtle by default (scale + gentle glow) */
-  .dataset-tri:hover {
-    opacity:0.95;transform:translateY(-50%) scale(1.06)
-  }
-  .dataset-tri:focus-visible {
-    outline:none;box-shadow:0 0 0 6px rgba(255, 255, 255, 0.06);border-color: #ffffff;transform:translateY(-50%      ) scale(1.12)
-  }
-  /* keep low-impact active state for click */
-  .dataset-tri:active {
-    transform:translateY(-50%) scale(1.06)
-  }
 @media(max-width:520px) {
-  .banner-inner h1.title-wrap {
-    width:220px
+  .title-wrap {
+    max-width:220px;
   }
 }
 

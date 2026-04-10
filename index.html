@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BeluGANG List</title>
   <style>
+
+
 .container {
   padding-bottom: 80px;
 }
@@ -236,12 +238,15 @@ html {
   opacity: 0;
   transform: translateY(-16px) translateX(8px) rotateX(25deg) scale(0.9);
   pointer-events: none;
-  transition: none;
+  transition: all 0.3s cubic-bezier(.34, 1.56, .64, 1);
   perspective: 1000px;
 }
 .filter-dropdown.open {
-  animation: dropdownSlideIn .4s cubic-bezier(.34, 1.56, .64, 1) forwards;
+  opacity: 1;
+  transform: translateY(0) translateX(0) rotateX(0) scale(1);
   pointer-events: auto;
+  box-shadow: 0 0 16px #2e2e2e4c, 0 8px 32px #2e2e2e88;
+  border-color: rgba(43, 43, 43, 0.599);
 }
 @keyframes dropdownSlideIn {
   0% {
@@ -257,6 +262,19 @@ html {
     transform: translateY(0) translateX(0) rotateX(0) scale(1);
     box-shadow: 0 0 16px #2e2e2e4c, 0 8px 32px #2e2e2e88;
     border-color: rgba(43, 43, 43, 0.599);
+  }
+}
+@keyframes dropdownSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotateX(0) scale(1);
+    box-shadow: 0 0 16px #2e2e2e4c, 0 8px 32px #2e2e2e88;
+    border-color: rgba(43, 43, 43, 0.599);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) translateX(8px) rotateX(25deg) scale(0.9);
+    box-shadow: 0 0 0 #2e2e2e00, 0 8px 32px rgba(0,0,0,0.2);
   }
 }
 .filter-dropdown.open .filter-dropdown-item {
@@ -324,6 +342,131 @@ html {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.filter-dropdown-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.04);
+  margin: 8px 0;
+}
+
+.simulator-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.simulator-input {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e6eef8;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.simulator-input::placeholder {
+  color: rgba(230,238,248,0.4);
+}
+
+.simulator-input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.4);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.2), 0 0 8px #2e2e2e26;
+}
+
+.simulator-btn {
+  background: linear-gradient(180deg, rgba(46,46,46,0.4), rgba(46,46,46,0.2));
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e6eef8;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.simulator-btn:hover {
+  background: linear-gradient(180deg, rgba(46,46,46,0.5), rgba(46,46,46,0.3));
+  border-color: rgba(255,255,255,0.16);
+  box-shadow: inset 0 0 8px #2e2e2e1a, 0 0 8px #2e2e2e26;
+  transform: translateY(-1px);
+}
+
+.simulator-result {
+  padding: 12px 16px;
+  background: rgba(46,46,46,0.2);
+  border-radius: 6px;
+  color: #e6eef8;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+  animation: resultSlideIn 0.3s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.simulator-chart {
+  padding: 12px 16px 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.simulator-chart-track {
+  position: relative;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.736);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.simulator-chart-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(255, 215, 14, 0.747), rgba(255, 255, 255, 0.736));
+  transition: width 0.35s ease;
+}
+
+.simulator-chart-marker {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border: 2px solid rgba(46,46,46,0.8);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(230,238,248,0.25);
+  transition: left 0.35s ease;
+}
+
+.simulator-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+@keyframes resultSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
   .card-banner {
@@ -528,14 +671,12 @@ html {
     border-radius:12px;
     position:relative;
     overflow:visible;
-    transition:transform .22s cubic-bezier(.2, .8, .2, 1),
-      box-shadow .22s ease,
-      margin .18s ease,
-      width .22s ease;
     display:flex;
     flex-direction:column;
     align-items:stretch;
     box-sizing:border-box;
+    backface-visibility:hidden;
+    contain:layout style;
   }
   .card::before {
     content:'';
@@ -560,6 +701,7 @@ html {
   .card:focus-within, .card:hover {
     transform:translateY(-6px);
     box-shadow:0 12px 40px rgba(2, 6, 23, 0.6);
+    transition:transform .15s ease, box-shadow .15s ease;
   }
 
   .card.show-desc {
@@ -638,11 +780,15 @@ html {
 
   /* reveal-on-scroll animation */
   .reveal {
-    opacity:0;transform:translateY(16px) scale(0.95);transition:opacity .5s cubic-bezier(.34, 1.56, .64, 1),
-    transform .5s cubic-bezier(.34, 1.56, .64, 1)
+    opacity:0;transform:translateY(16px) scale(0.95);transition:opacity .35s ease-out,
+    transform .35s cubic-bezier(.34, 1.56, .64, 1);
+    will-change:opacity,transform;
+    backface-visibility:hidden;
+    contain:layout style paint;
   }
   .reveal.visible {
-    opacity:1;transform:translateY(0) scale(1)
+    opacity:1;transform:translateY(0) scale(1);
+    will-change:auto;
   }
 
   /* rank badge and gradient colors */
@@ -755,9 +901,29 @@ font-family:inherit
     <div class="filter-dropdown-label">Filter</div>
     <button class="filter-dropdown-item active" data-dir="asc">↑ Ascending</button>
     <button class="filter-dropdown-item" data-dir="desc">↓ Descending</button>
+    
+    <div class="filter-dropdown-divider"></div>
+    <div class="filter-dropdown-label">Rank Simulator</div>
+    
+    <div class="simulator-section">
+      <input type="text" id="simulatorInput" class="simulator-input" placeholder="12 / 15" aria-label="Enter time in months / days format">
+      <button id="simulatorBtn" class="simulator-btn">Calculate</button>
+    </div>
+    <div id="simulatorResult" class="simulator-result" aria-live="polite" style="display:none;"></div>
+    <div id="simulatorChart" class="simulator-chart" aria-hidden="true" style="display:none;">
+      <div class="simulator-chart-track">
+        <div class="simulator-chart-fill"></div>
+        <div class="simulator-chart-marker" aria-label="Your rank position"></div>
+      </div>
+      <div class="simulator-chart-labels">
+        <span class="simulator-chart-start">#1</span>
+        <span class="simulator-chart-end">#36</span>
+      </div>
+    </div>
   </div>
   <button class="filter-fab-btn" id="filterFabBtn">☰</button>
   <script>
+
   function discordDefaultAvatar(id) {
      if (!id || id === 'Deleted') return null;
      if (!/^[0-9]+$/.test(String(id))) return null;
@@ -1131,6 +1297,14 @@ if (sortDirBtn) {
     reorderBoardWithAnimation();
   });
 }
+
+document.getElementById("simulatorInput").addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+document.getElementById("simulatorBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+
 
 let currentView = 'leaderboard';
 const viewToggle = document.getElementById('viewToggle');
@@ -1683,7 +1857,8 @@ function setupRevealObserver() {
         }
       });
     }, {
-      threshold:0.12
+      threshold:0.35,
+      rootMargin:'50px'
     });
     document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
       try {
@@ -1724,8 +1899,10 @@ filterFabBtn.addEventListener('click', (e) => {
   filterDropdown.classList.toggle('open');
 });
 
-document.addEventListener('click', () => {
-  filterDropdown.classList.remove('open');
+document.addEventListener('click', (e) => {
+  if (!filterFabBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+    filterDropdown.classList.remove('open');
+  }
 });
 
 filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(item => {
@@ -1746,7 +1923,93 @@ filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(item => {
   });
 });
 
+// Rank simulator logic
+const simulatorInput = document.getElementById('simulatorInput');
+const simulatorBtn = document.getElementById('simulatorBtn');
+const simulatorResult = document.getElementById('simulatorResult');
+
+function parseSimulatorTime(timeStr) {
+  if (!timeStr || typeof timeStr !== 'string') return null;
+  const trimmed = timeStr.trim();
+  const parts = trimmed.split('/').map(s => s.trim());
+  if (parts.length !== 2) return null;
+  const m = parseInt(parts[0], 10);
+  const d = parseInt(parts[1], 10);
+  if (isNaN(m) || isNaN(d) || m < 0 || d < 0) return null;
+  return { monthsNum: m, daysNum: d, totalDays: m * 30 + d };
+}
+
+function updateSimulatorChart(rank, total) {
+  const chart = document.getElementById('simulatorChart');
+  const fill = chart.querySelector('.simulator-chart-fill');
+  const marker = chart.querySelector('.simulator-chart-marker');
+  const startLabel = chart.querySelector('.simulator-chart-start');
+  const endLabel = chart.querySelector('.simulator-chart-end');
+
+  const normalized = total > 1 ? Math.min(100, Math.max(0, ((rank - 1) / (total - 1)) * 100)) : 0;
+  fill.style.width = `${normalized}%`;
+  // Clamp marker position to stay within bounds (marker is 14px wide, so half is 7px, keep within 7% to 93%)
+  const markerPos = Math.max(7, Math.min(93, normalized));
+  marker.style.left = `${markerPos}%`;
+  startLabel.textContent = '#1';
+  endLabel.textContent = `#${total}`;
+  chart.style.display = 'block';
+}
+
+function calculateSimulatorRank() {
+  const timeStr = simulatorInput.value;
+  const parsed = parseSimulatorTime(timeStr);
+  
+  if (!parsed) {
+    simulatorResult.textContent = '❌ Invalid format. Use: MM / DD';
+    simulatorResult.style.display = 'block';
+    document.getElementById('simulatorChart').style.display = 'none';
+    return;
+  }
+
+  const userTime = parsed;
+  let rankBetter = 0;
+  const validTimes = people.filter(p => p.totalDays < 1e9 && p.discordId !== '-');
+
+  validTimes.forEach(p => {
+    if (p.totalDays < userTime.totalDays) {
+      rankBetter++;
+    }
+  });
+
+  const rank = rankBetter + 1;
+  const total = validTimes.length || people.length;
+  const suffix = rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th';
+
+  simulatorResult.textContent = `⭐ You'd rank #${rank}${suffix} of ${total}.`;
+  simulatorResult.style.display = 'block';
+  updateSimulatorChart(rank, total);
+}
+
+simulatorBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  calculateSimulatorRank();
+});
+
+simulatorInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.stopPropagation();
+    calculateSimulatorRank();
+  }
+});
+
+let isScrolling = false;
+window.addEventListener('scroll', () => {
+  isScrolling = true;
+  clearTimeout(window.scrollTimeout);
+  window.scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150);
+}, { passive: true });
+
 setInterval(() => {
+  if (isScrolling) return;
+  
   document.querySelectorAll('.card').forEach(async (card) => {
     const id = card.dataset.id;
     const avatar = card.querySelector('.avatar');

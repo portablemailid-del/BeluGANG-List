@@ -5,6 +5,260 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BeluGANG List</title>
   <style>
+.container {
+  padding-bottom: 80px;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+
+.card {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.rank-badge {
+  top: 10px;
+  right: 10px;
+  font-size: 0.8rem;
+  padding: 5px 8px;
+}
+
+.container {
+  padding: 0 14px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+}
+.grid {
+  gap: 18px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 14px;
+}
+
+.card-header {
+  gap: 12px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pill {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.username {
+  font-size: 1rem;
+}
+  .banner-inner {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.org {
+  width: 100%;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+
+.controls .toggle-btn {
+  font-size: 0.75rem;
+  padding: 6px 8px;
+}
+
+  .container {
+    padding: 0 12px;
+    margin-top: calc(var(--banner-height) + 12px);
+  }
+
+  .grid {
+    gap: 16px;
+  }
+
+  /* Cards */
+  .card {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .card-header {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    font-size: 14px;
+  }
+
+  .username {
+    font-size: 0.95rem;
+  }
+
+  .pill {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .muted {
+    font-size: 0.8rem;
+  }
+
+  .desc {
+    font-size: 0.85rem;
+  }
+
+  .banner-inner {
+    padding: 0 10px;
+  }
+
+  .banner-inner h1 {
+    font-size: 1rem;
+  }
+
+  .org {
+    font-size: 1.2rem;
+  }
+
+  .controls .toggle-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: unset;
+  }
+
+  .filter-fab {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .filter-fab-btn {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .timeline-entry {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .timeline-name {
+    font-size: 0.9rem;
+  }
+
+  .timeline-date {
+    font-size: 0.8rem;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
+.banner-inner h1 .title-wrap {
+  width: 180px;
+}
+
+.grid {
+  grid-template-columns: 1fr !important;
+}
+
+.title-text {
+  font-size: 0.9rem;
+}
+
+.filter-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.filter-fab-btn {
+  background: linear-gradient(180deg, #2c3136, #26292c);
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  transition: transform .18s ease, box-shadow .18s ease;
+  white-space: nowrap;
+}
+.filter-fab-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+}
+.filter-dropdown {
+  background: linear-gradient(180deg, #2c3136, #26292c);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+}
+.filter-dropdown.open {
+  display: flex;
+}
+.filter-dropdown-item {
+  background: transparent;
+  border: none;
+  color: #e6eef8;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.filter-dropdown-item:last-child {
+  border-bottom: none;
+}
+.filter-dropdown-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+.filter-dropdown-item.active {
+  color: #ffffff;
+  background: rgba(255,255,255,0.08);
+}
+.filter-dropdown-label {
+  padding: 8px 16px 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
   .card-banner {
     position:absolute;
     inset:0;
@@ -50,7 +304,25 @@
     .banner {
       position:fixed;top:0;left:0;width:100% ;height:var(--banner-height);background: #111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
       .banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
-      .banner-inner h1{position:absolute;left:50%;transform:translate(-50%,-4px);font-size:1.2rem;white-space:nowrap;margin:0}
+      .banner-inner {
+         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+      .banner-inner h1 {
+        position: static;
+        transform: none;
+        font-size: 1rem;
+        text-align: center;
+        flex: 1;
+      }
+      .banner-inner h1 {
+        font-size: 1.2rem;
+        white-space:nowrap;
+        margin:0
+      }
       .banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px
     }
     .dataset-btn {
@@ -86,12 +358,11 @@
       .group-title::after {
         right:0
       }
-      .staff-grid {
-        display:grid;
-        grid-template-columns:repeat(auto-fit, minmax(420px, 1fr));
-        gap:24px;
-        grid-auto-rows:1fr;
-      }
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
       .staff-grid.card {
         height:100% ;box-sizing:border-box
       }
@@ -185,7 +456,6 @@ color: #111827}
 .role-mod{background:linear-gradient(180deg,#ffffff, #e6e6e6);
 color: #111827}
 
-/* pill colors for staff roles (used under ID) */
 .pill.role-owner{background:linear-gradient(180deg,#ffffff, #e6e6e6);
 color: #111827}
 .pill.role-cm{background:linear-gradient(180deg,#ff6b6b, #ff3b3b);
@@ -201,24 +471,23 @@ color: #ffffff
     background:linear-gradient(180deg,
     #79c99a,#5fbf7f);color: #111827}
 
-/* title wrapper and dataset triangles (absolute so they don't shift) */
-.banner-inner h1 .title-wrap{position:absolute;left:50%;transform:translate(-50%,-4px);width:320px;display:block;min-width:240px}
-.banner-inner h1 .title-wrap .title-text{display:block;text-align:center;width:100%;font-weight:700}
-.dataset-tri{
-background:transparent;
-border:none;
-padding:0;
-width:0;
-height:0;
-display:inline-block;
-vertical-align:middle;
-transform-origin:center;
-transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .16s, border-color .16s;
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
--webkit-tap-highlight-color:transparent;
+    .banner-inner h1 .title-wrap{position:absolute;left:50%;transform:translate(-50%,-4px);width:320px;display:block;min-width:240px}
+    .banner-inner h1 .title-wrap .title-text{display:block;text-align:center;width:100%;font-weight:700}
+    .dataset-tri{
+    background:transparent;
+    border:none;
+    padding:0;
+    width:0;
+    height:0;
+    display:inline-block;
+    vertical-align:middle;
+    transform-origin:center;
+    transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .16s, border-color .16s;
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
 }
 .dataset-tri.left{left:12px;border-top:11px solid transparent;border-bottom:11px solid transparent;border-right:14px solid #e6eef8;margin:0
   }
@@ -442,7 +711,6 @@ cursor:pointer;
 .pill{background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:999px;font-weight:700;font-size:1.12rem;color:var(--muted)} 
 .months{color:var(--muted);font-size:0.9rem}
 
-/* description inner animation */
 .desc{padding:0;max-height:0;overflow:hidden;border-radius:10px;background:transparent;border:1px solid transparent;color:#e6eef8;font-size:0.92rem;line-height:1.5;transition:max-height .32s ease;padding-top:0;padding-bottom:0
   }
   .desc-inner {
@@ -482,14 +750,14 @@ cursor:pointer;
     right:12px;
     background:linear-gradient(180deg, #ffffff, #e6e6e6);
     color: #111827;
-padding:6px 10px;
-border-radius:999px;
-font-weight:700;
-font-size:.85rem;
-box-shadow:0 2px 8px rgba(0,0,0,0.18);
-border:1px solid rgba(0,0,0,0.06);
-min-width:44px;
-text-align:center;
+    padding:6px 10px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.85rem;
+    box-shadow:0 2px 8px rgba(0,0,0,0.18);
+    border:1px solid rgba(0,0,0,0.06);
+    min-width:44px;
+    text-align:center;
 }
 .card.rank-1 .rank-badge{background:linear-gradient(180deg,#FFEB99,
     #FFD54F);
@@ -499,7 +767,6 @@ color: #111827}
 .card.rank-3 .rank-badge{background:linear-gradient(180deg,#F3C08A, #E29A5A);
 color: #111827}
 
-/* clickable ID (copies to clipboard) */
 .id-link{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8;
 padding:4px 8px;
 border-radius:6px;
@@ -544,6 +811,12 @@ font-family:inherit
     outline:3px solid rgba(124, 58, 237, 0.12);
     outline-offset:4px
   }
+  
+  .controls .toggle-btn.sort-dir {
+    min-width: 42px;
+    padding: 8px 12px;
+    font-size: 1rem;
+  }
   </style>
 </head>
 <body>
@@ -562,6 +835,7 @@ font-family:inherit
             <button id = "sortMode" class = "toggle-btn" aria-label = "Toggle sort" aria-pressed = "false" data-mode = "fastest"> 
               Fastest 200 
             </button>
+            </button>
             <button id = "viewToggle" class = "toggle-btn" aria-label = "Toggle view" title = "Switch between Leaderboard and Timeline views" style = "margin-left:8px">
               Timeline
             </button>
@@ -574,8 +848,14 @@ font-family:inherit
     <div id = "timeline" style = "display:none">
     </div>
   </div> 
-
-  <script >
+  <div class="filter-fab" id="filterFab">
+  <div class="filter-dropdown" id="filterDropdown">
+    <div class="filter-dropdown-label">Filter</div>
+    <button class="filter-dropdown-item active" data-dir="asc">↑ Ascending</button>
+    <button class="filter-dropdown-item" data-dir="desc">↓ Descending</button>
+  </div>
+  <button class="filter-fab-btn" id="filterFabBtn">☰</button>
+  <script>
   function discordDefaultAvatar(id) {
      if (!id || id === 'Deleted') return null;
      if (!/^[0-9]+$/.test(String(id))) return null;
@@ -668,205 +948,205 @@ font-family:inherit
         discordId: '918862839316373554',
         name: 'Java',
         time: '09 / 19',
-}, {
-  date: '06/12/2022',
-  position: '4th',
-  discordId: '961824403413426246',
-  name: 'Safo',
-  time: '07 / 28',
-}, {
-  date: '01/02/2023',
-  position: '5th',
-  discordId: '918864897633296405',
-  name: 'Motorhead',
-  time: '-- / --',
-}, {
-  date: '06/06/2023',
-  position: '6th',
-  discordId: '863423967883559012',
-  name: 'Mika',
-  time: '14 / 12',
-}, {
-  date: '19/06/2023',
-  position: '7th',
-  discordId: '-',
-  name: 'Dark',
-  time: '10 / 11',
-}, {
-  date: '16/08/2023',
-  position: '8th',
-  discordId: '832173647577612298',
-  name: 'Callie',
-  time: '11 / 14',
-}, {
-  date: '04/10/2023',
-  position: '9th',
-  discordId: '894871129108410389',
-  name: 'Tormentor',
-  time: '23 / 28',
-}, {
-  date: '29/10/2023',
-  position: '10th',
-  discordId: '761273366602448946',
-  name: 'Oblivio',
-  time: '24 / 00',
-}, {
-  date: '26/01/2024',
-  position: '11th',
-  discordId: '1042982216373903490',
-  name: 'Abdullah',
-  time: '10 / 04',
-}, {
-  date: '28/02/2024',
-  position: '12th',
-  discordId: '544833848559665173',
-  name: 'Agent',
-  time: '28 / 27',
-}, {
-  date: '15/03/2024',
-  position: '13th',
-  discordId: '913230713871040562',
-  name: 'Sidney',
-  time: '20 / 06',
-}, {
-  date: '20/04/2024',
-  position: '14th',
-  discordId: '981042270939779102',
-  name: 'Jhebert',
-  time: '22 / 19',
-}, {
-  date: '23/05/2024',
-  position: '15th',
-  discordId: '841287142785417256',
-  name: 'Leo',
-  time: '31 / 17',
-}, {
-  date: '26/05/2024',
-  position: '16th',
-  discordId: '1170790968941891596',
-  name: 'SH',
-  time: '25 / 09',
-}, {
-  date: '03/06/2024',
-  position: '17th',
-  discordId: '775371863106650112',
-  name: 'TT',
-  time: '24 / 29',
-}, {
-  date: '29/06/2024',
-  position: '18th',
-  discordId: '617215246766964765',
-  name: 'Awakes',
-  time: '36 / 04',
-}, {
-  date: '25/07/2024',
-  position: '19th',
-  discordId: '1059770507546861609',
-  name: 'Jod',
-  time: '14 / 25',
-}, {
-  date: '11/11/2024',
-  position: '20th',
-  discordId: '1126210964061180038',
-  name: 'Nameless',
-  time: '14 / 24',
-}, {
-  date: '29/11/2024',
-  position: '21st',
-  discordId: '769982567469940777',
-  name: 'Suga',
-  time: '16 / 13',
-}, {
-  date: '29/11/2024',
-  position: '22nd',
-  discordId: '1034407138019258408',
-  name: 'Sonic',
-  time: '35 / 10',
-}, {
-  date: '30/12/2024',
-  position: '23rd',
-  discordId: '577141429906833408',
-  name: 'Eric',
-  time: '39 / 20',
-}, {
-  date: '09/02/2025',
-  position: '24th',
-  discordId: '1155133403780350032',
-  name: 'Rei',
-  time: '10 / 02',
-}, {
-  date: '12/03/2025',
-  position: '25th',
-  discordId: '1079783186600579152',
-  name: 'Catto',
-  time: '24 / 13',
-}, {
-  date: '10/04/2025',
-  position: '26th',
-  discordId: '1181564704909439067',
-  name: 'HD',
-  time: '39 / 11',
-}, {
-  date: '28/04/2025',
-  position: '27th',
-  discordId: '1238135785681850469',
-  name: 'Begu',
-  time: '10 / 21',
-}, {
-  date: '21/05/2025',
-  position: '28th',
-  discordId: '-',
-  name: 'Certi',
-  time: '-- / --',
-}, {
-  date: '09/06/2025',
-  position: '29th',
-  discordId: '984783971676205106',
-  name: 'Chaos',
-  time: '35 / 28',
-}, {
-  date: '16/06/2025',
-  position: '30th',
-  discordId: '1072043150505410570',
-  name: 'Dawa',
-  time: '28 / 10',
-}, {
-  date: '04/07/2025',
-  position: '31st',
-  discordId: '1095261491617345586',
-  name: 'Bebo',
-  time: '22 / 27',
-}, {
-  date: '08/08/2025',
-  position: '32nd',
-  discordId: '658059455790841868',
-  name: 'Cold',
-  time: '35 / 22',
-}, {
-  date: '20/11/2025',
-  position: '33rd',
-  discordId: '1168813994123993119',
-  name: 'Rosie',
-  time: '24 / 20',
-}, {
-  date: '30/12/2025',
-  position: '34th',
-  discordId: '1226544764128596020',
-  name: 'Hamza',
-  time: '10 / 28',
-}, {
-  date: '13/01/2026',
-  position: '35th',
-  discordId: '1242486029915521125',
-  name: 'Chespin',
-  time: '54 / 07',
-}, {
-  date: '07/04/2026',
-  position: '36th',
-  discordId: '777265386239426570',
-  name: 'Wintails',
-  time: '42 / 29',
-}];
+      }, {
+        date: '06/12/2022',
+        position: '4th',
+        discordId: '961824403413426246',
+        name: 'Safo',
+        time: '07 / 28',
+      }, {
+        date: '01/02/2023',
+        position: '5th',
+        discordId: '918864897633296405',
+        name: 'Motorhead',
+        time: '-- / --',
+      }, {
+        date: '06/06/2023',
+        position: '6th',
+        discordId: '863423967883559012',
+        name: 'Mika',
+        time: '14 / 12',
+      }, {
+        date: '19/06/2023',
+        position: '7th',
+        discordId: '-',
+        name: 'Dark',
+        time: '10 / 11',
+      }, {
+        date: '16/08/2023',
+        position: '8th',
+        discordId: '832173647577612298',
+        name: 'Callie',
+        time: '11 / 14',
+      }, {
+        date: '04/10/2023',
+        position: '9th',
+        discordId: '894871129108410389',
+        name: 'Tormentor',
+        time: '23 / 28',
+      }, {
+        date: '29/10/2023',
+        position: '10th',
+        discordId: '761273366602448946',
+        name: 'Oblivio',
+        time: '24 / 00',
+      }, {
+        date: '26/01/2024',
+        position: '11th',
+        discordId: '1042982216373903490',
+        name: 'Abdullah',
+        time: '10 / 04',
+      }, {
+        date: '28/02/2024',
+        position: '12th',
+        discordId: '544833848559665173',
+        name: 'Agent',
+        time: '28 / 27',
+      }, {
+        date: '15/03/2024',
+        position: '13th',
+        discordId: '913230713871040562',
+        name: 'Sidney',
+        time: '20 / 06',
+      }, {
+        date: '20/04/2024',
+        position: '14th',
+        discordId: '981042270939779102',
+        name: 'Jhebert',
+        time: '22 / 19',
+      }, {
+        date: '23/05/2024',
+        position: '15th',
+        discordId: '841287142785417256',
+        name: 'Leo',
+        time: '31 / 17',
+      }, {
+        date: '26/05/2024',
+        position: '16th',
+        discordId: '1170790968941891596',
+        name: 'SH',
+        time: '25 / 09',
+      }, {
+        date: '03/06/2024',
+        position: '17th',
+        discordId: '775371863106650112',
+        name: 'TT',
+        time: '24 / 29',
+      }, {
+        date: '29/06/2024',
+        position: '18th',
+        discordId: '617215246766964765',
+        name: 'Awakes',
+        time: '36 / 04',
+      }, {
+        date: '25/07/2024',
+        position: '19th',
+        discordId: '1059770507546861609',
+        name: 'Jod',
+        time: '14 / 25',
+      }, {
+        date: '11/11/2024',
+        position: '20th',
+        discordId: '1126210964061180038',
+        name: 'Nameless',
+        time: '14 / 24',
+      }, {
+        date: '29/11/2024',
+        position: '21st',
+        discordId: '769982567469940777',
+        name: 'Suga',
+        time: '16 / 13',
+      }, {
+        date: '29/11/2024',
+        position: '22nd',
+        discordId: '1034407138019258408',
+        name: 'Sonic',
+        time: '35 / 10',
+      }, {
+        date: '30/12/2024',
+        position: '23rd',
+        discordId: '577141429906833408',
+        name: 'Eric',
+        time: '39 / 20',
+      }, {
+        date: '09/02/2025',
+        position: '24th',
+        discordId: '1155133403780350032',
+        name: 'Rei',
+        time: '10 / 02',
+      }, {
+        date: '12/03/2025',
+        position: '25th',
+        discordId: '1079783186600579152',
+        name: 'Catto',
+        time: '24 / 13',
+      }, {
+        date: '10/04/2025',
+        position: '26th',
+        discordId: '1181564704909439067',
+        name: 'HD',
+        time: '39 / 11',
+      }, {
+        date: '28/04/2025',
+        position: '27th',
+        discordId: '1238135785681850469',
+        name: 'Begu',
+        time: '10 / 21',
+      }, {
+        date: '21/05/2025',
+        position: '28th',
+        discordId: '-',
+        name: 'Certi',
+        time: '-- / --',
+      }, {
+        date: '09/06/2025',
+        position: '29th',
+        discordId: '984783971676205106',
+        name: 'Chaos',
+        time: '35 / 28',
+      }, {
+        date: '16/06/2025',
+        position: '30th',
+        discordId: '1072043150505410570',
+        name: 'Dawa',
+        time: '28 / 10',
+      }, {
+        date: '04/07/2025',
+        position: '31st',
+        discordId: '1095261491617345586',
+        name: 'Bebo',
+        time: '22 / 27',
+      }, {
+        date: '08/08/2025',
+        position: '32nd',
+        discordId: '658059455790841868',
+        name: 'Cold',
+        time: '35 / 22',
+      }, {
+        date: '20/11/2025',
+        position: '33rd',
+        discordId: '1168813994123993119',
+        name: 'Rosie',
+        time: '24 / 20',
+      }, {
+        date: '30/12/2025',
+        position: '34th',
+        discordId: '1226544764128596020',
+        name: 'Hamza',
+        time: '10 / 28',
+      }, {
+        date: '13/01/2026',
+        position: '35th',
+        discordId: '1242486029915521125',
+        name: 'Chespin',
+        time: '54 / 07',
+      }, {
+        date: '07/04/2026',
+        position: '36th',
+        discordId: '777265386239426570',
+        name: 'Wintails',
+        time: '42 / 29',
+  }];
 
 const board = document.getElementById('board');
 
@@ -939,6 +1219,17 @@ if (sortBtn) {
   });
 }
 
+const sortDirBtn = document.getElementById('sortDir');
+if (sortDirBtn) {
+  sortDirBtn.addEventListener('click', () => {
+    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    sortDirBtn.textContent = sortDirection === 'asc' ? '↑' : '↓';
+    sortDirBtn.title = sortDirection === 'asc' ? 'Currently ascending' : 'Currently descending';
+    sortPeople(sortBtn.dataset.mode);
+    reorderBoardWithAnimation();
+  });
+}
+
 let currentView = 'leaderboard';
 const viewToggle = document.getElementById('viewToggle');
 const timeline = document.getElementById('timeline');
@@ -954,7 +1245,9 @@ function renderTimeline() {
     grouped[year].push(p);
   });
   
-  const years = Object.keys(grouped).sort((a, b) => b - a);
+  const years = Object.keys(grouped).sort((a, b) => 
+    sortDirection === 'asc' ? a - b : b - a
+  );
   
   years.forEach(year => {
     const section = document.createElement('div');
@@ -1044,6 +1337,7 @@ if (sortBtn) {
   sortBtn.classList.remove('hidden');
 }
 
+let sortDirection = 'asc';
 let currentDataset = 'people';
 
 function setDataset(ds) {
@@ -1138,12 +1432,28 @@ function formatDateDisplay(dateStr) {
 }
 
 function sortPeople(mode) {
+  const isMissing = p => p.totalDays >= 1e9;
+
   if (mode === 'fastest') {
-    people.sort((a, b) => (a.monthsNum-b.monthsNum) || (a.daysNum-b.daysNum) || (parseDateToNumber(a.date) -
-      parseDateToNumber(b.date)));
+    people.sort((a, b) => {
+      // always push missing times to the bottom
+      if (isMissing(a) && isMissing(b)) return 0;
+      if (isMissing(a)) return 1;
+      if (isMissing(b)) return -1;
+
+      const cmp = (a.monthsNum - b.monthsNum) || (a.daysNum - b.daysNum) || (parseDateToNumber(a.date) - parseDateToNumber(b.date));
+      return sortDirection === 'desc' ? -cmp : cmp;
+    });
   } else if (mode === 'first') {
-    people.sort((a, b) => (parseDateToNumber(a.date) - parseDateToNumber(b.date)) || (parseInt(a.position, 10) -
-      parseInt(b.position, 10)) || (a.id-b.id));
+    people.sort((a, b) => {
+      // always push missing times to the bottom
+      if (isMissing(a) && isMissing(b)) return 0;
+      if (isMissing(a)) return 1;
+      if (isMissing(b)) return -1;
+
+      const cmp = (parseDateToNumber(a.date) - parseDateToNumber(b.date)) || (parseInt(a.position, 10) - parseInt(b.position, 10)) || (a.id - b.id);
+      return sortDirection === 'desc' ? -cmp : cmp;
+    });
   }
 }
 
@@ -1312,18 +1622,22 @@ function renderBoard() {
           descInner.style.transform = 'translateY(0)';
         }, 40);
 
-        setTimeout(() => {
-          const cardRect = card.getBoundingClientRect();
-          const expandedBottom = cardRect.bottom + descInner.scrollHeight + 24;
-          const viewportHeight = window.innerHeight;
+setTimeout(() => {
+  const isLastCard = card === board.lastElementChild;
 
-          if (expandedBottom > viewportHeight) {
-            savedScrollY = window.scrollY;
-            autoScrollActive = true;
-            const scrollNeeded = expandedBottom-viewportHeight + 16;
-            smoothScrollBy(scrollNeeded, 600); // 600ms slow smooth scroll
-          }
-        }, 360);
+  if (!isLastCard) return; // ✅ only allow bottom card
+
+  const cardRect = card.getBoundingClientRect();
+  const expandedBottom = cardRect.bottom + descInner.scrollHeight + 24;
+  const viewportHeight = window.innerHeight;
+
+  if (expandedBottom > viewportHeight) {
+    savedScrollY = window.scrollY;
+    autoScrollActive = true;
+    const scrollNeeded = expandedBottom - viewportHeight + 16;
+    smoothScrollBy(scrollNeeded, 600);
+  }
+}, 360);
       }
 
       function hideDesc() {
@@ -1342,8 +1656,16 @@ function renderBoard() {
         }
       }
 
-      card.addEventListener('mouseenter', showDesc);
-      card.addEventListener('mouseleave', hideDesc);
+  card.addEventListener('mouseenter', showDesc);
+  card.addEventListener('mouseleave', hideDesc);
+
+  card.addEventListener('click', (e) => {
+  if (window.innerWidth <= 768) {
+    const isOpen = card.classList.contains('show-desc');
+    if (isOpen) hideDesc();
+    else showDesc();
+  }
+});
       card.addEventListener('focusin', showDesc);
       card.addEventListener('focusout', hideDesc);
       card.addEventListener('keydown', (e) => {
@@ -1439,7 +1761,6 @@ function setupRevealObserver() {
     revealObserver = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // add a tiny delay and clear inline transition to ensure the CSS transition runs
           setTimeout(() => {
             try {
               entry.target.style.transition = '';
@@ -1447,20 +1768,17 @@ function setupRevealObserver() {
             } catch (e) {}
           }, 25);
         } else {
-          // remove visible class when scrolling out of view so animation replays when scrolling back
           entry.target.classList.remove('visible');
         }
       });
     }, {
       threshold:0.12
     });
-    // ensure reveal elements already in the viewport show immediately; otherwise observe them
     document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
       try {
         const r = el.getBoundingClientRect();
         const vh = window.innerHeight || document.documentElement.clientHeight;
         if (r.top < vh && r.bottom > 0) {
-          // small delay to ensure initial styles are applied; clear any inline transition and then add visible
           setTimeout(() => {
             try {
               el.style.transition = '';
@@ -1481,11 +1799,54 @@ function setupRevealObserver() {
 setSortMode('first');
 try {
   setDataset('people');
-} catch (err) {
+  }
+catch (err) {
   console.error('init render failed', err);
   showErrorOverlay('Init render failed: ' + (err && err.message ? err.message : String(err)));
 }
 
+const filterFabBtn = document.getElementById('filterFabBtn');
+const filterDropdown = document.getElementById('filterDropdown');
+
+filterFabBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  filterDropdown.classList.toggle('open');
+});
+
+document.addEventListener('click', () => {
+  filterDropdown.classList.remove('open');
+});
+
+filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortDirection = item.dataset.dir;
+    filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    filterFabBtn.textContent = sortDirection === 'asc' ? '⚙ Filter ↑' : '⚙ Filter ↓';
+    filterDropdown.classList.remove('open');
+    sortPeople(sortBtn.dataset.mode);
+    reorderBoardWithAnimation();
+  });
+});
+
+filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortDirection = item.dataset.dir;
+    filterDropdown.querySelectorAll('.filter-dropdown-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    filterFabBtn.textContent = sortDirection === 'asc' ? '⚙ Filter ↑' : '⚙ Filter ↓';
+    filterDropdown.classList.remove('open');
+    sortPeople(sortBtn.dataset.mode);
+
+    if (currentView === 'timeline') {
+      renderTimeline();
+    } else {
+      reorderBoardWithAnimation();
+    }
+  });
+});
 
 setInterval(() => {
   document.querySelectorAll('.card').forEach(async (card) => {

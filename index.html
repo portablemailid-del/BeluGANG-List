@@ -6,38 +6,6 @@
   <title>BeluGANG List</title>
   <style>
 
-.controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .banner-inner {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  .banner-inner h1 {
-    position: static;
-    transform: none;
-    text-align: center;
-    width: 100%;
-    order: 2;
-  }
-
-  .org {
-    order: 1;
-  }
-
-  .controls {
-    order: 3;
-    justify-content: center;
-    width: 100%;
-  }
-}
 
 .container {
   padding-bottom: 80px;
@@ -210,7 +178,7 @@ html {
 }
 
 .title-text {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
 }
 
 .filter-fab {
@@ -377,19 +345,27 @@ html {
 }
 
   .card-banner {
-    position:absolute;
-    inset:0;
-    border-radius:12px;
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-    opacity:0.18;
-    transition:opacity .22s ease;
-    pointer-events:none;
-    z-index:0;
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity .4s ease;
   }
-  .card:hover.card-banner, .card:focus-within.card-banner {
-    opacity:0.32;
+  .card-banner.loaded {
+    opacity: 1;
+  }
+  /* dark overlay so text stays legible */
+  .card-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: rgba(18, 19, 22, 0.78);
   }
   .card-header, .desc, .rank-badge {
     position:relative;
@@ -421,23 +397,24 @@ html {
       position:fixed;top:0;left:0;width:100% ;height:var(--banner-height);background: #111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
       .banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
       .banner-inner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
+         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
 
-.banner-inner h1 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  font-size: 1.2rem;
-}
-
+      .banner-inner h1 {
+        position: static;
+        transform: none;
+        font-size: 1rem;
+        text-align: center;
+        flex: 1;
+      }
+      .banner-inner h1 {
+        font-size: 1.2rem;
+        white-space:nowrap;
+        margin:0
+      }
       .banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px
     }
     .dataset-btn {
@@ -697,7 +674,21 @@ html {
   .status-dot { width: 11px; height: 11px; }
 }
 
-  /* status label in expanded desc */
+  .custom-state {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #6b7685;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    min-height: 0;
+    transition: opacity .3s ease;
+  }
+  .custom-state:empty {
+    display: none;
+  }
   .status-label {
     display: inline-flex;
     align-items: center;
@@ -923,7 +914,6 @@ font-family:inherit
   <button class="filter-fab-btn" id="filterFabBtn">☰</button>
   <script>
 
-
   function discordDefaultAvatar(id) {
      if (!id || id === 'Deleted') return null;
      if (!/^[0-9]+$/.test(String(id))) return null;
@@ -945,7 +935,7 @@ font-family:inherit
 
     async function getDiscordProfile(id, name, img) {
       if (!id || !/^[0-9]+$/.test(id)) {
-        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null, status: null };
+        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null };
       }
 
       try {
@@ -964,15 +954,25 @@ font-family:inherit
           ? `https://cdn.discordapp.com/avatar-decoration-presets/${decorationAsset}.png`
           : null;
 
+        // nameplate from collectibles — asset is a path like "nameplates/nameplate_bonanza/twilight_dusk/"
+        const nameplateAsset = user?.collectibles?.nameplate?.asset || null;
+        const nameplateUrl = nameplateAsset
+          ? `https://cdn.discordapp.com/assets/collectibles/${nameplateAsset}static.png`
+          : null;
+
         // discord_status: "online" | "idle" | "dnd" | "offline"
         const status = data?.discord_status || null;
 
-        return { avatarUrl, decorationUrl, status };
+        // custom status caption: activities where type === 4
+        const customActivity = (data?.activities || []).find(a => a.type === 4);
+        const customState = customActivity?.state || null;
+
+        return { avatarUrl, decorationUrl, status, customState, nameplateUrl };
       } catch (err) {
         console.warn('Lanyard failed:', id);
       }
 
-      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null, status: null };
+      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null };
     }
 
     function showErrorOverlay(msg) {
@@ -1273,9 +1273,7 @@ function parseDateToNumber(dateStr) {
 const sortBtn = document.getElementById('sortMode');
 
 function getModeLabel(mode) {
-  return mode === 'first'
-    ? 'First Level 200'
-    : 'Fastest Level 200';
+  return mode === 'first' ? 'First Level 200' : 'Fastest 200';
 }
 
 function setSortMode(mode) {
@@ -1448,20 +1446,16 @@ styleTag.textContent = `
 .controls .toggle-btn{
  background:linear-gradient(180deg,#15171a,#1f2023);
  color:#e6eef8;
- border:2px solid rgba(255,255,255,0.9);
+ border:2px solid #2e2e2e66;
  padding:8px 18px;
  border-radius:12px;
  font-weight:700;
  cursor:pointer;
  text-align:center;
-
- display:flex;
- align-items:center;
- justify-content:center;
-
- min-width:150px;  /* important */
- height:36px;      /* consistent height */
- white-space:nowrap;
+ display:inline-block;
+ min-width:120px;
+ transition:opacity .28s cubic-bezier(.34, 1.56, .64, 1), transform .28s cubic-bezier(.34, 1.56, .64, 1), visibility .28s cubic-bezier(.34, 1.56, .64, 1), border-color .2s ease, box-shadow .2s ease;
+ box-shadow:0 0 0 #2e2e2e00;
 }
 .controls .toggle-btn:hover{
  border-color:#2e2e2eb3;
@@ -1564,23 +1558,10 @@ function renderBoard() {
       rankBadge.textContent = `#${index+1}`;
       card.appendChild(rankBadge);
 
-      if (p.banner) {
-        const bannerEl = document.createElement('div');
-        bannerEl.className = 'card-banner';
-
-        if (typeof p.banner === 'string') {
-          bannerEl.style.backgroundImage = `url("${p.banner.trim()}")`;
-        } else if (typeof p.banner === 'object') {
-          if (p.banner.backgroundColor) {
-            bannerEl.style.backgroundColor = p.banner.backgroundColor;
-          }
-          if (p.banner.image) {
-            bannerEl.style.backgroundImage = `url("${p.banner.image}")`;
-          }
-        }
-
-        card.appendChild(bannerEl);
-      }
+      // Always create the banner element; it will be populated after Lanyard fetch
+      const bannerEl = document.createElement('div');
+      bannerEl.className = 'card-banner';
+      card.appendChild(bannerEl);
 
       const initials = getInitials(p.name);
       const formatted = formatTime(p);
@@ -1606,6 +1587,7 @@ function renderBoard() {
          </div>
          <div class="meta">
            <div class="username">${p.name}</div>
+           <div class="custom-state" data-custom-state></div>
            <div class="stats"><div class="pill">${formatted}</div></div>
          </div>
        </div>
@@ -1627,8 +1609,25 @@ function renderBoard() {
       avatar.style.backgroundPosition = 'center';
       avatar.textContent = '';
 
-      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl, status }) => {
+      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl, status, customState, nameplateUrl }) => {
         avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+        // Nameplate background
+        const cardBanner = card.querySelector('.card-banner');
+        if (cardBanner) {
+          if (nameplateUrl) {
+            const img = new Image();
+            img.onload = () => {
+              cardBanner.style.backgroundImage = `url("${nameplateUrl}")`;
+              cardBanner.classList.add('loaded');
+            };
+            img.onerror = () => { cardBanner.classList.remove('loaded'); };
+            img.src = nameplateUrl;
+          } else {
+            cardBanner.style.backgroundImage = '';
+            cardBanner.classList.remove('loaded');
+          }
+        }
 
         // Remove any existing decoration
         const existing = avatarWrap.querySelector('.avatar-decoration');
@@ -1652,6 +1651,10 @@ function renderBoard() {
         }
         dot.className = 'status-dot' + (status ? ' ' + status : ' offline');
         dot.title = status ? (status === 'dnd' ? 'Do Not Disturb' : status.charAt(0).toUpperCase() + status.slice(1)) : 'Offline';
+
+        // Custom state caption below username
+        const customStateEl = card.querySelector('[data-custom-state]');
+        if (customStateEl) customStateEl.textContent = customState || '';
 
         // Status label in desc
         const statusLabelEl = card.querySelector('[data-status-label]');
@@ -1980,8 +1983,25 @@ setInterval(() => {
 
     if (!id || id === 'unknown') return;
 
-    const { avatarUrl, decorationUrl, status } = await getDiscordProfile(id);
+    const { avatarUrl, decorationUrl, status, customState, nameplateUrl } = await getDiscordProfile(id);
     avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+    // Nameplate background
+    const cardBanner = card.querySelector('.card-banner');
+    if (cardBanner) {
+      if (nameplateUrl) {
+        const npImg = new Image();
+        npImg.onload = () => {
+          cardBanner.style.backgroundImage = `url("${nameplateUrl}")`;
+          cardBanner.classList.add('loaded');
+        };
+        npImg.onerror = () => { cardBanner.classList.remove('loaded'); };
+        npImg.src = nameplateUrl;
+      } else {
+        cardBanner.style.backgroundImage = '';
+        cardBanner.classList.remove('loaded');
+      }
+    }
 
     const existing = avatarWrap.querySelector('.avatar-decoration');
     if (existing) existing.remove();
@@ -2003,6 +2023,9 @@ setInterval(() => {
     }
     dot.className = 'status-dot' + (status ? ' ' + status : ' offline');
     dot.title = status ? (status === 'dnd' ? 'Do Not Disturb' : status.charAt(0).toUpperCase() + status.slice(1)) : 'Offline';
+
+    const customStateEl = card.querySelector('[data-custom-state]');
+    if (customStateEl) customStateEl.textContent = customState || '';
 
     const statusLabelEl = card.querySelector('[data-status-label]');
     if (statusLabelEl && status) {

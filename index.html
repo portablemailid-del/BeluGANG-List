@@ -573,7 +573,36 @@ html {
   .card.rank-3::before {
     background:linear-gradient(180deg, #CD7F32, #B87333);
   }
-  /* focus mode */
+  .avatar-wrap {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+  }
+  .avatar-decoration {
+    position: absolute;
+    inset: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    pointer-events: none;
+    z-index: 2;
+    image-rendering: auto;
+  }
+
+@media (max-width: 768px) {
+  .avatar-wrap {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+  }
+}
+@media (max-width: 520px) {
+  .avatar-wrap {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+  }
+}
   .grid.has-focus .card {
     opacity: 0.35;
     filter: blur(2px);
@@ -798,24 +827,32 @@ font-family:inherit
       return `https://cdn.discordapp.com/embed/avatars/${idx}.png`;
     }
 
-    async function getDiscordAvatar(id, name, img) {
+    async function getDiscordProfile(id, name, img) {
       if (!id || !/^[0-9]+$/.test(id)) {
-      return getFallbackDiscordAvatar(name);
-    }
-  
-    try {
-      const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
-      const json = await res.json();
-      const avatarHash = json?.data?.discord_user?.avatar;
-      if (avatarHash) {
-      return `https://cdn.discordapp.com/avatars/${id}/${avatarHash}.png?size=512`;
+        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null };
       }
-    }  catch (err) {
-      console.warn('Lanyard failed:', id);
-    }
 
-    if (img) return img;
-    return getFallbackDiscordAvatar(name);
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+        const json = await res.json();
+        const user = json?.data?.discord_user;
+        const avatarHash = user?.avatar;
+        const decorationAsset = user?.avatar_decoration_data?.asset;
+
+        const avatarUrl = avatarHash
+          ? `https://cdn.discordapp.com/avatars/${id}/${avatarHash}.png?size=512`
+          : (img || getFallbackDiscordAvatar(name));
+
+        const decorationUrl = decorationAsset
+          ? `https://cdn.discordapp.com/avatar-decoration-presets/${decorationAsset}.png`
+          : null;
+
+        return { avatarUrl, decorationUrl };
+      } catch (err) {
+        console.warn('Lanyard failed:', id);
+      }
+
+      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null };
     }
 
     function showErrorOverlay(msg) {
@@ -1438,7 +1475,9 @@ function renderBoard() {
 
       card.innerHTML += `
        <div class="card-header">
-         <div class="avatar" aria-hidden="true" aria-label="${p.name}"></div>
+         <div class="avatar-wrap">
+           <div class="avatar" aria-hidden="true" aria-label="${p.name}"></div>
+         </div>
          <div class="meta">
            <div class="username">${p.name}</div>
            <div class="stats"><div class="pill">${formatted}</div></div>
@@ -1454,14 +1493,28 @@ function renderBoard() {
      `;
 
       const avatar = card.querySelector('.avatar');
+      const avatarWrap = card.querySelector('.avatar-wrap');
 
       avatar.style.backgroundImage = `url("${getFallbackDiscordAvatar(p.name)}")`;
       avatar.style.backgroundSize = 'cover';
       avatar.style.backgroundPosition = 'center';
       avatar.textContent = '';
 
-      getDiscordAvatar(p.discordId, p.name, p.img).then(url => {
-        avatar.style.backgroundImage = `url("${url}")`;
+      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl }) => {
+        avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+        // Remove any existing decoration
+        const existing = avatarWrap.querySelector('.avatar-decoration');
+        if (existing) existing.remove();
+
+        if (decorationUrl) {
+          const deco = document.createElement('img');
+          deco.className = 'avatar-decoration';
+          deco.src = decorationUrl;
+          deco.alt = '';
+          deco.draggable = false;
+          avatarWrap.appendChild(deco);
+        }
       });
 
       const idButtons = card.querySelectorAll('.id-link');
@@ -1773,15 +1826,28 @@ window.addEventListener('scroll', () => {
 
 setInterval(() => {
   if (isScrolling) return;
-  
+
   document.querySelectorAll('.card').forEach(async (card) => {
     const id = card.dataset.id;
     const avatar = card.querySelector('.avatar');
+    const avatarWrap = card.querySelector('.avatar-wrap');
 
     if (!id || id === 'unknown') return;
 
-    const url = await getDiscordAvatar(id);
-    avatar.style.backgroundImage = `url("${url}")`;
+    const { avatarUrl, decorationUrl } = await getDiscordProfile(id);
+    avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+    const existing = avatarWrap.querySelector('.avatar-decoration');
+    if (existing) existing.remove();
+
+    if (decorationUrl) {
+      const deco = document.createElement('img');
+      deco.className = 'avatar-decoration';
+      deco.src = decorationUrl;
+      deco.alt = '';
+      deco.draggable = false;
+      avatarWrap.appendChild(deco);
+    }
   });
 }, 60000);
 

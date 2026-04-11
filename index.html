@@ -573,10 +573,20 @@ html {
   .card.rank-3::before {
     background:linear-gradient(180deg, #CD7F32, #B87333);
   }
-  .card:focus-within, .card:hover {
-    transform:translateY(-6px);
-    box-shadow:0 12px 40px rgba(2, 6, 23, 0.6);
-    transition:transform .15s ease, box-shadow .15s ease;
+  /* focus mode */
+  .grid.has-focus .card {
+    opacity: 0.35;
+    filter: blur(2px);
+    transform: scale(0.98);
+    transition: opacity .28s ease, filter .28s ease, transform .28s ease, box-shadow .28s ease;
+  }
+  .grid.has-focus .card.focused {
+    opacity: 1;
+    filter: none;
+    transform: scale(1.02);
+    box-shadow: 0 16px 48px rgba(2, 6, 23, 0.7), 0 0 0 2px rgba(255,255,255,0.08);
+    transition: opacity .28s ease, filter .28s ease, transform .28s ease, box-shadow .28s ease;
+    z-index: 10;
   }
 
   .card.show-desc {
@@ -602,18 +612,7 @@ html {
     transition:transform .2s ease, box-shadow .2s ease;
     cursor:pointer
   }
-  .avatar:hover {
-    transform:scale(1.12);
-  }
-  .card.rank-1 .avatar:hover {
-    box-shadow:0 0 24px rgba(255, 235, 153, 0.6), 0 0 12px rgba(255, 235, 153, 0.4);
-  }
-  .card.rank-2 .avatar:hover {
-    box-shadow:0 0 24px rgba(240, 240, 240, 0.6), 0 0 12px rgba(240, 240, 240, 0.4);
-  }
-  .card.rank-3 .avatar:hover {
-    box-shadow:0 0 24px rgba(243, 192, 138, 0.6), 0 0 12px rgba(243, 192, 138, 0.4);
-  }
+
   .meta {
     flex:1
   }
@@ -1485,11 +1484,14 @@ function renderBoard() {
       function closeOthers() {
         document.querySelectorAll('.card.show-desc').forEach(c => {
           if (c !== card) {
-            c.classList.remove('show-desc');
+            c.classList.remove('show-desc', 'focused');
             const d = c.querySelector('.desc');
             if (d) d.style.maxHeight = '0px';
+            const di = c.querySelector('.desc-inner');
+            if (di) { di.style.opacity = 0; di.style.transform = 'translateY(6px)'; }
           }
         });
+        board.classList.remove('has-focus');
       }
 
       let autoScrollActive = false;
@@ -1533,7 +1535,8 @@ function renderBoard() {
 
       function showDesc() {
         closeOthers();
-        card.classList.add('show-desc');
+        card.classList.add('show-desc', 'focused');
+        board.classList.add('has-focus');
         card.setAttribute('aria-expanded', 'true');
         desc.setAttribute('aria-hidden', 'false');
         desc.style.maxHeight = descInner.scrollHeight + 24 + 'px';
@@ -1561,7 +1564,8 @@ function renderBoard() {
       }
 
       function hideDesc() {
-        card.classList.remove('show-desc');
+        card.classList.remove('show-desc', 'focused');
+        board.classList.remove('has-focus');
         card.setAttribute('aria-expanded', 'false');
         desc.setAttribute('aria-hidden', 'true');
         descInner.style.opacity = 0;
@@ -1576,18 +1580,13 @@ function renderBoard() {
         }
       }
 
-      card.addEventListener('mouseenter', showDesc);
-      card.addEventListener('mouseleave', hideDesc);
-
       card.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-          const isOpen = card.classList.contains('show-desc');
-          if (isOpen) hideDesc();
-          else showDesc();
-        }
+        // Don't toggle if the user clicked the copy-ID button
+        if (e.target.closest('.id-link')) return;
+        const isOpen = card.classList.contains('show-desc');
+        if (isOpen) hideDesc();
+        else showDesc();
       });
-      card.addEventListener('focusin', showDesc);
-      card.addEventListener('focusout', hideDesc);
       card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -1730,6 +1729,18 @@ filterFabBtn.addEventListener('click', (e) => {
 document.addEventListener('click', (e) => {
   if (!filterFabBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
     filterDropdown.classList.remove('open');
+  }
+  // Deselect focused card when clicking outside the board
+  if (!e.target.closest('#board .card')) {
+    document.querySelectorAll('.card.show-desc').forEach(c => {
+      c.classList.remove('show-desc', 'focused');
+      c.setAttribute('aria-expanded', 'false');
+      const d = c.querySelector('.desc');
+      if (d) d.style.maxHeight = '0px';
+      const di = c.querySelector('.desc-inner');
+      if (di) { di.style.opacity = 0; di.style.transform = 'translateY(6px)'; }
+    });
+    board.classList.remove('has-focus');
   }
 });
 

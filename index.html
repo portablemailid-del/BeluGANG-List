@@ -603,6 +603,90 @@ html {
     flex: 0 0 48px;
   }
 }
+
+  /* status dot on avatar */
+  .status-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #23272b;
+    z-index: 3;
+    transition: background-color .3s ease;
+  }
+  .status-dot.online  { background: #23a55a; }
+  .status-dot.idle    { background: #f0b232; }
+  .status-dot.dnd     { background: #f23f43; }
+  .status-dot.offline { background: #80848e; }
+
+  /* idle crescent mask */
+  .status-dot.idle::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #23272b;
+  }
+
+  /* dnd bar */
+  .status-dot.dnd::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    right: 2px;
+    height: 2.5px;
+    border-radius: 999px;
+    background: #fff;
+    transform: translateY(-50%);
+  }
+
+  /* invisible hollow circle */
+  .status-dot.offline {
+    background: #23272b;
+    border-color: #23272b;
+  }
+  .status-dot.offline::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: 50%;
+    background: #80848e;
+  }
+
+@media (max-width: 768px) {
+  .status-dot { width: 12px; height: 12px; }
+}
+@media (max-width: 520px) {
+  .status-dot { width: 11px; height: 11px; }
+}
+
+  /* status label in expanded desc */
+  .status-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .status-label .dot-inline {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+  }
+  .status-label .dot-inline.online  { background: #23a55a; }
+  .status-label .dot-inline.idle    { background: #f0b232; }
+  .status-label .dot-inline.dnd     { background: #f23f43; }
+  .status-label .dot-inline.offline { background: #80848e; }
   .grid.has-focus .card {
     opacity: 0.35;
     filter: blur(2px);
@@ -829,13 +913,14 @@ font-family:inherit
 
     async function getDiscordProfile(id, name, img) {
       if (!id || !/^[0-9]+$/.test(id)) {
-        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null };
+        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null, status: null };
       }
 
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
         const json = await res.json();
-        const user = json?.data?.discord_user;
+        const data = json?.data;
+        const user = data?.discord_user;
         const avatarHash = user?.avatar;
         const decorationAsset = user?.avatar_decoration_data?.asset;
 
@@ -847,12 +932,15 @@ font-family:inherit
           ? `https://cdn.discordapp.com/avatar-decoration-presets/${decorationAsset}.png`
           : null;
 
-        return { avatarUrl, decorationUrl };
+        // discord_status: "online" | "idle" | "dnd" | "offline"
+        const status = data?.discord_status || null;
+
+        return { avatarUrl, decorationUrl, status };
       } catch (err) {
         console.warn('Lanyard failed:', id);
       }
 
-      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null };
+      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null, status: null };
     }
 
     function showErrorOverlay(msg) {
@@ -1487,7 +1575,8 @@ function renderBoard() {
          <div class="desc-inner centered">
            <strong>Date:</strong> ${formatDateDisplay(p.date)}<br>
            <strong>ID:</strong> ${idHtml}<br>
-           <strong>Time:</strong> ${formatTime(p)}
+           <strong>Time:</strong> ${formatTime(p)}<br>
+           <span class="status-label" data-status-label></span>
          </div>
        </div>
      `;
@@ -1500,7 +1589,7 @@ function renderBoard() {
       avatar.style.backgroundPosition = 'center';
       avatar.textContent = '';
 
-      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl }) => {
+      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl, status }) => {
         avatar.style.backgroundImage = `url("${avatarUrl}")`;
 
         // Remove any existing decoration
@@ -1514,6 +1603,25 @@ function renderBoard() {
           deco.alt = '';
           deco.draggable = false;
           avatarWrap.appendChild(deco);
+        }
+
+        // Status dot on avatar
+        let dot = avatarWrap.querySelector('.status-dot');
+        if (!dot) {
+          dot = document.createElement('div');
+          dot.className = 'status-dot';
+          avatarWrap.appendChild(dot);
+        }
+        dot.className = 'status-dot' + (status ? ' ' + status : ' offline');
+        dot.title = status ? (status === 'dnd' ? 'Do Not Disturb' : status.charAt(0).toUpperCase() + status.slice(1)) : 'Offline';
+
+        // Status label in desc
+        const statusLabelEl = card.querySelector('[data-status-label]');
+        if (statusLabelEl && status) {
+          const labels = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
+          statusLabelEl.innerHTML = `<span class="dot-inline ${status}"></span>${labels[status] || status}`;
+        } else if (statusLabelEl) {
+          statusLabelEl.innerHTML = '';
         }
       });
 
@@ -1834,7 +1942,7 @@ setInterval(() => {
 
     if (!id || id === 'unknown') return;
 
-    const { avatarUrl, decorationUrl } = await getDiscordProfile(id);
+    const { avatarUrl, decorationUrl, status } = await getDiscordProfile(id);
     avatar.style.backgroundImage = `url("${avatarUrl}")`;
 
     const existing = avatarWrap.querySelector('.avatar-decoration');
@@ -1847,6 +1955,23 @@ setInterval(() => {
       deco.alt = '';
       deco.draggable = false;
       avatarWrap.appendChild(deco);
+    }
+
+    let dot = avatarWrap.querySelector('.status-dot');
+    if (!dot) {
+      dot = document.createElement('div');
+      dot.className = 'status-dot';
+      avatarWrap.appendChild(dot);
+    }
+    dot.className = 'status-dot' + (status ? ' ' + status : ' offline');
+    dot.title = status ? (status === 'dnd' ? 'Do Not Disturb' : status.charAt(0).toUpperCase() + status.slice(1)) : 'Offline';
+
+    const statusLabelEl = card.querySelector('[data-status-label]');
+    if (statusLabelEl && status) {
+      const labels = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
+      statusLabelEl.innerHTML = `<span class="dot-inline ${status}"></span>${labels[status] || status}`;
+    } else if (statusLabelEl) {
+      statusLabelEl.innerHTML = '';
     }
   });
 }, 60000);

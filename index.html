@@ -110,14 +110,56 @@ body {
   display: flex; flex-direction: column; align-items: stretch;
   box-sizing: border-box; backface-visibility: hidden; contain: layout style;
 }
-.card::before {
-  content: ''; position: absolute;
-  left: 0; top: 0; bottom: 0; width: 6px;
-  border-radius: 12px 0 0 12px; background: transparent;
+
+.card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
 }
-.card.rank-1::before { background: linear-gradient(180deg,#FFD700,#FFC107); }
-.card.rank-2::before { background: linear-gradient(180deg,#C0C0C0,#A8A8A8); }
-.card.rank-3::before { background: linear-gradient(180deg,#CD7F32,#B87333); }
+
+.card-banner {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.card-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: rgba(18,19,22,0.78);
+  z-index: 1;
+}
+
+.user-card:hover {
+  transform: scale(1.02);
+}
+
+.card.rank-1::before {
+  background: linear-gradient(180deg,#FFD700,#FFC107);
+}
+
+.card.rank-2::before {
+  background: linear-gradient(180deg,#C0C0C0,#A8A8A8);
+}
+
+.card.rank-3::before {
+  background: linear-gradient(180deg,#CD7F32,#B87333);
+}
 
 /* ── Card banner (nameplate bg) ── */
 .card-banner {
@@ -128,7 +170,7 @@ body {
 .card-banner.loaded { opacity: 1; }
 .card-banner::after {
   content: ''; position: absolute; inset: 0; border-radius: 12px;
-  background: rgba(18,19,22,0.78);
+  background: rgba(18,19,22,0.78); z-index: 1;
 }
 .card-header, .desc, .rank-badge { position: relative; z-index: 1; }
 
@@ -345,6 +387,7 @@ body {
   </div>
 
 <script>
+
 let revealObserver = null;
 
 function setupRevealObserver() {
@@ -944,7 +987,7 @@ s.textContent = `
 `;
 document.head.appendChild(s);
 
-/* ── live status refresh (60s) ────────────────────────── */
+/* ── live status refresh (10s) ────────────────────────── */
 let isScrolling = false;
 window.addEventListener('scroll', () => { isScrolling = true; clearTimeout(window._st); window._st = setTimeout(() => { isScrolling = false; }, 150); }, { passive: true });
 
@@ -957,7 +1000,7 @@ setInterval(async () => {
     const avatarWrap = card.querySelector('.avatar-wrap');
     if (avatar && avatarWrap) applyProfile(card, avatarWrap, avatar, people.find(p => (p.discordId||'').toString() === id) || {}, profile);
   }
-}, 60000);
+}, 10000);
 
 /* ── init ─────────────────────────────────────────────── */
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';

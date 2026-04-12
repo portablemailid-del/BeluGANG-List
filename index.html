@@ -178,7 +178,27 @@ html {
 }
 
 .title-text {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e6eef8;
+  white-space: nowrap;
+}
+
+.controls .viz-icon-btn {
+  min-width: unset !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px !important;
+  flex-shrink: 0;
+}
+.controls .viz-icon-btn.active {
+  background: linear-gradient(180deg, #2a2d32, #222528) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  box-shadow: 0 0 12px rgba(255,255,255,0.06), inset 0 0 8px rgba(255,255,255,0.04) !important;
 }
 
 .filter-fab {
@@ -397,24 +417,36 @@ html {
       position:fixed;top:0;left:0;width:100% ;height:var(--banner-height);background: #111216;padding:0;border-radius:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.6)}
       .banner-inner{position:relative;max-width:1100px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px}
       .banner-inner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.banner-inner h1 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  font-size: 1.2rem;
-}
-
-
-      .banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:8px
+         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+      .banner-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .banner-divider {
+        color: rgba(230,238,248,0.25);
+        font-size: 1.3rem;
+        font-weight: 300;
+        line-height: 1;
+      }
+      .banner-inner h1 {
+        position: static;
+        transform: none;
+        font-size: 1rem;
+        text-align: center;
+        flex: 1;
+      }
+      .banner-inner h1 {
+        font-size: 1.2rem;
+        white-space:nowrap;
+        margin:0
+      }
+      .banner-inner .org{font-weight:900;color:#e6eef8;font-size:1.6rem;padding-left:6px;padding-right:0}
     }
     .dataset-btn {
         background:transparent;border:1px solid rgba(255, 255, 255, 0.06);color: #e6eef8;padding:6px 10px;border-radius:8px;font-weight:600;cursor:pointer
@@ -426,7 +458,6 @@ html {
         opacity:0.5;cursor:default
       }
 
-      /* staff grouping */
       .group-section {
         margin-top:18px
       }
@@ -539,7 +570,7 @@ html {
     max-width:1100px;
     padding:0 16px;
     padding-bottom:48px;
-    margin:calc(var(--banner-height) + 20px) auto 0;
+    margin:calc(var(--banner-height) + 32px) auto 0;
   }
   .grid {
     display:grid;
@@ -851,6 +882,7 @@ font-family:inherit
     cursor:default;
   }
 
+/* small screens */
 @media(max-width:520px) {
     .grid {
       grid-template-columns:1fr
@@ -861,6 +893,7 @@ font-family:inherit
       font-size:16px
     }
   }
+  /* focus outline for keyboard */
   .card:focus {
     outline:3px solid #2e2e2e1f;
     outline-offset:4px
@@ -872,50 +905,158 @@ font-family:inherit
     font-size: 1rem;
   }
 
-  @media (max-width: 768px) {
-  .banner-inner {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+  /* ── Time Visualization Bar view ── */
+  #vizbar {
+    transition: opacity .28s cubic-bezier(.34,1.56,.64,1), transform .28s cubic-bezier(.34,1.56,.64,1);
+  }
+  #vizbar.fade-out {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.97);
+    pointer-events: none;
+  }
+  #vizbar.fade-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
-  .banner-inner h1 {
-    position: static;
-    transform: none;
+  .viz-header {
     text-align: center;
-    width: 100%;
-    order: 2;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 28px;
+    opacity: 0.6;
   }
 
-  .org {
-    order: 1;
+  .viz-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateX(-18px);
+    transition: opacity .4s cubic-bezier(.34,1.56,.64,1), transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .viz-row.visible {
+    opacity: 1;
+    transform: translateX(0);
   }
 
-  .controls {
-    order: 3;
-    justify-content: center;
-    width: 100%;
+  .viz-rank {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--muted);
+    min-width: 30px;
+    text-align: right;
+    flex-shrink: 0;
   }
-}
-.controls {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-  </style>
+
+  .viz-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #e6eef8;
+    min-width: 72px;
+    max-width: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .viz-bar-wrap {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .viz-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    width: 0%;
+    transition: width .7s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    box-sizing: border-box;
+    min-width: 6px;
+  }
+
+  /* top 3 get accent colours, rest use a muted gradient */
+  .viz-row.rank-1 .viz-bar-fill { background: linear-gradient(90deg, #FFD700, #FFC107); }
+  .viz-row.rank-2 .viz-bar-fill { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+  .viz-row.rank-3 .viz-bar-fill { background: linear-gradient(90deg, #CD7F32, #B87333); }
+  .viz-row:not(.rank-1):not(.rank-2):not(.rank-3) .viz-bar-fill {
+    background: linear-gradient(90deg, #4a5568, #2d3748);
+  }
+
+  .viz-bar-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* label outside bar — fixed width keeps all bar tracks identical */
+  .viz-bar-label-outside {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-left: 10px;
+    flex-shrink: 0;
+    width: 140px;
+  }
+
+  .viz-missing {
+    font-size: 0.75rem;
+    color: #4a5568;
+    font-style: italic;
+    margin-left: 8px;
+  }
+
+  /* separator between fastest and unknown */
+  .viz-separator {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 22px 0;
+  }
+
+  .viz-section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  /* empty bar track for unknown-time rows — no width, just preserves row structure */
+  .viz-bar-empty {
+    flex: 0 0 0px;
+    background: none;
+    border: none;
+  }
+
+  @media (max-width: 520px) {
+    .viz-name { min-width: 52px; max-width: 52px; font-size: 0.8rem; }
+    .viz-bar-wrap { height: 18px; }
+  }</style>
 </head>
 <body>
   <div class = "banner">
     <div class = "banner-inner">
-      <div class = "org" > 
-        BeluGANG 
-      </div> 
-    <h1 id = "bannerTitle"> 
-    <div class = "title-wrap"> 
-      <span class = "title-text"> 
-        Level 200 List 
-      </span></div></h1> 
+      <div class="banner-brand">
+        <span class="org">BeluGANG</span>
+        <span class="banner-divider">|</span>
+        <span class="title-text">Level 200 List</span>
+      </div>
         <div class = "controls">
           <label for = "sortMode" class = "sr-only"> Sort leaderboard </label>
             <button id = "sortMode" class = "toggle-btn" aria-label = "Toggle sort" aria-pressed = "false" data-mode = "fastest"> 
@@ -925,6 +1066,9 @@ font-family:inherit
             <button id = "viewToggle" class = "toggle-btn" aria-label = "Toggle view" title = "Switch between Leaderboard and Timeline views" style = "margin-left:8px">
               Timeline
             </button>
+            <button id = "vizToggle" class = "toggle-btn viz-icon-btn" aria-label = "Time Visualization Bar" title = "Time Visualization Bar" style = "margin-left:8px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+            </button>
         </div>
     </div>
   </div> 
@@ -932,6 +1076,8 @@ font-family:inherit
     <div id = "board" class = "grid" role = "list">
     </div>
     <div id = "timeline" style = "display:none">
+    </div>
+    <div id = "vizbar" style = "display:none">
     </div>
   </div> 
   <div class="filter-fab" id="filterFab">
@@ -962,9 +1108,47 @@ font-family:inherit
       return `https://cdn.discordapp.com/embed/avatars/${idx}.png`;
     }
 
+    function getDominantColor(imageSrc) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 160;
+            canvas.height = 160;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) { resolve(null); return; }
+            ctx.drawImage(img, 0, 0, 160, 160);
+            const imageData = ctx.getImageData(0, 0, 160, 160);
+            const data = imageData.data;
+            let r = 0, g = 0, b = 0, count = 0;
+            for (let i = 0; i < data.length; i += 4) {
+              const alpha = data[i + 3];
+              if (alpha > 128) {
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+              }
+            }
+            if (count === 0) { resolve(null); return; }
+            r = Math.round(r / count);
+            g = Math.round(g / count);
+            b = Math.round(b / count);
+            resolve(`rgb(${r}, ${g}, ${b})`);
+          } catch (e) {
+            resolve(null);
+          }
+        };
+        img.onerror = () => resolve(null);
+        img.src = imageSrc;
+      });
+    }
+
     async function getDiscordProfile(id, name, img) {
       if (!id || !/^[0-9]+$/.test(id)) {
-        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null };
+        return { avatarUrl: getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null, nameplateColor: null };
       }
 
       try {
@@ -989,6 +1173,12 @@ font-family:inherit
           ? `https://cdn.discordapp.com/assets/collectibles/${nameplateAsset}static.png`
           : null;
 
+        // Extract dominant color from nameplate
+        let nameplateColor = null;
+        if (nameplateUrl) {
+          nameplateColor = await getDominantColor(nameplateUrl);
+        }
+
         // discord_status: "online" | "idle" | "dnd" | "offline"
         const status = data?.discord_status || null;
 
@@ -996,12 +1186,12 @@ font-family:inherit
         const customActivity = (data?.activities || []).find(a => a.type === 4);
         const customState = customActivity?.state || null;
 
-        return { avatarUrl, decorationUrl, status, customState, nameplateUrl };
+        return { avatarUrl, decorationUrl, status, customState, nameplateUrl, nameplateColor };
       } catch (err) {
         console.warn('Lanyard failed:', id);
       }
 
-      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null };
+      return { avatarUrl: img || getFallbackDiscordAvatar(name), decorationUrl: null, status: null, customState: null, nameplateUrl: null, nameplateColor: null };
     }
 
     function showErrorOverlay(msg) {
@@ -1286,6 +1476,7 @@ people.forEach((p, i) => {
   p.totalDaysLabel = (p.totalDays >= 1e9) ? '--' : `${p.totalDays} days`;
   p.id = i + 1;
   p.description = `Date: ${formatDateDisplay(p.date)} \nID: ${p.discordId} \nTime: ${formatTime(p)}`;
+  p.nameplateColor = null; // Will be populated from Lanyard data
 });
 
 function parseDateToNumber(dateStr) {
@@ -1302,9 +1493,7 @@ function parseDateToNumber(dateStr) {
 const sortBtn = document.getElementById('sortMode');
 
 function getModeLabel(mode) {
-  return mode === 'first'
-    ? 'First Level 200'
-    : 'Fastest Level 200';
+  return mode === 'first' ? 'First Level 200' : 'Fastest 200';
 }
 
 function setSortMode(mode) {
@@ -1321,11 +1510,11 @@ function toggleSortMode() {
   reorderBoardWithAnimation();
 }
 if (sortBtn) {
-  sortBtn.addEventListener('click', toggleSortMode);
   sortBtn.addEventListener('keydown', (e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
-      toggleSortMode();
+      if (currentView === 'viz') goToLeaderboard();
+      else toggleSortMode();
     }
   });
 }
@@ -1401,37 +1590,6 @@ function renderTimeline() {
   if (typeof setupRevealObserver === 'function') setupRevealObserver();
 }
 
-function toggleView() {
-  if (currentView === 'leaderboard') {
-    currentView = 'timeline';
-    board.classList.add('fade-out');
-    sortBtn.classList.add('hidden');
-    document.querySelectorAll('.card.visible').forEach(card => {
-      card.classList.remove('visible');
-    });
-    setTimeout(() => {
-      board.style.display = 'none';
-      renderTimeline();
-      timeline.style.display = 'block';
-      timeline.classList.remove('fade-out');
-      timeline.classList.add('fade-in');
-    }, 140);
-    viewToggle.textContent = 'Leaderboard';
-  } else {
-    currentView = 'leaderboard';
-    timeline.classList.add('fade-out');
-    setTimeout(() => {
-      timeline.style.display = 'none';
-      board.style.display = '';
-      board.classList.remove('fade-out');
-      board.classList.add('fade-in');
-      sortBtn.classList.remove('hidden');
-      if (typeof setupRevealObserver === 'function') setupRevealObserver();
-    }, 140);
-    viewToggle.textContent = 'Timeline';
-  }
-}
-
 if (viewToggle) {
   viewToggle.addEventListener('click', toggleView);
   viewToggle.addEventListener('keydown', (e) => {
@@ -1440,6 +1598,257 @@ if (viewToggle) {
       toggleView();
     }
   });
+}
+
+// ── Viz Bar ──────────────────────────────────────────────
+const vizbar   = document.getElementById('vizbar');
+const vizToggle = document.getElementById('vizToggle');
+
+function renderVizBar() {
+  if (!vizbar) return;
+  vizbar.innerHTML = '';
+
+  // Sort by totalDays ascending for the visualization
+  const known   = people.filter(p => p.totalDays < 1e9).slice().sort((a, b) => a.totalDays - b.totalDays);
+  const unknown = people.filter(p => p.totalDays >= 1e9);
+
+  const maxDays = known.length ? known[known.length - 1].totalDays : 1;
+  const minDays = known.length ? known[0].totalDays : 0;
+
+  function makeRow(p, rankOverride) {
+    const row = document.createElement('div');
+    row.className = 'viz-row reveal';
+
+    const speedRank = known.indexOf(p) + 1;
+    if (speedRank === 1) row.classList.add('rank-1');
+    else if (speedRank === 2) row.classList.add('rank-2');
+    else if (speedRank === 3) row.classList.add('rank-3');
+
+    const rankEl = document.createElement('div');
+    rankEl.className = 'viz-rank';
+    rankEl.textContent = `#${rankOverride}`;
+    row.appendChild(rankEl);
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'viz-name';
+    nameEl.textContent = p.name;
+    nameEl.title = p.name;
+    row.appendChild(nameEl);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'viz-bar-wrap';
+
+    const fill = document.createElement('div');
+    fill.className = 'viz-bar-fill';
+
+    // Use nameplate color if available, otherwise use rank-based gradients
+    if (p.nameplateColor) {
+      fill.style.background = p.nameplateColor;
+    } else if (speedRank === 1) {
+      fill.style.background = 'linear-gradient(90deg, #FFD700, #FFC107)';
+    } else if (speedRank === 2) {
+      fill.style.background = 'linear-gradient(90deg, #C0C0C0, #A8A8A8)';
+    } else if (speedRank === 3) {
+      fill.style.background = 'linear-gradient(90deg, #CD7F32, #B87333)';
+    } else {
+      fill.style.background = 'linear-gradient(90deg, #4a5568, #2d3748)';
+    }
+
+    const pct = maxDays === minDays
+      ? 100
+      : 8 + ((p.totalDays - minDays) / (maxDays - minDays)) * 92;
+
+    fill.style.width = '0%';
+    setTimeout(() => { fill.style.width = pct.toFixed(1) + '%'; }, 60);
+
+    wrap.appendChild(fill);
+    row.appendChild(wrap);
+
+    // Label always outside the bar
+    const lbl = document.createElement('span');
+    lbl.className = 'viz-bar-label-outside';
+    lbl.textContent = formatTime(p);
+    row.appendChild(lbl);
+
+    return row;
+  }
+
+  known.forEach((p, i) => {
+    vizbar.appendChild(makeRow(p, i + 1));
+  });
+
+  unknown.forEach((p) => {
+    const row = document.createElement('div');
+    row.className = 'viz-row reveal';
+
+    const originalRank = people.indexOf(p) + 1;
+
+    const rankEl = document.createElement('div');
+    rankEl.className = 'viz-rank';
+    rankEl.textContent = `#${originalRank}`;
+    row.appendChild(rankEl);
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'viz-name';
+    nameEl.textContent = p.name;
+    nameEl.title = p.name;
+    row.appendChild(nameEl);
+
+    // Empty bar track (no fill, zero width)
+    const wrap = document.createElement('div');
+    wrap.className = 'viz-bar-wrap viz-bar-empty';
+    const emptyFill = document.createElement('div');
+    emptyFill.className = 'viz-bar-fill';
+    emptyFill.style.width = '0%';
+    wrap.appendChild(emptyFill);
+    row.appendChild(wrap);
+
+    const noTime = document.createElement('span');
+    noTime.className = 'viz-bar-label-outside';
+    noTime.style.color = '#7a8490';
+    noTime.style.fontStyle = 'italic';
+    noTime.style.opacity = '0.7';
+    noTime.textContent = `Reached on ${formatDateDisplay(p.date)}`;
+    row.appendChild(noTime);
+
+    vizbar.appendChild(row);
+  });
+
+  if (typeof setupRevealObserver === 'function') setupRevealObserver();
+}
+
+// ── view helpers ─────────────────────────────────────────
+const filterFab = document.getElementById('filterFab');
+
+function setFilterFabVisibility(visible) {
+  if (!filterFab) return;
+  filterFab.style.display = visible ? '' : 'none';
+}
+
+function hidePanel(el, cb) {
+  if (!el || el.style.display === 'none') { if (cb) cb(); return; }
+  el.classList.remove('fade-in');
+  el.classList.add('fade-out');
+  setTimeout(() => {
+    el.style.display = 'none';
+    el.classList.remove('fade-out');
+    if (cb) cb();
+  }, 280);
+}
+
+function showPanel(el) {
+  if (!el) return;
+  el.style.display = 'block';
+  el.classList.remove('fade-out');
+  void el.offsetWidth;
+  el.classList.add('fade-in');
+}
+
+let isTransitioning = false;
+
+function goToLeaderboard() {
+  if (currentView === 'leaderboard') return;
+  if (isTransitioning) return;
+  isTransitioning = true;
+  const prev = currentView;
+  currentView = 'leaderboard';
+
+  // Restore sortBtn to its sort-mode label and make it visible again
+  sortBtn.textContent = getModeLabel(sortBtn.dataset.mode || 'first');
+  sortBtn.classList.remove('hidden');
+  viewToggle.textContent = 'Timeline';
+  vizToggle.classList.remove('active');
+  vizToggle.title = 'Time Visualization Bar';
+  setFilterFabVisibility(true);
+
+  const panelToHide = prev === 'timeline' ? timeline : vizbar;
+  hidePanel(panelToHide, () => {
+    board.style.display = '';
+    void board.offsetWidth;
+    board.classList.remove('fade-out');
+    board.classList.add('fade-in');
+    if (typeof setupRevealObserver === 'function') setupRevealObserver();
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 320);
+  });
+}
+
+function goToTimeline() {
+  if (currentView === 'timeline') return;
+  if (isTransitioning) return;
+  isTransitioning = true;
+  const prev = currentView;
+  currentView = 'timeline';
+  sortBtn.classList.add('hidden');
+  viewToggle.textContent = 'Leaderboard';
+  vizToggle.classList.remove('active');
+  vizToggle.title = 'Time Visualization Bar';
+  setFilterFabVisibility(true);
+
+  const panelToHide = prev === 'leaderboard' ? board : vizbar;
+  hidePanel(panelToHide, () => {
+    renderTimeline();
+    showPanel(timeline);
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 280);
+  });
+}
+
+function goToViz() {
+  if (currentView === 'viz') return;
+  if (isTransitioning) return;
+  isTransitioning = true;
+  const prev = currentView;
+  currentView = 'viz';
+
+  // Replace sortBtn text with "Leaderboard" shortcut while on viz page
+  sortBtn.textContent = 'Leaderboard';
+  sortBtn.classList.remove('hidden');
+  viewToggle.textContent = 'Timeline';
+  vizToggle.classList.add('active');
+  vizToggle.title = 'Time Visualization Bar';
+  setFilterFabVisibility(false);
+
+  const panelToHide = prev === 'leaderboard' ? board : timeline;
+  hidePanel(panelToHide, () => {
+    renderVizBar();
+    showPanel(vizbar);
+    isTransitioning = false;
+  });
+}
+
+// vizToggle: on viz page → do nothing (already there); off viz page → go to viz
+if (vizToggle) {
+  vizToggle.addEventListener('click', () => {
+    if (currentView === 'viz') return; // already there, do nothing
+    goToViz();
+  });
+}
+
+// viewToggle: leaderboard ↔ timeline; from viz → timeline
+function toggleView() {
+  if (currentView === 'leaderboard') goToTimeline();
+  else if (currentView === 'timeline') goToLeaderboard();
+  else if (currentView === 'viz') goToTimeline();
+}
+
+// sortBtn: on viz page it acts as "Leaderboard" button; otherwise it sorts
+sortBtn.addEventListener('click', () => {
+  if (currentView === 'viz') {
+    goToLeaderboard();
+  } else {
+    toggleSortMode();
+  }
+});
+
+// org / brand click → home (leaderboard)
+const orgEl = document.querySelector('.banner-brand');
+if (orgEl) {
+  orgEl.style.cursor = 'pointer';
+  orgEl.title = 'Go to Leaderboard';
+  orgEl.addEventListener('click', () => goToLeaderboard());
 }
 
 if (sortBtn) {
@@ -1477,21 +1886,16 @@ styleTag.textContent = `
 .controls .toggle-btn{
  background:linear-gradient(180deg,#15171a,#1f2023);
  color:#e6eef8;
- border:2px solid rgba(255,255,255,0.9);
+ border:2px solid #2e2e2e66;
  padding:8px 18px;
  border-radius:12px;
  font-weight:700;
  cursor:pointer;
  text-align:center;
-
- display:flex;
- align-items:center;
- justify-content:center;
-
- min-width:150px;  /* important */
- height:36px;      /* consistent height */
- white-space:nowrap;
-}
+ display:inline-block;
+ min-width:120px;
+ transition:opacity .28s cubic-bezier(.34, 1.56, .64, 1), transform .28s cubic-bezier(.34, 1.56, .64, 1), visibility .28s cubic-bezier(.34, 1.56, .64, 1), border-color .2s ease, box-shadow .2s ease;
+ box-shadow:0 0 0 #2e2e2e00;
 }
 .controls .toggle-btn:hover{
  border-color:#2e2e2eb3;
@@ -1576,6 +1980,8 @@ function sortPeople(mode) {
 
 function renderBoard() {
   board.innerHTML = '';
+  board.style.transform = 'none';
+  board.style.opacity = '1';
   people.forEach((p, index) => {
     try {
       const card = document.createElement('article');
@@ -1584,6 +1990,8 @@ function renderBoard() {
       card.setAttribute('role', 'listitem');
       card.setAttribute('tabindex', '0');
       card.dataset.id = p.discordId || 'unknown';
+      card.style.transform = 'none';
+      card.style.opacity = '1';
 
       if (index === 0) card.classList.add('rank-1');
       else if (index === 1) card.classList.add('rank-2');
@@ -1645,8 +2053,11 @@ function renderBoard() {
       avatar.style.backgroundPosition = 'center';
       avatar.textContent = '';
 
-      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl, status, customState, nameplateUrl }) => {
+      getDiscordProfile(p.discordId, p.name, p.img).then(({ avatarUrl, decorationUrl, status, customState, nameplateUrl, nameplateColor }) => {
         avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+        // Store the nameplate color for use in viz bar
+        p.nameplateColor = nameplateColor;
 
         // Nameplate background
         const cardBanner = card.querySelector('.card-banner');
@@ -1933,6 +2344,8 @@ function setupRevealObserver() {
           setTimeout(() => {
             try {
               el.style.transition = '';
+              el.style.transform = 'translateY(0) scale(1)';
+              el.style.opacity = '1';
               el.classList.add('visible');
             } catch (e) {}
           }, 25);
@@ -1943,9 +2356,12 @@ function setupRevealObserver() {
         revealObserver.observe(el);
       }
     });
-  } catch (err) {
-    /* noop */ }
+  } catch (err) {}
 }
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
 
 setSortMode('first');
 try {
@@ -2019,8 +2435,14 @@ setInterval(() => {
 
     if (!id || id === 'unknown') return;
 
-    const { avatarUrl, decorationUrl, status, customState, nameplateUrl } = await getDiscordProfile(id);
+    const { avatarUrl, decorationUrl, status, customState, nameplateUrl, nameplateColor } = await getDiscordProfile(id);
     avatar.style.backgroundImage = `url("${avatarUrl}")`;
+
+    // Find person object and update nameplate color
+    const person = people.find(p => (p.discordId || '').toString() === id);
+    if (person) {
+      person.nameplateColor = nameplateColor;
+    }
 
     // Nameplate background
     const cardBanner = card.querySelector('.card-banner');
